@@ -1,0 +1,204 @@
+<div class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>
+            <i class="fas fa-cog me-2"></i>Manage Resource: <%= resource.title %>
+        </h2>
+        <div>
+            <a href="/admin/manage-resources" class="btn btn-outline-secondary btn-custom">
+                <i class="fas fa-arrow-left me-2"></i>Back to Resources
+            </a>
+        </div>
+    </div>
+    
+    <!-- Resource Details Card -->
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">
+                <i class="fas fa-info-circle me-2"></i>Resource Details
+            </h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Title:</strong> <%= resource.title %></p>
+                    <p><strong>Type:</strong> 
+                        <% if (resource.type === 'pdf') { %>
+                            <span class="badge bg-danger"><i class="fas fa-file-pdf me-1"></i>PDF</span>
+                        <% } else { %>
+                            <span class="badge bg-success"><i class="fas fa-link me-1"></i>Link</span>
+                        <% } %>
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Course:</strong> <span class="badge bg-primary"><%= resource.course %></span></p>
+                    <p><strong>Semester:</strong> <span class="badge bg-secondary"><%= resource.semester %></span></p>
+                    <p><strong>Subject:</strong> <span class="badge bg-info"><%= resource.subject %></span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add YouTube Link Form -->
+    <div class="card mb-4">
+        <div class="card-header bg-danger text-white">
+            <h5 class="mb-0">
+                <i class="fab fa-youtube me-2"></i>Add YouTube Link
+            </h5>
+        </div>
+        <div class="card-body">
+            <form method="POST" action="/admin/add-youtube-link/<%= resource._id %>">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="topicName" class="form-label">Topic Name *</label>
+                        <input type="text" class="form-control" id="topicName" name="topicName" 
+                               placeholder="e.g., Introduction to JavaScript" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="url" class="form-label">YouTube URL *</label>
+                        <input type="url" class="form-control" id="url" name="url" 
+                               placeholder="https://youtube.com/watch?v=..." required>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-danger btn-custom">
+                    <i class="fab fa-youtube me-2"></i>Add YouTube Link
+                </button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Existing YouTube Links -->
+    <div class="card">
+        <div class="card-header bg-success text-white">
+            <h5 class="mb-0">
+                <i class="fab fa-youtube me-2"></i>YouTube Links (<%= resource.youtubeLinks.length %>)
+            </h5>
+        </div>
+        <div class="card-body">
+            <% if (resource.youtubeLinks.length === 0) { %>
+                <div class="alert alert-info text-center">
+                    <i class="fas fa-info-circle me-2"></i>
+                    No YouTube links added yet. Add your first link above!
+                </div>
+            <% } else { %>
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Topic Name</th>
+                                <th>YouTube URL</th>
+                                <th>Added Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% resource.youtubeLinks.forEach(link => { %>
+                                <tr>
+                                    <td>
+                                        <strong><%= link.topicName %></strong>
+                                    </td>
+                                    <td>
+                                        <a href="<%= link.url %>" target="_blank" class="text-decoration-none">
+                                            <i class="fab fa-youtube text-danger me-1"></i>
+                                            <%= link.url.length > 50 ? link.url.substring(0, 50) + '...' : link.url %>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <small><%= new Date(link.addedAt).toLocaleDateString() %></small>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm" role="group">
+                                            <a href="<%= link.url %>" target="_blank" 
+                                               class="btn btn-outline-success" title="Open Video">
+                                                <i class="fas fa-play"></i>
+                                            </a>
+                                            <button type="button" class="btn btn-outline-danger" 
+                                                    onclick="removeYouTubeLink('<%= resource._id %>', '<%= link._id %>', '<%= link.topicName %>')" 
+                                                    title="Remove">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+            <% } %>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-exclamation-triangle text-warning me-2"></i>Remove YouTube Link
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to remove this YouTube link?</p>
+                <p><strong id="linkTopicName"></strong></p>
+                <p class="text-danger"><small>This action cannot be undone!</small></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form id="deleteForm" method="POST" class="d-inline">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash me-1"></i>Remove Link
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function removeYouTubeLink(resourceId, linkId, topicName) {
+    document.getElementById('linkTopicName').textContent = topicName;
+    document.getElementById('deleteForm').action = `/admin/remove-youtube-link/${resourceId}/${linkId}`;
+    
+    const modal = new bootstrap.Modal(document.getElementById('deleteModal'));
+    modal.show();
+}
+
+// Auto-validate YouTube URLs
+document.getElementById('url').addEventListener('input', function() {
+    const url = this.value;
+    const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+/;
+    
+    if (url && !youtubeRegex.test(url)) {
+        this.setCustomValidity('Please enter a valid YouTube URL');
+    } else {
+        this.setCustomValidity('');
+    }
+});
+</script>
+
+<style>
+.table th {
+    border-top: none;
+    font-weight: 600;
+    color: #495057;
+}
+
+.table td {
+    vertical-align: middle;
+}
+
+.btn-group-sm .btn {
+    padding: 0.25rem 0.5rem;
+}
+
+@media (max-width: 768px) {
+    .table-responsive {
+        font-size: 0.875rem;
+    }
+    
+    .btn-group-sm .btn {
+        padding: 0.2rem 0.3rem;
+    }
+}
+</style>

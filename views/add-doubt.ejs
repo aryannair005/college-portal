@@ -1,0 +1,68 @@
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4><i class="fas fa-question-circle me-2"></i>Post Your Doubt</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="/doubts/add" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Doubt Title *</label>
+                            <input type="text" class="form-control" id="title" name="title" 
+                                   placeholder="Brief description of your doubt" required>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="course" class="form-label">Course *</label>
+                                <input type="text" class="form-control" id="course" name="course" 
+                                       placeholder="e.g., BCA, MCA" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="semester" class="form-label">Semester *</label>
+                                <select class="form-select" id="semester" name="semester" required>
+                                    <option value="">Select Semester</option>
+                                    <% for(let i = 1; i <= 8; i++) { %>
+                                        <option value="<%= i %>"><%= i %></option>
+                                    <% } %>
+                                </select>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="subject" class="form-label">Subject *</label>
+                                <input type="text" class="form-control" id="subject" name="subject" 
+                                       placeholder="e.g., Mathematics" required>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Detailed Description *</label>
+                            <textarea class="form-control" id="description" name="description" rows="5" 
+                                      placeholder="Explain your doubt in detail..." required></textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="doubtImage" class="form-label">Attach Image (Optional)</label>
+                            <input type="file" class="form-control" id="doubtImage" name="doubtImage" 
+                                   accept="image/*">
+                            <div class="form-text">Upload an image if it helps explain your doubt better.</div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <button type="submit" class="btn btn-primary btn-custom w-100">
+                                    <i class="fas fa-paper-plane me-2"></i>Post Doubt
+                                </button>
+                            </div>
+                            <div class="col-md-6">
+                                <a href="/doubts" class="btn btn-outline-secondary btn-custom w-100">
+                                    <i class="fas fa-arrow-left me-2"></i>Back to Doubts
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

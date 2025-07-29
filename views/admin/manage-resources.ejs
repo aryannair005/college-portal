@@ -1,0 +1,172 @@
+<div class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>
+            <i class="fas fa-cog me-2"></i>Manage Resources
+        </h2>
+        <div>
+            <a href="/admin/add-resource" class="btn btn-primary btn-custom me-2">
+                <i class="fas fa-plus me-2"></i>Add New Resource
+            </a>
+            <a href="/admin" class="btn btn-outline-secondary btn-custom">
+                <i class="fas fa-arrow-left me-2"></i>Back to Admin
+            </a>
+        </div>
+    </div>
+    
+    <% if (resources.length === 0) { %>
+        <div class="alert alert-info alert-custom text-center">
+            <i class="fas fa-info-circle me-2"></i>
+            No resources found. <a href="/admin/add-resource">Add your first resource!</a>
+        </div>
+    <% } else { %>
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-list me-2"></i>All Resources (<%= resources.length %>)
+                </h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Title</th>
+                                <th>Course Details</th>
+                                <th>Type</th>
+                                <th>YouTube Links</th>
+                                <th>Added Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% resources.forEach(resource => { %>
+                                <tr>
+                                    <td>
+                                        <strong><%= resource.title %></strong>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-primary me-1"><%= resource.course %></span>
+                                        <span class="badge bg-secondary me-1">Sem <%= resource.semester %></span>
+                                        <span class="badge bg-info"><%= resource.subject %></span>
+                                    </td>
+                                    <td>
+                                        <% if (resource.type === 'pdf') { %>
+                                            <span class="badge bg-danger"><i class="fas fa-file-pdf me-1"></i>PDF</span>
+                                        <% } else { %>
+                                            <span class="badge bg-success"><i class="fas fa-link me-1"></i>Link</span>
+                                        <% } %>
+                                    </td>
+                                    <td class="text-center">
+                                        <% if (resource.youtubeLinks && resource.youtubeLinks.length > 0) { %>
+                                            <span class="badge bg-danger">
+                                                <i class="fab fa-youtube me-1"></i>
+                                                <%= resource.youtubeLinks.length %>
+                                            </span>
+                                        <% } else { %>
+                                            <span class="text-muted">-</span>
+                                        <% } %>
+                                    </td>
+                                    <td>
+                                        <small><%= new Date(resource.uploadedAt).toLocaleDateString() %></small>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm" role="group">
+                                            <a href="/admin/manage-resource/<%= resource._id %>" 
+                                               class="btn btn-outline-primary" title="Manage Resource & YouTube Links">
+                                                <i class="fas fa-cog"></i>
+                                            </a>
+                                            <% if (resource.type === 'pdf') { %>
+                                                <a href="/viewer/resource/<%= resource.filename %>" 
+                                                   class="btn btn-outline-success" title="View PDF">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                            <% } else { %>
+                                                <a href="<%= resource.url %>" target="_blank" 
+                                                   class="btn btn-outline-success" title="Open Link">
+                                                    <i class="fas fa-external-link-alt"></i>
+                                                </a>
+                                            <% } %>
+                                            <button type="button" class="btn btn-outline-danger" 
+                                                    onclick="deleteResource('<%= resource._id %>', '<%= resource.title %>')" 
+                                                    title="Delete Resource">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    <% } %>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-exclamation-triangle text-warning me-2"></i>Confirm Delete
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this resource?</p>
+                <p><strong id="resourceTitle"></strong></p>
+                <p class="text-warning"><small>This will also delete all associated YouTube links!</small></p>
+                <p class="text-danger"><small>This action cannot be undone!</small></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form id="deleteForm" method="POST" class="d-inline">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash me-1"></i>Delete
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function deleteResource(id, title) {
+    document.getElementById('resourceTitle').textContent = title;
+    document.getElementById('deleteForm').action = '/admin/delete-resource/' + id;
+    
+    const modal = new bootstrap.Modal(document.getElementById('deleteModal'));
+    modal.show();
+}
+</script>
+
+<style>
+.table th {
+    border-top: none;
+    font-weight: 600;
+    color: #495057;
+}
+
+.table td {
+    vertical-align: middle;
+}
+
+.btn-group-sm .btn {
+    padding: 0.25rem 0.5rem;
+}
+
+.badge {
+    font-size: 0.75em;
+}
+
+@media (max-width: 768px) {
+    .table-responsive {
+        font-size: 0.875rem;
+    }
+    
+    .btn-group-sm .btn {
+        padding: 0.2rem 0.3rem;
+    }
+}
+</style>

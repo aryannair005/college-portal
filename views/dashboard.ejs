@@ -1,0 +1,157 @@
+<div class="container my-5">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="mb-4">
+                <i class="fas fa-tachometer-alt me-2"></i>Welcome back, <%= user.username %>!
+            </h2>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-3 mb-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <i class="fas fa-book text-primary fa-3x mb-3"></i>
+                    <h5 class="card-title">Study Resources</h5>
+                    <p class="card-text">Browse study materials, PDFs, and links organized by course and subject.</p>
+                    <a href="/resources" class="btn btn-primary btn-custom">
+                        <i class="fas fa-arrow-right me-2"></i>Browse Resources
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3 mb-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <i class="fas fa-question-circle text-success fa-3x mb-3"></i>
+                    <h5 class="card-title">Previous Year Questions</h5>
+                    <p class="card-text">Access previous year question papers for exam preparation.</p>
+                    <a href="/pyqs" class="btn btn-success btn-custom">
+                        <i class="fas fa-arrow-right me-2"></i>Browse PYQs
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3 mb-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <i class="fas fa-list-alt text-warning fa-3x mb-3"></i>
+                    <h5 class="card-title">Course Syllabus</h5>
+                    <p class="card-text">View detailed course syllabus organized by semester and subject.</p>
+                    <a href="/syllabus" class="btn btn-warning btn-custom">
+                        <i class="fas fa-arrow-right me-2"></i>View Syllabus
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3 mb-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <i class="fas fa-comments text-info fa-3x mb-3"></i>
+                    <h5 class="card-title">Doubts & Discussion</h5>
+                    <p class="card-text">Post your doubts and get help from peers and teachers.</p>
+                    <a href="/doubts" class="btn btn-info btn-custom">
+                        <i class="fas fa-arrow-right me-2"></i>Browse Doubts
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Recent Doubts Section -->
+    <% if (recentDoubts && recentDoubts.length > 0) { %>
+    <div class="row mt-5">
+        <div class="col-12">
+            <h4 class="mb-4">
+                <i class="fas fa-clock me-2"></i>Recent Doubts
+            </h4>
+        </div>
+    </div>
+    <div class="row">
+        <% recentDoubts.forEach(doubt => { %>
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title">
+                            <span class="badge bg-<%= doubt.status === 'resolved' ? 'success' : 'warning' %> me-2">
+                                <%= doubt.status %>
+                            </span>
+                            <%= doubt.title.length > 30 ? doubt.title.substring(0, 30) + '...' : doubt.title %>
+                        </h6>
+                        <p class="card-text small text-muted">
+                            <%= doubt.course %> - Sem <%= doubt.semester %> - <%= doubt.subject %>
+                        </p>
+                        <p class="card-text small">
+                            By: <%= doubt.postedByName %> • <%= doubt.replies.length %> replies
+                        </p>
+                        <a href="/doubts/<%= doubt._id %>" class="btn btn-sm btn-outline-primary">
+                            View Details
+                        </a>
+                    </div>
+                </div>
+            </div>
+        <% }) %>
+    </div>
+    <div class="text-center mt-3">
+        <a href="/doubts" class="btn btn-info btn-custom">
+            <i class="fas fa-eye me-2"></i>View All Doubts
+        </a>
+    </div>
+    <% } %>
+    
+    <!-- Quick Actions Section -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card border-light bg-light">
+                <div class="card-header bg-transparent">
+                    <h5 class="mb-0"><i class="fas fa-zap me-2"></i>Quick Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-md-3 mb-3">
+                            <a href="/doubts/add" class="btn btn-outline-primary btn-custom w-100">
+                                <i class="fas fa-plus me-2"></i>Post New Doubt
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <a href="/syllabus" class="btn btn-outline-warning btn-custom w-100">
+                                <i class="fas fa-list-alt me-2"></i>View Syllabus
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <a href="/resources" class="btn btn-outline-success btn-custom w-100">
+                                <i class="fas fa-search me-2"></i>Find Resources
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <a href="/pyqs" class="btn btn-outline-info btn-custom w-100">
+                                <i class="fas fa-download me-2"></i>Download PYQs
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <% if (user.role === 'admin') { %>
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card border-warning">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0"><i class="fas fa-crown me-2"></i>Admin Panel</h5>
+                </div>
+                <div class="card-body">
+                    <p>You have admin privileges. Manage resources and PYQs from the admin panel.</p>
+                    <a href="/admin" class="btn btn-warning">
+                        <i class="fas fa-cog me-2"></i>Go to Admin Panel
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <% } %>
+</div>

@@ -1,0 +1,149 @@
+<div class="container-fluid p-0">
+    <div class="bg-primary text-white p-3 mb-0">
+        <div class="d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">
+                <i class="fas fa-file-pdf me-2"></i>PDF Viewer
+            </h4>
+            <div class="btn-group" role="group">
+                <% if (type === 'resource') { %>
+                    <a href="/resources" class="btn btn-outline-light btn-sm">
+                        <i class="fas fa-arrow-left me-1"></i>Back to Resources
+                    </a>
+                    <a href="/download/resource/<%= filename %>" class="btn btn-light btn-sm">
+                        <i class="fas fa-download me-1"></i>Download
+                    </a>
+                <% } else if (type === 'pyq') { %>
+                    <a href="/pyqs" class="btn btn-outline-light btn-sm">
+                        <i class="fas fa-arrow-left me-1"></i>Back to PYQs
+                    </a>
+                    <a href="/download/pyq/<%= filename %>" class="btn btn-light btn-sm">
+                        <i class="fas fa-download me-1"></i>Download
+                    </a>
+                <% } else if (type === 'syllabus') { %>
+                    <a href="/syllabus" class="btn btn-outline-light btn-sm">
+                        <i class="fas fa-arrow-left me-1"></i>Back to Syllabus
+                    </a>
+                    <a href="/download/syllabus/<%= filename %>" class="btn btn-light btn-sm">
+                        <i class="fas fa-download me-1"></i>Download
+                    </a>
+                <% } %>
+            </div>
+        </div>
+    </div>
+    
+    <div class="pdf-container" style="height: calc(100vh - 120px); background: #f0f0f0;">
+        <iframe 
+            src="/pdf/<%= type %>/<%= filename %>" 
+            width="100%" 
+            height="100%" 
+            style="border: none; display: block;"
+            title="PDF Viewer">
+        </iframe>
+        
+        <!-- Fallback for browsers that don't support PDF viewing -->
+        <div id="pdf-fallback" style="display: none;" class="text-center p-5">
+            <div class="alert alert-warning">
+                <h5><i class="fas fa-exclamation-triangle me-2"></i>PDF Viewer Not Supported</h5>
+                <p>Your browser doesn't support inline PDF viewing. Please download the file to view it.</p>
+                <% if (type === 'resource') { %>
+                    <a href="/download/resource/<%= filename %>" class="btn btn-primary">
+                        <i class="fas fa-download me-2"></i>Download PDF
+                    </a>
+                <% } else if (type === 'pyq') { %>
+                    <a href="/download/pyq/<%= filename %>" class="btn btn-primary">
+                        <i class="fas fa-download me-2"></i>Download PDF
+                    </a>
+                <% } else if (type === 'syllabus') { %>
+                    <a href="/download/syllabus/<%= filename %>" class="btn btn-primary">
+                        <i class="fas fa-download me-2"></i>Download PDF
+                    </a>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Ensure the PDF viewer takes full height */
+body {
+    margin: 0;
+    overflow: hidden;
+}
+
+.pdf-container iframe {
+    background: white;
+}
+
+/* Loading animation */
+.pdf-container::before {
+    content: "Loading PDF...";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 18px;
+    color: #666;
+    z-index: 1;
+}
+
+/* Hide navbar for full-screen experience */
+.navbar {
+    display: none;
+}
+
+/* Hide footer for full-screen experience */
+.footer {
+    display: none;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .pdf-container {
+        height: calc(100vh - 100px) !important;
+    }
+    
+    .btn-group .btn {
+        font-size: 12px;
+        padding: 5px 10px;
+    }
+}
+</style>
+
+<script>
+// Check if PDF loaded successfully
+document.addEventListener('DOMContentLoaded', function() {
+    const iframe = document.querySelector('iframe');
+    const fallback = document.getElementById('pdf-fallback');
+    
+    iframe.addEventListener('error', function() {
+        iframe.style.display = 'none';
+        fallback.style.display = 'block';
+    });
+    
+    // Timeout fallback
+    setTimeout(function() {
+        try {
+            // Try to access iframe content to check if PDF loaded
+            iframe.contentDocument;
+        } catch (e) {
+            // If we can't access it, assume it failed
+            iframe.style.display = 'none';
+            fallback.style.display = 'block';
+        }
+    }, 5000);
+});
+
+// Keyboard shortcuts
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        // Go back to previous page
+        <% if (type === 'resource') { %>
+            window.location.href = '/resources';
+        <% } else if (type === 'pyq') { %>
+            window.location.href = '/pyqs';
+        <% } else if (type === 'syllabus') { %>
+            window.location.href = '/syllabus';
+        <% } %>
+    }
+});
+</script>

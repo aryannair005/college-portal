@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %> - College Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Sticky Footer Styles */
+        html, body {
+            height: 100%;
+        }
+        
+        body { 
+            background-color: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        .main-content {
+            flex: 1 0 auto;
+        }
+        
+        .footer {
+            flex-shrink: 0;
+            background-color: #f8f9fa;
+            color: black;
+            padding: 15px 0;
+            margin-top: auto;
+        }
+        
+        .navbar{
+            height: 70px;
+        }
+
+        /* Existing styles */
+        .navbar-brand { font-weight: bold; }
+        .card { 
+            transition: transform 0.2s; 
+            border: none; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+        }
+        .card:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15); 
+        }
+        .filter-section { 
+            background: white; 
+            border-radius: 10px; 
+            padding: 20px; 
+            margin-bottom: 20px; 
+        }
+        .resource-card { 
+            margin-bottom: 20px; 
+        }
+        .alert-custom { 
+            border-radius: 10px; 
+        }
+        .btn-custom { 
+            border-radius: 25px; 
+        }
+        .navbar-nav{
+            padding-top: 19px;
+        }
+
+        .navbar-brand{
+            padding-top: 19px;
+        }
+        
+        /* Hero section adjustments */
+        .hero-section {
+            padding: 60px 0;
+        }
+        
+        /* Ensure proper spacing */
+        .container, .container-fluid {
+            padding-bottom: 20px;
+        }
+        
+        /* Mobile responsive adjustments */
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 40px 0;
+            }
+            
+            .footer {
+                padding: 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+        <!-- Brand on the left -->
+        <a class="navbar-brand" href="/">
+            <i class="fas fa-graduation-cap me-2"></i>College Portal
+        </a>
+        
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <!-- Resources in the center -->
+            <ul class="navbar-nav mx-auto">
+                <% if (user) { %>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard">
+                            <i class="fas fa-tachometer-alt me-1"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/resources">
+                            <i class="fas fa-book me-1"></i>Resources
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/pyqs">
+                            <i class="fas fa-question-circle me-1"></i>PYQs
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/syllabus">
+                            <i class="fas fa-list-alt me-1"></i>Syllabus
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/doubts">
+                            <i class="fas fa-comments me-1"></i>Doubts
+                        </a>
+                    </li>
+                    <% if (user.role === 'admin') { %>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin">
+                                <i class="fas fa-cog me-1"></i>Admin
+                            </a>
+                        </li>
+                    <% } %>
+                <% } %>
+            </ul>
+            
+            <!-- User authentication on the right -->
+            <ul class="navbar-nav ms-auto">
+                <% if (user) { %>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user me-1"></i><%= user.username %>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/logout">
+                                <i class="fas fa-sign-out-alt me-1"></i>Logout
+                            </a></li>
+                        </ul>
+                    </li>
+                <% } else { %>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login">
+                            <i class="fas fa-sign-in-alt me-1"></i>Login
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/register">
+                            <i class="fas fa-user-plus me-1"></i>Register
+                        </a>
+                    </li>
+                <% } %>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <!-- Messages -->
+    <% if (messages && messages.length > 0) { %>
+        <div class="container mt-3">
+            <% messages.forEach(message => { %>
+                <div class="alert alert-info alert-dismissible fade show alert-custom" role="alert">
+                    <i class="fas fa-info-circle me-2"></i><%= message %>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            <% }) %>
+        </div>
+    <% } %>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <%- body %>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container text-center">
+            <p class="mb-0">&copy; 2025 College Portal. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

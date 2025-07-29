@@ -1,0 +1,152 @@
+<div class="container my-5">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="mb-4">
+                <i class="fas fa-cog me-2"></i>Admin Dashboard
+            </h2>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-3 mb-4">
+            <div class="card border-primary">
+                <div class="card-body text-center">
+                    <i class="fas fa-plus-circle text-primary fa-3x mb-3"></i>
+                    <h5 class="card-title">Add Study Resource</h5>
+                    <p class="card-text">Upload PDFs or add links to study materials for students.</p>
+                    <a href="/admin/add-resource" class="btn btn-primary btn-custom">
+                        <i class="fas fa-plus me-2"></i>Add Resource
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3 mb-4">
+            <div class="card border-success">
+                <div class="card-body text-center">
+                    <i class="fas fa-question-circle text-success fa-3x mb-3"></i>
+                    <h5 class="card-title">Add PYQ</h5>
+                    <p class="card-text">Upload previous year question papers for student reference.</p>
+                    <a href="/admin/add-pyq" class="btn btn-success btn-custom">
+                        <i class="fas fa-plus me-2"></i>Add PYQ
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3 mb-4">
+            <div class="card border-warning">
+                <div class="card-body text-center">
+                    <i class="fas fa-list-alt text-warning fa-3x mb-3"></i>
+                    <h5 class="card-title">Add Syllabus</h5>
+                    <p class="card-text">Upload course syllabus organized by semester and subject.</p>
+                    <a href="/admin/add-syllabus" class="btn btn-warning btn-custom">
+                        <i class="fas fa-plus me-2"></i>Add Syllabus
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3 mb-4">
+            <div class="card border-danger">
+                <div class="card-body text-center">
+                    <i class="fab fa-youtube text-danger fa-3x mb-3"></i>
+                    <h5 class="card-title">Manage Resources</h5>
+                    <p class="card-text">Manage existing resources and add YouTube video links.</p>
+                    <a href="/admin/manage-resources" class="btn btn-danger btn-custom">
+                        <i class="fas fa-cog me-2"></i>Manage Resources
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-info">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="fas fa-cog me-2"></i>Management Panel</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-2 text-center mb-3">
+                            <a href="/admin/manage-resources" class="btn btn-outline-danger btn-custom">
+                                <i class="fab fa-youtube me-2"></i>Manage Resources
+                            </a>
+                        </div>
+                        <div class="col-md-2 text-center mb-3">
+                            <a href="/admin/manage-syllabus" class="btn btn-outline-warning btn-custom">
+                                <i class="fas fa-list-alt me-2"></i>Manage Syllabus
+                            </a>
+                        </div>
+                        <div class="col-md-2 text-center mb-3">
+                            <a href="/resources" class="btn btn-outline-primary btn-custom">
+                                <i class="fas fa-book me-2"></i>View Resources
+                            </a>
+                        </div>
+                        <div class="col-md-2 text-center mb-3">
+                            <a href="/pyqs" class="btn btn-outline-success btn-custom">
+                                <i class="fas fa-question-circle me-2"></i>View PYQs
+                            </a>
+                        </div>
+                        <div class="col-md-2 text-center mb-3">
+                            <a href="/syllabus" class="btn btn-outline-warning btn-custom">
+                                <i class="fas fa-list-alt me-2"></i>View Syllabus
+                            </a>
+                        </div>
+                        <div class="col-md-2 text-center mb-3">
+                            <a href="/dashboard" class="btn btn-outline-secondary btn-custom">
+                                <i class="fas fa-home me-2"></i>Main Dashboard
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Quick Stats Section -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card border-light bg-light">
+                <div class="card-header bg-transparent">
+                    <h5 class="mb-0">
+                        <i class="fas fa-chart-bar me-2"></i>Quick Overview
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-md-3 mb-3">
+                            <div class="p-3 border rounded">
+                                <i class="fas fa-book text-primary fa-2x mb-2"></i>
+                                <h6>Total Resources</h6>
+                                <p class="mb-0 text-muted">Manage all study materials</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="p-3 border rounded">
+                                <i class="fab fa-youtube text-danger fa-2x mb-2"></i>
+                                <h6>YouTube Links</h6>
+                                <p class="mb-0 text-muted">Video resources added</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="p-3 border rounded">
+                                <i class="fas fa-question-circle text-success fa-2x mb-2"></i>
+                                <h6>PYQ Papers</h6>
+                                <p class="mb-0 text-muted">Previous year questions</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="p-3 border rounded">
+                                <i class="fas fa-list-alt text-warning fa-2x mb-2"></i>
+                                <h6>Syllabus Files</h6>
+                                <p class="mb-0 text-muted">Course syllabi uploaded</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
