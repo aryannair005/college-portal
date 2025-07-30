@@ -3,25 +3,59 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header bg-primary text-white text-center">
-                    <h4><i class="fas fa-sign-in-alt me-2"></i>Student Login</h4>
+                    <h4><i class="fas fa-sign-in-alt me-2"></i>Portal Login</h4>
+                    <small>Students & Administrators</small>
                 </div>
                 <div class="card-body">
                     <form method="POST" action="/login">
                         <div class="mb-3">
-                            <label for="username" class="form-label">Username</label>
-                            <input type="text" class="form-control" id="username" name="username" required>
+                            <label for="username" class="form-label">
+                                <i class="fas fa-user me-1"></i>Username
+                            </label>
+                            <input type="text" class="form-control" id="username" name="username" 
+                                   placeholder="Enter your username" required>
                         </div>
                         <div class="mb-3">
-                            <label for="password" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="password" name="password" required>
+                            <label for="password" class="form-label">
+                                <i class="fas fa-lock me-1"></i>Password
+                            </label>
+                            <input type="password" class="form-control" id="password" name="password" 
+                                   placeholder="Enter your password" required>
                         </div>
+                        
                         <button type="submit" class="btn btn-primary w-100 btn-custom">
                             <i class="fas fa-sign-in-alt me-2"></i>Login
                         </button>
                     </form>
+                    
                     <hr>
+                    
                     <div class="text-center">
-                        <p>Don't have an account? <a href="/register">Register here</a></p>
+                        <div class="row">
+                            <div class="col-md-6 mb-2">
+                                <p class="mb-1"><strong>Students:</strong></p>
+                                <p class="small text-muted mb-2">New to the portal?</p>
+                                <a href="/register" class="btn btn-outline-success btn-sm">
+                                    <i class="fas fa-user-plus me-1"></i>Register Here
+                                </a>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <p class="mb-1"><strong>Administrators:</strong></p>
+                                <p class="small text-muted mb-2">Need admin access?</p>
+                                <a href="/create-admin" class="btn btn-outline-warning btn-sm">
+                                    <i class="fas fa-user-shield me-1"></i>Create Admin
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="text-center">
+                        <small class="text-muted">
+                            <i class="fas fa-info-circle me-1"></i>
+                            The system will automatically redirect you to the appropriate dashboard based on your role.
+                        </small>
                     </div>
                 </div>
             </div>

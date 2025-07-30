@@ -1,6 +1,9 @@
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 
+// Secret code for admin creation (you can change this or move to environment variables)
+const ADMIN_SECRET_CODE = 'COLLEGE_ADMIN_2025';
+
 exports.getLoginPage = (req, res) => {
     res.render('auth/login', { title: 'Login' });
 };
@@ -16,7 +19,14 @@ exports.postLogin = async (req, res) => {
             req.session.username = user.username;
             req.session.userRole = user.role;
 
-            const redirectTo = req.session.returnTo || '/dashboard';
+            // Redirect based on role
+            let redirectTo;
+            if (user.role === 'admin') {
+                redirectTo = req.session.returnTo || '/admin';
+            } else {
+                redirectTo = req.session.returnTo || '/dashboard';
+            }
+            
             delete req.session.returnTo;
             res.redirect(redirectTo);
         } else {
@@ -59,6 +69,71 @@ exports.postRegister = async (req, res) => {
         console.error('Registration error:', error);
         req.session.messages = ['Registration error occurred'];
         res.redirect('/register');
+    }
+};
+
+// New Admin Creation Routes
+exports.getCreateAdminPage = (req, res) => {
+    res.render('auth/create-admin', { title: 'Create Admin Account' });
+};
+
+exports.postCreateAdmin = async (req, res) => {
+    // Joi validation handled by middleware
+    try {
+        const { secretCode, username, email, password } = req.body;
+
+        // Check secret code
+        if (secretCode !== ADMIN_SECRET_CODE) {
+            req.session.messages = ['Invalid secret code. Access denied.'];
+            return res.redirect('/create-admin');
+        }
+
+        // Server-side password validation with detailed feedback
+        const passwordErrors = [];
+        if (password.length < 8) {
+            passwordErrors.push('Password must be at least 8 characters long');
+        }
+        if (!/[A-Z]/.test(password)) {
+            passwordErrors.push('Password must contain at least one uppercase letter');
+        }
+        if (!/[a-z]/.test(password)) {
+            passwordErrors.push('Password must contain at least one lowercase letter');
+        }
+        if (!/[0-9]/.test(password)) {
+            passwordErrors.push('Password must contain at least one number');
+        }
+        if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) {
+            passwordErrors.push('Password must contain at least one special character');
+        }
+
+        if (passwordErrors.length > 0) {
+            req.session.messages = passwordErrors;
+            return res.redirect('/create-admin');
+        }
+
+        // Check if admin already exists with this username or email
+        const existingUser = await User.findOne({ $or: [{ username }, { email }] });
+        if (existingUser) {
+            req.session.messages = ['Username or email already exists'];
+            return res.redirect('/create-admin');
+        }
+
+        // Create admin user
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const admin = new User({
+            username,
+            email,
+            password: hashedPassword,
+            role: 'admin'
+        });
+
+        await admin.save();
+        req.session.messages = ['Admin account created successfully! You can now login.'];
+        res.redirect('/login');
+    } catch (error) {
+        console.error('Admin creation error:', error);
+        req.session.messages = ['Error creating admin account'];
+        res.redirect('/create-admin');
     }
 };
 

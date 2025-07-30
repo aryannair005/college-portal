@@ -1,52 +1,171 @@
-<div class="hero-section bg-primary text-white py-5">
+<!-- Hero Section -->
+<div class="hero-section bg-primary text-white">
     <div class="container text-center">
         <h1 class="display-4 mb-4">
-            <i class="fas fa-graduation-cap me-3"></i>Welcome to College Portal
+            <i class="fas fa-graduation-cap me-3"></i>
+            Welcome to College Portal
         </h1>
-        <p class="lead mb-4">Your one-stop destination for study resources and previous year question papers</p>
+        <p class="lead mb-5">Your comprehensive platform for academic resources, previous year questions, syllabus, and collaborative learning.</p>
+        
         <% if (!user) { %>
-            <a href="/register" class="btn btn-light btn-lg btn-custom me-3">
-                <i class="fas fa-user-plus me-2"></i>Get Started
-            </a>
-            <a href="/login" class="btn btn-outline-light btn-lg btn-custom">
-                <i class="fas fa-sign-in-alt me-2"></i>Login
-            </a>
+            <div class="row justify-content-center">
+                <div class="col-md-10">
+                    <div class="row g-3">
+                        <!-- Student Access -->
+                        <div class="col-md-4">
+                            <div class="card bg-light text-dark h-100">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-users fa-3x text-success mb-3"></i>
+                                    <h5 class="card-title">Students</h5>
+                                    <p class="card-text">Access resources, PYQs, and collaborate with peers.</p>
+                                    <div class="d-grid gap-2">
+                                        <a href="/login" class="btn btn-primary btn-sm">
+                                            <i class="fas fa-sign-in-alt me-1"></i>Login
+                                        </a>
+                                        <a href="/register" class="btn btn-outline-success btn-sm">
+                                            <i class="fas fa-user-plus me-1"></i>Register
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Admin Access -->
+                        <div class="col-md-4">
+                            <div class="card bg-light text-dark h-100">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-user-shield fa-3x text-warning mb-3"></i>
+                                    <h5 class="card-title">Administrators</h5>
+                                    <p class="card-text">Manage resources, syllabus, and platform content.</p>
+                                    <div class="d-grid gap-2">
+                                        <a href="/login" class="btn btn-primary btn-sm">
+                                            <i class="fas fa-sign-in-alt me-1"></i>Login
+                                        </a>
+                                        <a href="/create-admin" class="btn btn-outline-warning btn-sm">
+                                            <i class="fas fa-user-shield me-1"></i>Create Admin
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Features -->
+                        <div class="col-md-4">
+                            <div class="card bg-light text-dark h-100">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-star fa-3x text-info mb-3"></i>
+                                    <h5 class="card-title">Features</h5>
+                                    <p class="card-text">Resources, PYQs, Syllabus, Doubts & Discussions.</p>
+                                    <div class="d-grid">
+                                        <a href="#features" class="btn btn-outline-info btn-sm">
+                                            <i class="fas fa-arrow-down me-1"></i>Learn More
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         <% } else { %>
-            <a href="/dashboard" class="btn btn-light btn-lg btn-custom">
-                <i class="fas fa-tachometer-alt me-2"></i>Go to Dashboard
-            </a>
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="alert alert-success" role="alert">
+                        <h4 class="alert-heading">
+                            <i class="fas fa-check-circle me-2"></i>Welcome back, <%= user.username %>!
+                        </h4>
+                        <p class="mb-3">You are logged in as <strong><%= user.role %></strong>.</p>
+                        <hr>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                            <% if (user.role === 'admin') { %>
+                                <a href="/admin" class="btn btn-warning">
+                                    <i class="fas fa-cog me-1"></i>Admin Dashboard
+                                </a>
+                            <% } else { %>
+                                <a href="/dashboard" class="btn btn-success">
+                                    <i class="fas fa-tachometer-alt me-1"></i>Student Dashboard
+                                </a>
+                            <% } %>
+                            <a href="/logout" class="btn btn-outline-light">
+                                <i class="fas fa-sign-out-alt me-1"></i>Logout
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         <% } %>
     </div>
 </div>
 
-<div class="container my-5">
-    <div class="row">
-        <div class="col-md-4 mb-4">
-            <div class="card h-100 text-center">
+<!-- Features Section -->
+<div class="container py-5" id="features">
+    <div class="text-center mb-5">
+        <h2 class="display-5 fw-bold">Platform Features</h2>
+        <p class="lead text-muted">Everything you need for academic excellence</p>
+    </div>
+    
+    <div class="row g-4">
+        <div class="col-md-3">
+            <div class="card text-center h-100 border-0 shadow-sm">
                 <div class="card-body">
-                    <i class="fas fa-book text-primary fa-3x mb-3"></i>
+                    <i class="fas fa-book fa-3x text-primary mb-3"></i>
                     <h5 class="card-title">Study Resources</h5>
-                    <p class="card-text">Access a vast collection of study materials, PDFs, and helpful links organized by course, semester, and subject.</p>
+                    <p class="card-text">Access comprehensive study materials, notes, and reference documents for all subjects.</p>
                 </div>
             </div>
         </div>
-        <div class="col-md-4 mb-4">
-            <div class="card h-100 text-center">
+        
+        <div class="col-md-3">
+            <div class="card text-center h-100 border-0 shadow-sm">
                 <div class="card-body">
-                    <i class="fas fa-question-circle text-success fa-3x mb-3"></i>
+                    <i class="fas fa-question-circle fa-3x text-success mb-3"></i>
                     <h5 class="card-title">Previous Year Questions</h5>
-                    <p class="card-text">Browse and download previous year question papers to ace your exams with proper preparation.</p>
+                    <p class="card-text">Browse and download PYQs to prepare effectively for your examinations.</p>
                 </div>
             </div>
         </div>
-        <div class="col-md-4 mb-4">
-            <div class="card h-100 text-center">
+        
+        <div class="col-md-3">
+            <div class="card text-center h-100 border-0 shadow-sm">
                 <div class="card-body">
-                    <i class="fas fa-filter text-info fa-3x mb-3"></i>
-                    <h5 class="card-title">Smart Filtering</h5>
-                    <p class="card-text">Find exactly what you need with our advanced filtering system by course, semester, and subject.</p>
+                    <i class="fas fa-list-alt fa-3x text-info mb-3"></i>
+                    <h5 class="card-title">Course Syllabus</h5>
+                    <p class="card-text">Stay updated with current syllabus and course requirements for all semesters.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="card text-center h-100 border-0 shadow-sm">
+                <div class="card-body">
+                    <i class="fas fa-comments fa-3x text-warning mb-3"></i>
+                    <h5 class="card-title">Doubts & Discussion</h5>
+                    <p class="card-text">Ask questions, share knowledge, and collaborate with your peers.</p>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Call to Action -->
+<% if (!user) { %>
+<div class="bg-light py-5">
+    <div class="container text-center">
+        <h3 class="mb-4">Ready to Get Started?</h3>
+        <p class="lead mb-4">Join thousands of students already using our platform for academic success.</p>
+        <div class="d-inline-flex gap-3">
+            <a href="/register" class="btn btn-success btn-lg">
+                <i class="fas fa-user-plus me-2"></i>Register as Student
+            </a>
+            <a href="/login" class="btn btn-primary btn-lg">
+                <i class="fas fa-sign-in-alt me-2"></i>Login to Portal
+            </a>
+        </div>
+        <div class="mt-3">
+            <small class="text-muted">
+                Administrators can <a href="/create-admin">create admin accounts here</a>
+            </small>
+        </div>
+    </div>
+</div>
+<% } %>

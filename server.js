@@ -2,16 +2,15 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const session = require('express-session');
-const bcrypt = require('bcryptjs'); // Still needed for initial admin creation
 const expressLayouts = require('express-ejs-layouts');
 const path = require('path');
-const fs = require('fs'); // Still needed for initial directory checks, if any
+const fs = require('fs');
 
-// Import Models (optional: if you need to access them directly in app.js, e.g., for admin creation)
-const User = require('./models/User'); // Required for createAdminUser
+// Import Models (optional: if you need to access them directly in app.js)
+const User = require('./models/User');
 
 // Import Middleware
-const { ensureStudent, ensureAdmin } = require('./middleware/authMiddleware'); // For global use if needed, but primarily in routes
+const { ensureStudent, ensureAdmin } = require('./middleware/authMiddleware');
 
 // Import Routers
 const indexRouter = require('./routes/index');
@@ -19,7 +18,7 @@ const authRouter = require('./routes/authRoutes');
 const studentRouter = require('./routes/studentRoutes');
 const doubtRouter = require('./routes/doubtRoutes');
 const adminRouter = require('./routes/adminRoutes');
-const utilityRouter = require('./routes/utilityRoutes'); // For downloads/viewers
+const utilityRouter = require('./routes/utilityRoutes');
 
 const app = express();
 
@@ -30,7 +29,6 @@ mongoose.connect('mongodb://localhost:27017/college_portal', {
 })
 .then(() => console.log('MongoDB Connected'))
 .catch(err => console.error('MongoDB connection error:', err));
-
 
 // Middleware
 app.use(express.urlencoded({ extended: true }));
@@ -51,7 +49,6 @@ uploadDirs.forEach(dir => {
     }
 });
 
-
 // Session configuration
 app.use(session({
     secret: 'college-portal-secret-key',
@@ -64,7 +61,7 @@ app.use(session({
 app.set('view engine', 'ejs');
 app.use(expressLayouts);
 app.set('layout', 'layouts/main');
-app.set('views', path.join(__dirname, 'views')); // Explicitly set views directory
+app.set('views', path.join(__dirname, 'views'));
 
 // Global variables for templates
 app.use((req, res, next) => {
@@ -80,7 +77,7 @@ app.use((req, res, next) => {
 
 // ==================== Mount Routers ====================
 app.use('/', indexRouter); // Home route
-app.use('/', authRouter); // Login, Register, Logout
+app.use('/', authRouter); // Login, Register, Logout, Create Admin
 app.use('/', studentRouter); // Dashboard, Resources, PYQs, Syllabus (student view)
 app.use('/doubts', doubtRouter); // All doubt related routes
 app.use('/admin', adminRouter); // Admin routes
@@ -91,52 +88,21 @@ app.use((req, res, next) => {
     res.status(404).render('404', { title: 'Page Not Found' });
 });
 
-// Basic Error Handler (Add more robust error handling in production)
+// Basic Error Handler
 app.use((err, req, res, next) => {
     console.error(err.stack);
     req.session.messages = ['An unexpected error occurred. Please try again.'];
-    res.status(500).redirect('/'); // Redirect to home or a dedicated error page
+    res.status(500).redirect('/');
 });
 
 // ==================== SERVER START ====================
 const PORT = process.env.PORT || 3000;
 
-// Create admin user on first run (moved here as it uses User model and bcrypt)
-const createAdminUser = async () => {
-    try {
-        const adminExists = await User.findOne({ role: 'admin' });
-        if (!adminExists) {
-            const hashedPassword = await bcrypt.hash('admin123', 10);
-            const admin = new User({
-                username: 'admin',
-                email: 'admin@college.edu',
-                password: hashedPassword,
-                role: 'admin'
-            });
-            await admin.save();
-            console.log('Admin user created: username=admin, password=admin123');
-        }
-    } catch (error) {
-        console.log('Error creating admin user:', error);
-    }
-};
-
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
-    createAdminUser(); // Call this on server start
-    // migrateResources(); // Uncomment this line and run once to update old resources, then comment it back.
+    console.log('Admin Creation Instructions:');
+    console.log('1. Go to http://localhost:3000/create-admin');
+    console.log('2. Use secret code: COLLEGE_ADMIN_2025');
+    console.log('3. Create your admin account');
+    console.log('Note: Change the secret code in authController.js for production!');
 });
-
-// Original migration function (can be placed here or run as a separate script)
-async function migrateResources() {
-    try {
-        const resources = await Resource.find({ youtubeLinks: { $exists: false } }); // Assuming Resource model is imported
-        for (let resource of resources) {
-            resource.youtubeLinks = [];
-            await resource.save();
-        }
-        console.log(`Migrated ${resources.length} resources to include youtubeLinks field`);
-    } catch (error) {
-        console.error('Migration error:', error);
-    }
-}

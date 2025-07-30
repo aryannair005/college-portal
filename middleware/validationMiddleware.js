@@ -43,6 +43,39 @@ const schemas = {
         })
     }),
 
+    // Admin Creation Schema - More flexible for better UX
+    createAdminSchema: Joi.object({
+        secretCode: Joi.string().trim().required().messages({
+            'string.base': 'Secret code should be a type of text',
+            'string.empty': 'Secret code cannot be empty',
+            'any.required': 'Secret code is required'
+        }),
+        username: Joi.string().trim().alphanum().min(3).max(30).required().messages({
+            'string.base': 'Username should be a type of text',
+            'string.empty': 'Username cannot be empty',
+            'string.alphanum': 'Username can only contain alpha-numeric characters',
+            'string.min': 'Username should have a minimum length of {#limit}',
+            'string.max': 'Username should have a maximum length of {#limit}',
+            'any.required': 'Username is required'
+        }),
+        email: Joi.string().trim().email().required().messages({
+            'string.base': 'Email should be a type of text',
+            'string.empty': 'Email cannot be empty',
+            'string.email': 'Email must be a valid email address',
+            'any.required': 'Email is required'
+        }),
+        password: Joi.string().min(8).required().messages({
+            'string.base': 'Password should be a type of text',
+            'string.empty': 'Password cannot be empty',
+            'string.min': 'Password should have a minimum length of {#limit}',
+            'any.required': 'Password is required'
+        }),
+        confirmPassword: Joi.string().valid(Joi.ref('password')).required().messages({
+            'any.only': 'Passwords do not match',
+            'any.required': 'Confirm Password is required'
+        })
+    }),
+
     // Admin Schemas
     addResourceSchema: Joi.object({
         title: Joi.string().trim().min(3).max(100).required().messages({
@@ -226,10 +259,12 @@ const validate = (schemaName, source = 'body') => {
             req.session.messages = errors;
             console.log('Validation Errors:', errors);
 
+            // Always redirect back for POST requests, never to a 404
             if (req.method === 'POST') {
                 return res.redirect('back');
             } else {
-                return res.redirect('/');
+                // For GET requests with query params, just continue with empty/default values
+                return next();
             }
         }
         next();
