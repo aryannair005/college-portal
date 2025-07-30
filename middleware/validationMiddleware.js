@@ -43,25 +43,6 @@ const schemas = {
         })
     }),
 
-    // Chatbot Message Schema
-    chatMessageSchema: Joi.object({
-        message: Joi.string().trim().min(1).max(1000).required().messages({
-            'string.base': 'Message should be a type of text',
-            'string.empty': 'Message cannot be empty',
-            'string.min': 'Message cannot be empty',
-            'string.max': 'Message should have a maximum length of {#limit}',
-            'any.required': 'Message is required'
-        }),
-        conversationHistory: Joi.array().items(
-            Joi.object({
-                role: Joi.string().valid('user', 'bot').required(),
-                content: Joi.string().required()
-            })
-        ).max(50).optional().messages({
-            'array.max': 'Conversation history is too long'
-        })
-    }),
-
     // Admin Creation Schema - More flexible for better UX
     createAdminSchema: Joi.object({
         secretCode: Joi.string().trim().required().messages({
@@ -256,15 +237,6 @@ const validate = (schemaName, source = 'body') => {
         const schema = schemas[schemaName];
         if (!schema) {
             console.error(`Joi schema "${schemaName}" not found.`);
-            
-            // For chatbot API calls, return JSON error instead of redirecting
-            if (req.path.includes('/chatbot/message')) {
-                return res.status(500).json({
-                    success: false,
-                    error: 'Internal server error: Validation schema missing.'
-                });
-            }
-            
             req.session.messages = ['Internal server error: Validation schema missing.'];
             return res.redirect('back');
         }
@@ -276,15 +248,6 @@ const validate = (schemaName, source = 'body') => {
             dataToValidate = req.query;
         } else {
             console.error(`Invalid source for validation: ${source}. Must be 'body' or 'query'.`);
-            
-            // For chatbot API calls, return JSON error
-            if (req.path.includes('/chatbot/message')) {
-                return res.status(500).json({
-                    success: false,
-                    error: 'Internal server error: Invalid validation source.'
-                });
-            }
-            
             req.session.messages = ['Internal server error: Invalid validation source.'];
             return res.redirect('back');
         }
@@ -294,15 +257,6 @@ const validate = (schemaName, source = 'body') => {
         if (error) {
             const errors = error.details.map(detail => detail.message);
             console.log('Validation Errors:', errors);
-
-            // For chatbot API calls, return JSON error
-            if (req.path.includes('/chatbot/message')) {
-                return res.status(400).json({
-                    success: false,
-                    error: errors[0] // Return the first error message
-                });
-            }
-
             req.session.messages = errors;
 
             // Always redirect back for POST requests, never to a 404

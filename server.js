@@ -22,12 +22,11 @@ const studentRouter = require('./routes/studentRoutes');
 const doubtRouter = require('./routes/doubtRoutes');
 const adminRouter = require('./routes/adminRoutes');
 const utilityRouter = require('./routes/utilityRoutes');
-const chatbotRouter = require('./routes/chatbotRoutes'); // NEW: Import chatbot routes
 
 const app = express();
 
 // MongoDB Connection - Use environment variable if available
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/college_portal';
+const MONGODB_URI = process.env.MONGODB_URI;
 mongoose.connect(MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -88,7 +87,6 @@ app.use('/', studentRouter); // Dashboard, Resources, PYQs, Syllabus (student vi
 app.use('/doubts', doubtRouter); // All doubt related routes
 app.use('/admin', adminRouter); // Admin routes
 app.use('/', utilityRouter); // Download and Viewer routes
-app.use('/chatbot', chatbotRouter); // NEW: Chatbot routes
 
 // Handle 404 (Not Found)
 app.use((req, res, next) => {
@@ -112,14 +110,4 @@ app.listen(PORT, () => {
     console.log('2. Use secret code: COLLEGE_ADMIN_2025');
     console.log('3. Create your admin account');
     console.log('Note: Change the secret code in authController.js for production!');
-    console.log('');
-    console.log('🤖 StudyBot is ready! Access it at: http://localhost:3000/chatbot');
-    
-    // Check if Gemini API key is configured
-    if (process.env.GEMINI_API_KEY) {
-        console.log('✅ Gemini API key configured');
-    } else {
-        console.log('⚠️  Warning: GEMINI_API_KEY not found in environment variables');
-        console.log('   Chatbot will use fallback key from controller');
-    }
 });
