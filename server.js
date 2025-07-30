@@ -1,4 +1,7 @@
-// ==================== APP.JS (formerly server.js) ====================
+// ==================== SERVER.JS ====================
+// Load environment variables first
+require('dotenv').config();
+
 const express = require('express');
 const mongoose = require('mongoose');
 const session = require('express-session');
@@ -19,11 +22,13 @@ const studentRouter = require('./routes/studentRoutes');
 const doubtRouter = require('./routes/doubtRoutes');
 const adminRouter = require('./routes/adminRoutes');
 const utilityRouter = require('./routes/utilityRoutes');
+const chatbotRouter = require('./routes/chatbotRoutes'); // NEW: Import chatbot routes
 
 const app = express();
 
-// MongoDB Connection
-mongoose.connect('mongodb://localhost:27017/college_portal', {
+// MongoDB Connection - Use environment variable if available
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/college_portal';
+mongoose.connect(MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 })
@@ -49,9 +54,10 @@ uploadDirs.forEach(dir => {
     }
 });
 
-// Session configuration
+// Session configuration - Use environment variable if available
+const SESSION_SECRET = process.env.SESSION_SECRET || 'college-portal-secret-key';
 app.use(session({
-    secret: 'college-portal-secret-key',
+    secret: SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: { secure: false } // Set to true if using HTTPS
@@ -82,6 +88,7 @@ app.use('/', studentRouter); // Dashboard, Resources, PYQs, Syllabus (student vi
 app.use('/doubts', doubtRouter); // All doubt related routes
 app.use('/admin', adminRouter); // Admin routes
 app.use('/', utilityRouter); // Download and Viewer routes
+app.use('/chatbot', chatbotRouter); // NEW: Chatbot routes
 
 // Handle 404 (Not Found)
 app.use((req, res, next) => {
@@ -105,4 +112,14 @@ app.listen(PORT, () => {
     console.log('2. Use secret code: COLLEGE_ADMIN_2025');
     console.log('3. Create your admin account');
     console.log('Note: Change the secret code in authController.js for production!');
+    console.log('');
+    console.log('🤖 StudyBot is ready! Access it at: http://localhost:3000/chatbot');
+    
+    // Check if Gemini API key is configured
+    if (process.env.GEMINI_API_KEY) {
+        console.log('✅ Gemini API key configured');
+    } else {
+        console.log('⚠️  Warning: GEMINI_API_KEY not found in environment variables');
+        console.log('   Chatbot will use fallback key from controller');
+    }
 });
