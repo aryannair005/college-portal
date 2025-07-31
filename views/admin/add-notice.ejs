@@ -1,0 +1,61 @@
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-warning text-dark">
+                    <h4><i class="fas fa-bullhorn me-2"></i>Add New Notice</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="/notices/admin/add" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Notice Title *</label>
+                            <input type="text" class="form-control" id="title" name="title" 
+                                   placeholder="Enter notice title" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="priority" class="form-label">Priority Level</label>
+                            <select class="form-select" id="priority" name="priority" required>
+                                <option value="low">Low</option>
+                                <option value="medium" selected>Medium</option>
+                                <option value="high">High</option>
+                                <option value="urgent">Urgent</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description *</label>
+                            <textarea class="form-control" id="description" name="description" rows="6" 
+                                      placeholder="Enter detailed description of the notice..." required></textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="noticeImage" class="form-label">Attach Image (Optional)</label>
+                            <input type="file" class="form-control" id="noticeImage" name="noticeImage" 
+                                   accept="image/*">
+                            <div class="form-text">Upload an image to make your notice more engaging.</div>
+                        </div>
+                        
+                        <div class="alert alert-info" role="alert">
+                            <i class="fas fa-info-circle me-2"></i>
+                            <strong>Note:</strong> This notice will automatically expire and be deleted after 2 weeks.
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <button type="submit" class="btn btn-warning btn-custom w-100">
+                                    <i class="fas fa-plus me-2"></i>Add Notice
+                                </button>
+                            </div>
+                            <div class="col-md-6">
+                                <a href="/notices/admin/manage" class="btn btn-outline-secondary btn-custom w-100">
+                                    <i class="fas fa-arrow-left me-2"></i>Back to Notices
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

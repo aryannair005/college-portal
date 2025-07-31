@@ -1,4 +1,4 @@
-// config/multerConfig.js
+// Updated config/multerConfig.js
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
@@ -12,6 +12,8 @@ const storage = multer.diskStorage({
             uploadPath = 'uploads/resources/';
         } else if (file.fieldname === 'doubtImage') {
             uploadPath = 'uploads/doubts/';
+        } else if (file.fieldname === 'noticeImage') {
+            uploadPath = 'uploads/notices/';
         } else {
             uploadPath = 'uploads/'; // Fallback or handle specific types
         }

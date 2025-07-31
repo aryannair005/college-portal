@@ -228,7 +228,27 @@ const schemas = {
         course: Joi.string().trim().allow(''),
         semester: Joi.number().integer().min(1).max(10).allow(''),
         subject: Joi.string().trim().allow('')
-    })
+    }),
+    // Add this to your existing validationMiddleware.js schemas object
+
+    // Notice Schemas
+    addNoticeSchema: Joi.object({
+        title: Joi.string().trim().min(3).max(200).required().messages({
+            'string.empty': 'Title cannot be empty',
+            'string.min': 'Title should have a minimum length of {#limit}',
+            'string.max': 'Title should have a maximum length of {#limit}',
+            'any.required': 'Title is required'
+        }),
+        description: Joi.string().trim().min(10).required().messages({
+            'string.empty': 'Description cannot be empty',
+            'string.min': 'Description should have a minimum length of {#limit}',
+            'any.required': 'Description is required'
+        }),
+        priority: Joi.string().valid('low', 'medium', 'high', 'urgent').default('medium').messages({
+            'any.only': 'Priority must be one of: low, medium, high, urgent'
+        })
+        // image is handled by multer, not directly validated by Joi here
+    }),
 };
 
 // Validation middleware function

@@ -29,4 +29,11 @@ router.post('/add-syllabus', ensureAdmin, upload.single('pdf'), validate('addSyl
 router.get('/manage-syllabus', ensureAdmin, adminController.getManageSyllabus);
 router.post('/delete-syllabus/:id', ensureAdmin, adminController.deleteSyllabus);
 
+// Notice Management
+router.get('/notices', ensureAdmin, require('../controllers/noticeController').getAdminNoticesPage);
+router.get('/add-notice', ensureAdmin, require('../controllers/noticeController').getAddNoticePage);
+router.post('/add-notice', ensureAdmin, upload.single('noticeImage'), validate('addNoticeSchema'), require('../controllers/noticeController').postAddNotice);
+router.post('/delete-notice/:id', ensureAdmin, require('../controllers/noticeController').deleteNotice);
+router.post('/toggle-notice/:id', ensureAdmin, require('../controllers/noticeController').toggleNoticeStatus);
+
 module.exports = router;

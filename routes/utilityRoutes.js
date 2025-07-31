@@ -19,4 +19,11 @@ router.get('/pdf/resource/:filename', ensureStudent, utilityController.serveReso
 router.get('/pdf/pyq/:filename', ensureStudent, utilityController.servePyqPdf);
 router.get('/pdf/syllabus/:filename', ensureStudent, utilityController.serveSyllabusPdf);
 
+
+// Notice Image Downloads 
+router.get('/download/notice/:filename', ensureStudent, utilityController.downloadNoticeImage);
+
+// Notice Image Serving 
+router.get('/serve/notice/:filename', ensureStudent, utilityController.serveNoticeImage);
+
 module.exports = router;

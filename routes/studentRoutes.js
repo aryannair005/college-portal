@@ -23,4 +23,8 @@ router.get('/syllabus', ensureStudent, validate('studentQuerySchema', 'query'), 
 router.get('/view-syllabus-pdf/:filename', ensureStudent, require('../controllers/utilityController').viewSyllabusPdf);
 router.get('/download-syllabus/:filename', ensureStudent, require('../controllers/utilityController').downloadSyllabus);
 
+// Notices 
+router.get('/notices', ensureStudent, require('../controllers/noticeController').getNoticesPage);
+router.get('/notices/:id', ensureStudent, require('../controllers/noticeController').getSingleNotice);
+
 module.exports = router;

@@ -22,6 +22,7 @@ const studentRouter = require('./routes/studentRoutes');
 const doubtRouter = require('./routes/doubtRoutes');
 const adminRouter = require('./routes/adminRoutes');
 const utilityRouter = require('./routes/utilityRoutes');
+const noticeRouter = require('./routes/noticeRoutes'); // NEW: Notice routes
 
 const app = express();
 
@@ -40,12 +41,13 @@ app.use(express.json());
 app.use(express.static('public'));
 app.use('/uploads', express.static('uploads'));
 
-// Ensure upload directories exist on startup
+// Ensure upload directories exist on startup - UPDATED to include notices
 const uploadBaseDir = path.join(__dirname, 'uploads');
 const uploadDirs = [
     path.join(uploadBaseDir, 'pyqs'),
     path.join(uploadBaseDir, 'resources'),
-    path.join(uploadBaseDir, 'doubts')
+    path.join(uploadBaseDir, 'doubts'),
+    path.join(uploadBaseDir, 'notices') // NEW: Notices upload directory
 ];
 uploadDirs.forEach(dir => {
     if (!fs.existsSync(dir)) {
@@ -87,6 +89,7 @@ app.use('/', studentRouter); // Dashboard, Resources, PYQs, Syllabus (student vi
 app.use('/doubts', doubtRouter); // All doubt related routes
 app.use('/admin', adminRouter); // Admin routes
 app.use('/', utilityRouter); // Download and Viewer routes
+app.use('/notices', noticeRouter); // NEW: Notice routes
 
 // Handle 404 (Not Found)
 app.use((req, res, next) => {
@@ -110,4 +113,9 @@ app.listen(PORT, () => {
     console.log('2. Use secret code: COLLEGE_ADMIN_2025');
     console.log('3. Create your admin account');
     console.log('Note: Change the secret code in authController.js for production!');
+    console.log('');
+    console.log('🎯 NEW FEATURE: Notice Board');
+    console.log('- Admin can add notices at: /admin/notices');
+    console.log('- Students can view notices at: /notices');
+    console.log('- Notices auto-delete after 2 weeks');
 });

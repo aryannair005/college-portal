@@ -104,6 +104,9 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         
+        <!-- Update the navigation section in views/layouts/main.ejs -->
+<!-- Replace the existing navbar navigation items with this updated version -->
+
         <div class="collapse navbar-collapse" id="navbarNav">
             <!-- Resources in the center -->
             <ul class="navbar-nav mx-auto">
@@ -111,6 +114,11 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/dashboard">
                             <i class="fas fa-tachometer-alt me-1"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/notices">
+                            <i class="fas fa-bullhorn me-1"></i>Notices
                         </a>
                     </li>
                     <li class="nav-item">
@@ -143,7 +151,7 @@
                 <% } %>
             </ul>
             
-            <!-- User authentication on the right -->
+            <!-- User authentication on the right (remains the same) -->
             <ul class="navbar-nav ms-auto">
                 <% if (user) { %>
                     <li class="nav-item dropdown">

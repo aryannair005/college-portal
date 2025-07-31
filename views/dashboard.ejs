@@ -8,6 +8,20 @@
     </div>
     
     <div class="row">
+        <!-- Notice Board -->
+        <div class="col-md-3 mb-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <i class="fas fa-bullhorn text-warning fa-3x mb-3"></i>
+                    <h5 class="card-title">Notice Board</h5>
+                    <p class="card-text">Stay updated with latest announcements and important notices.</p>
+                    <a href="/notices" class="btn btn-warning btn-custom">
+                        <i class="fas fa-arrow-right me-2"></i>View Notices
+                    </a>
+                </div>
+            </div>
+        </div>
+        
         <div class="col-md-3 mb-4">
             <div class="card">
                 <div class="card-body text-center">
@@ -37,23 +51,25 @@
         <div class="col-md-3 mb-4">
             <div class="card">
                 <div class="card-body text-center">
-                    <i class="fas fa-list-alt text-warning fa-3x mb-3"></i>
+                    <i class="fas fa-list-alt text-info fa-3x mb-3"></i>
                     <h5 class="card-title">Course Syllabus</h5>
                     <p class="card-text">View detailed course syllabus organized by semester and subject.</p>
-                    <a href="/syllabus" class="btn btn-warning btn-custom">
+                    <a href="/syllabus" class="btn btn-info btn-custom">
                         <i class="fas fa-arrow-right me-2"></i>View Syllabus
                     </a>
                 </div>
             </div>
         </div>
-        
-        <div class="col-md-3 mb-4">
+    </div>
+    
+    <div class="row">
+        <div class="col-md-12 mb-4">
             <div class="card">
                 <div class="card-body text-center">
-                    <i class="fas fa-comments text-info fa-3x mb-3"></i>
+                    <i class="fas fa-comments text-secondary fa-3x mb-3"></i>
                     <h5 class="card-title">Doubts & Discussion</h5>
                     <p class="card-text">Post your doubts and get help from peers and teachers.</p>
-                    <a href="/doubts" class="btn btn-info btn-custom">
+                    <a href="/doubts" class="btn btn-secondary btn-custom">
                         <i class="fas fa-arrow-right me-2"></i>Browse Doubts
                     </a>
                 </div>
@@ -61,7 +77,7 @@
         </div>
     </div>
     
-    <!-- Recent Doubts Section -->
+    <!-- Recent Doubts Section (keep existing code) -->
     <% if (recentDoubts && recentDoubts.length > 0) { %>
     <div class="row mt-5">
         <div class="col-12">
@@ -96,7 +112,7 @@
         <% }) %>
     </div>
     <div class="text-center mt-3">
-        <a href="/doubts" class="btn btn-info btn-custom">
+        <a href="/doubts" class="btn btn-secondary btn-custom">
             <i class="fas fa-eye me-2"></i>View All Doubts
         </a>
     </div>
@@ -111,24 +127,34 @@
                 </div>
                 <div class="card-body">
                     <div class="row text-center">
-                        <div class="col-md-3 mb-3">
+                        <div class="col-md-2 mb-3">
+                            <a href="/notices" class="btn btn-outline-warning btn-custom w-100">
+                                <i class="fas fa-bullhorn me-2"></i>View Notices
+                            </a>
+                        </div>
+                        <div class="col-md-2 mb-3">
                             <a href="/doubts/add" class="btn btn-outline-primary btn-custom w-100">
                                 <i class="fas fa-plus me-2"></i>Post New Doubt
                             </a>
                         </div>
-                        <div class="col-md-3 mb-3">
-                            <a href="/syllabus" class="btn btn-outline-warning btn-custom w-100">
+                        <div class="col-md-2 mb-3">
+                            <a href="/syllabus" class="btn btn-outline-info btn-custom w-100">
                                 <i class="fas fa-list-alt me-2"></i>View Syllabus
                             </a>
                         </div>
-                        <div class="col-md-3 mb-3">
+                        <div class="col-md-2 mb-3">
                             <a href="/resources" class="btn btn-outline-success btn-custom w-100">
                                 <i class="fas fa-search me-2"></i>Find Resources
                             </a>
                         </div>
-                        <div class="col-md-3 mb-3">
-                            <a href="/pyqs" class="btn btn-outline-info btn-custom w-100">
+                        <div class="col-md-2 mb-3">
+                            <a href="/pyqs" class="btn btn-outline-secondary btn-custom w-100">
                                 <i class="fas fa-download me-2"></i>Download PYQs
+                            </a>
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <a href="/doubts" class="btn btn-outline-dark btn-custom w-100">
+                                <i class="fas fa-comments me-2"></i>Browse Doubts
                             </a>
                         </div>
                     </div>
@@ -145,7 +171,7 @@
                     <h5 class="mb-0"><i class="fas fa-crown me-2"></i>Admin Panel</h5>
                 </div>
                 <div class="card-body">
-                    <p>You have admin privileges. Manage resources and PYQs from the admin panel.</p>
+                    <p>You have admin privileges. Manage resources, notices, and PYQs from the admin panel.</p>
                     <a href="/admin" class="btn btn-warning">
                         <i class="fas fa-cog me-2"></i>Go to Admin Panel
                     </a>

@@ -1,0 +1,82 @@
+<div class="container my-4">
+    <h2 class="mb-4">
+        <i class="fas fa-bullhorn me-2"></i>Notice Board
+    </h2>
+    
+    <% if (notices.length === 0) { %>
+        <div class="alert alert-info alert-custom text-center">
+            <i class="fas fa-info-circle me-2"></i>
+            No active notices at the moment. Check back later for updates!
+        </div>
+    <% } else { %>
+        <div class="row">
+            <% notices.forEach(notice => { %>
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100 border-<%= 
+                        notice.priority === 'urgent' ? 'danger' : 
+                        notice.priority === 'high' ? 'warning' : 
+                        notice.priority === 'medium' ? 'info' : 'light' 
+                    %>">
+                        <% if (notice.image) { %>
+                            <img src="/download/notice/<%= notice.image %>" 
+                                 class="card-img-top" 
+                                 alt="Notice Image" 
+                                 style="height: 200px; object-fit: cover;">
+                        <% } %>
+                        
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <span class="badge bg-<%= 
+                                notice.priority === 'urgent' ? 'danger' : 
+                                notice.priority === 'high' ? 'warning' : 
+                                notice.priority === 'medium' ? 'info' : 'secondary' 
+                            %>">
+                                <%= notice.priority.toUpperCase() %>
+                            </span>
+                            <small class="text-muted">
+                                <i class="fas fa-calendar me-1"></i>
+                                <%= new Date(notice.createdAt).toLocaleDateString() %>
+                            </small>
+                        </div>
+                        
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <%= notice.title %>
+                            </h5>
+                            <p class="card-text">
+                                <%= notice.description.length > 120 ? notice.description.substring(0, 120) + '...' : notice.description %>
+                            </p>
+                            <div class="d-flex justify-content-between align-items-center mt-auto">
+                                <small class="text-muted">
+                                    By: <%= notice.createdByName %>
+                                </small>
+                                <a href="/notices/<%= notice._id %>" class="btn btn-primary btn-sm btn-custom">
+                                    <i class="fas fa-eye me-1"></i>Read More
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <div class="card-footer bg-transparent">
+                            <small class="text-muted">
+                                <i class="fas fa-clock me-1"></i>
+                                Expires: <%= new Date(notice.expiresAt).toLocaleDateString() %>
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
+    <% } %>
+    
+    <!-- Info section -->
+    <div class="mt-5">
+        <div class="card border-light bg-light">
+            <div class="card-body text-center">
+                <h6><i class="fas fa-lightbulb me-2"></i>About Notice Board</h6>
+                <p class="mb-0 small text-muted">
+                    Stay updated with the latest announcements, events, and important information from the college administration.
+                    All notices are automatically removed after 2 weeks to keep the board current.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

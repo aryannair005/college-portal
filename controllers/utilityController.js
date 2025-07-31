@@ -138,3 +138,29 @@ exports.serveSyllabusPdf = (req, res) => {
         res.status(404).send('PDF not found');
     }
 };
+
+
+exports.downloadNoticeImage = (req, res) => {
+    const filename = req.params.filename;
+    const filepath = path.join(getBaseDir(), 'uploads/notices', filename);
+
+    if (fs.existsSync(filepath)) {
+        res.sendFile(filepath);
+    } else {
+        res.status(404).send('Image not found');
+    }
+};
+
+// Alternative function for serving notice images inline
+exports.serveNoticeImage = (req, res) => {
+    const filename = req.params.filename;
+    const filepath = path.join(getBaseDir(), 'uploads/notices', filename);
+
+    if (fs.existsSync(filepath)) {
+        res.setHeader('Content-Type', 'image/*');
+        res.setHeader('Content-Disposition', 'inline');
+        res.sendFile(filepath);
+    } else {
+        res.status(404).send('Image not found');
+    }
+};
