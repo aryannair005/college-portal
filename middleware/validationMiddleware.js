@@ -249,6 +249,37 @@ const schemas = {
         })
         // image is handled by multer, not directly validated by Joi here
     }),
+
+    // Profile Update Schema
+    profileUpdateSchema: Joi.object({
+        fullName: Joi.string().trim().min(2).max(100).allow('').messages({
+            'string.min': 'Full name should have a minimum length of {#limit}',
+            'string.max': 'Full name should have a maximum length of {#limit}'
+        }),
+        email: Joi.string().email().allow('').optional().messages({
+            'string.email': 'Email must be a valid email address'
+        }), // Allow email but ignore it in processing
+        phone: Joi.string().trim().pattern(/^[+]?[\d\s\-\(\)]{7,15}$/).allow('').messages({
+            'string.pattern.base': 'Please enter a valid phone number'
+        }),
+        rollNo: Joi.string().trim().alphanum().max(20).allow('').messages({
+            'string.alphanum': 'Roll number can only contain letters and numbers',
+            'string.max': 'Roll number should have a maximum length of {#limit}'
+        }),
+        course: Joi.string().trim().max(100).allow('').messages({
+            'string.max': 'Course name should have a maximum length of {#limit}'
+        }),
+        bio: Joi.string().trim().max(500).allow('').messages({
+            'string.max': 'Bio should have a maximum length of {#limit} characters'
+        }),
+        dateOfBirth: Joi.date().max('now').allow('').optional().messages({
+            'date.max': 'Date of birth cannot be in the future'
+        }),
+        address: Joi.string().trim().max(200).allow('').messages({
+            'string.max': 'Address should have a maximum length of {#limit}'
+        })
+    }),
+
 };
 
 // Validation middleware function

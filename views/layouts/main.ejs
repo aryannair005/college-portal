@@ -69,6 +69,14 @@
             padding-top: 19px;
         }
         
+        /* Profile image styles */
+        .profile-nav-image {
+            width: 32px;
+            height: 32px;
+            object-fit: cover;
+            border: 2px solid #fff;
+        }
+        
         /* Hero section adjustments */
         .hero-section {
             padding: 60px 0;
@@ -104,9 +112,6 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         
-        <!-- Update the navigation section in views/layouts/main.ejs -->
-<!-- Replace the existing navbar navigation items with this updated version -->
-
         <div class="collapse navbar-collapse" id="navbarNav">
             <!-- Resources in the center -->
             <ul class="navbar-nav mx-auto">
@@ -151,17 +156,34 @@
                 <% } %>
             </ul>
             
-            <!-- User authentication on the right (remains the same) -->
+            <!-- User authentication on the right -->
             <ul class="navbar-nav ms-auto">
                 <% if (user) { %>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
-                            <i class="fas fa-user me-1"></i><%= user.username %>
+                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            <% if (user.profile && user.profile.profileImage) { %>
+                                <img src="/uploads/profiles/<%= user.profile.profileImage %>" 
+                                     alt="Profile" 
+                                     class="rounded-circle profile-nav-image me-2">
+                            <% } else { %>
+                                <div class="rounded-circle bg-light d-flex align-items-center justify-content-center me-2 profile-nav-image">
+                                    <i class="fas fa-user text-primary" style="font-size: 0.8rem;"></i>
+                                </div>
+                            <% } %>
+                            <%= user.username %>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="/logout">
-                                <i class="fas fa-sign-out-alt me-1"></i>Logout
-                            </a></li>
+                            <li>
+                                <a class="dropdown-item" href="/profile">
+                                    <i class="fas fa-user me-1"></i>My Profile
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item" href="/logout">
+                                    <i class="fas fa-sign-out-alt me-1"></i>Logout
+                                </a>
+                            </li>
                         </ul>
                     </li>
                 <% } else { %>

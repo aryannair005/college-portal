@@ -1,0 +1,533 @@
+<div class="container mt-4">
+    <div class="row">
+        <!-- Profile Header -->
+        <div class="col-12 mb-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <div class="profile-image-container mb-3">
+                        <% if (user.profile && user.profile.profileImage) { %>
+                            <img src="/uploads/profiles/<%= user.profile.profileImage %>" 
+                                 alt="Profile Picture" 
+                                 class="rounded-circle profile-image"
+                                 style="width: 150px; height: 150px; object-fit: cover; border: 4px solid #ffc107;">
+                        <% } else { %>
+                            <div class="rounded-circle bg-warning d-flex align-items-center justify-content-center"
+                                 style="width: 150px; height: 150px; margin: 0 auto; border: 4px solid #ffc107;">
+                                <i class="fas fa-user-shield text-dark" style="font-size: 4rem;"></i>
+                            </div>
+                        <% } %>
+                    </div>
+                    
+                    <h3 class="mb-1">
+                        <%= (user.profile && user.profile.fullName) ? user.profile.fullName : user.username %>
+                        <span class="badge bg-warning text-dark ms-2">
+                            <i class="fas fa-user-shield"></i> Administrator
+                        </span>
+                    </h3>
+                    
+                    <p class="text-muted mb-1">@<%= user.username %></p>
+                    
+                    <% if (user.profile && user.profile.bio) { %>
+                        <p class="text-muted mb-3"><%= user.profile.bio %></p>
+                    <% } %>
+                    
+                    <div class="d-flex justify-content-center gap-2">
+                        <a href="/profile/edit" class="btn btn-warning text-dark">
+                            <i class="fas fa-edit me-1"></i>Edit Profile
+                        </a>
+                        <a href="/admin" class="btn btn-primary">
+                            <i class="fas fa-cog me-1"></i>Admin Dashboard
+                        </a>
+                        <% if (user.profile && user.profile.profileImage) { %>
+                            <form method="POST" action="/profile/remove-picture" class="d-inline" 
+                                  onsubmit="return confirm('Are you sure you want to remove your profile picture?')">
+                                <button type="submit" class="btn btn-outline-danger">
+                                    <i class="fas fa-trash me-1"></i>Remove Picture
+                                </button>
+                            </form>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Profile Details -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">
+                        <i class="fas fa-user me-2"></i>Personal Information
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-sm-4"><strong>Full Name:</strong></div>
+                        <div class="col-sm-8">
+                            <%= (user.profile && user.profile.fullName) ? user.profile.fullName : 'Not provided' %>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-sm-4"><strong>Email:</strong></div>
+                        <div class="col-sm-8">
+                            <a href="mailto:<%= user.email %>" class="text-decoration-none">
+                                <%= user.email %>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-sm-4"><strong>Phone:</strong></div>
+                        <div class="col-sm-8">
+                            <% if (user.profile && user.profile.phone) { %>
+                                <a href="tel:<%= user.profile.phone %>" class="text-decoration-none">
+                                    <%= user.profile.phone %>
+                                </a>
+                            <% } else { %>
+                                Not provided
+                            <% } %>
+                        </div>
+                    </div>
+                    
+                    <% if (user.profile && user.profile.dateOfBirth) { %>
+                        <div class="row mb-3">
+                            <div class="col-sm-4"><strong>Date of Birth:</strong></div>
+                            <div class="col-sm-8">
+                                <%= new Date(user.profile.dateOfBirth).toLocaleDateString() %>
+                            </div>
+                        </div>
+                    <% } %>
+                    
+                    <% if (user.profile && user.profile.address) { %>
+                        <div class="row mb-3">
+                            <div class="col-sm-4"><strong>Address:</strong></div>
+                            <div class="col-sm-8">
+                                <%= user.profile.address %>
+                            </div>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Administrative Information -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-shield-alt me-2"></i>Administrative Information
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-sm-4"><strong>Role:</strong></div>
+                        <div class="col-sm-8">
+                            <span class="badge bg-warning text-dark">
+                                <i class="fas fa-user-shield me-1"></i>Administrator
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-sm-4"><strong>Department:</strong></div>
+                        <div class="col-sm-8">
+                            <%= (user.profile && user.profile.course) ? user.profile.course : 'Not specified' %>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-sm-4"><strong>Admin Since:</strong></div>
+                        <div class="col-sm-8">
+                            <%= new Date(user.createdAt).toLocaleDateString() %>
+                        </div>
+                    </div>
+                    
+                    <% if (user.profile && user.profile.lastProfileUpdate) { %>
+                        <div class="row mb-3">
+                            <div class="col-sm-4"><strong>Last Updated:</strong></div>
+                            <div class="col-sm-8">
+                                <%= new Date(user.profile.lastProfileUpdate).toLocaleDateString() %>
+                            </div>
+                        </div>
+                    <% } %>
+                    
+                    <div class="row">
+                        <div class="col-sm-4"><strong>Permissions:</strong></div>
+                        <div class="col-sm-8">
+                            <span class="badge bg-success me-1">Full Access</span>
+                            <span class="badge bg-info me-1">Content Management</span>
+                            <span class="badge bg-secondary">User Management</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Admin Quick Actions -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-tools me-2"></i>Admin Quick Actions
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3 mb-2">
+                            <a href="/admin" class="btn btn-outline-primary w-100">
+                                <i class="fas fa-tachometer-alt me-1"></i>Dashboard
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-2">
+                            <a href="/admin/add-resource" class="btn btn-outline-success w-100">
+                                <i class="fas fa-plus me-1"></i>Add Resource
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-2">
+                            <a href="/admin/notices" class="btn btn-outline-warning w-100">
+                                <i class="fas fa-bullhorn me-1"></i>Manage Notices
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-2">
+                            <a href="/admin/manage-resources" class="btn btn-outline-info w-100">
+                                <i class="fas fa-cog me-1"></i>Manage Content
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- System Information -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-info-circle me-2"></i>System Access
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h6><i class="fas fa-users me-1"></i>User Management</h6>
+                            <p class="text-muted mb-2">Full access to student accounts and permissions.</p>
+                        </div>
+                        <div class="col-md-4">
+                            <h6><i class="fas fa-database me-1"></i>Content Management</h6>
+                            <p class="text-muted mb-2">Add, edit, and delete resources, PYQs, and syllabus.</p>
+                        </div>
+                        <div class="col-md-4">
+                            <h6><i class="fas fa-chart-bar me-1"></i>Analytics</h6>
+                            <p class="text-muted mb-2">View system usage and performance metrics.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.profile-image {
+    transition: transform 0.3s ease;
+}
+
+.profile-image:hover {
+    transform: scale(1.05);
+}
+
+.card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.badge {
+    font-size: 0.8em;
+}
+
+.btn {
+    transition: all 0.2s ease;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+.bg-warning {
+    background-color: #ffc107 !important;
+}
+</style>
+    <div class="row">
+        <!-- Profile Header -->
+        <div class="col-12 mb-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <div class="profile-image-container mb-3">
+                        <% if (user.profile.profileImage) { %>
+                            <img src="/uploads/profiles/<%= user.profile.profileImage %>" 
+                                 alt="Profile Picture" 
+                                 class="rounded-circle profile-image"
+                                 style="width: 150px; height: 150px; object-fit: cover; border: 4px solid #ffc107;">
+                        <% } else { %>
+                            <div class="rounded-circle bg-warning d-flex align-items-center justify-content-center"
+                                 style="width: 150px; height: 150px; margin: 0 auto; border: 4px solid #ffc107;">
+                                <i class="fas fa-user-shield text-dark" style="font-size: 4rem;"></i>
+                            </div>
+                        <% } %>
+                    </div>
+                    
+                    <h3 class="mb-1">
+                        <%= user.profile.fullName || user.username %>
+                        <span class="badge bg-warning text-dark ms-2">
+                            <i class="fas fa-user-shield"></i> Administrator
+                        </span>
+                    </h3>
+                    
+                    <p class="text-muted mb-1">@<%= user.username %></p>
+                    
+                    <% if (user.profile.bio) { %>
+                        <p class="text-muted mb-3"><%= user.profile.bio %></p>
+                    <% } %>
+                    
+                    <div class="d-flex justify-content-center gap-2">
+                        <a href="/profile/edit" class="btn btn-warning text-dark">
+                            <i class="fas fa-edit me-1"></i>Edit Profile
+                        </a>
+                        <a href="/admin" class="btn btn-primary">
+                            <i class="fas fa-cog me-1"></i>Admin Dashboard
+                        </a>
+                        <% if (user.profile.profileImage) { %>
+                            <form method="POST" action="/profile/remove-picture" class="d-inline" 
+                                  onsubmit="return confirm('Are you sure you want to remove your profile picture?')">
+                                <button type="submit" class="btn btn-outline-danger">
+                                    <i class="fas fa-trash me-1"></i>Remove Picture
+                                </button>
+                            </form>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Profile Details -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">
+                        <i class="fas fa-user me-2"></i>Personal Information
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-sm-4"><strong>Full Name:</strong></div>
+                        <div class="col-sm-8">
+                            <%= user.profile.fullName || 'Not provided' %>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-sm-4"><strong>Email:</strong></div>
+                        <div class="col-sm-8">
+                            <a href="mailto:<%= user.email %>" class="text-decoration-none">
+                                <%= user.email %>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-sm-4"><strong>Phone:</strong></div>
+                        <div class="col-sm-8">
+                            <% if (user.profile.phone) { %>
+                                <a href="tel:<%= user.profile.phone %>" class="text-decoration-none">
+                                    <%= user.profile.phone %>
+                                </a>
+                            <% } else { %>
+                                Not provided
+                            <% } %>
+                        </div>
+                    </div>
+                    
+                    <% if (user.profile.dateOfBirth) { %>
+                        <div class="row mb-3">
+                            <div class="col-sm-4"><strong>Date of Birth:</strong></div>
+                            <div class="col-sm-8">
+                                <%= new Date(user.profile.dateOfBirth).toLocaleDateString() %>
+                            </div>
+                        </div>
+                    <% } %>
+                    
+                    <% if (user.profile.address) { %>
+                        <div class="row mb-3">
+                            <div class="col-sm-4"><strong>Address:</strong></div>
+                            <div class="col-sm-8">
+                                <%= user.profile.address %>
+                            </div>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Administrative Information -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-shield-alt me-2"></i>Administrative Information
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-sm-4"><strong>Role:</strong></div>
+                        <div class="col-sm-8">
+                            <span class="badge bg-warning text-dark">
+                                <i class="fas fa-user-shield me-1"></i>Administrator
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-sm-4"><strong>Department:</strong></div>
+                        <div class="col-sm-8">
+                            <%= user.profile.course || 'Not specified' %>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-sm-4"><strong>Admin Since:</strong></div>
+                        <div class="col-sm-8">
+                            <%= new Date(user.createdAt).toLocaleDateString() %>
+                        </div>
+                    </div>
+                    
+                    <% if (user.profile.lastProfileUpdate) { %>
+                        <div class="row mb-3">
+                            <div class="col-sm-4"><strong>Last Updated:</strong></div>
+                            <div class="col-sm-8">
+                                <%= new Date(user.profile.lastProfileUpdate).toLocaleDateString() %>
+                            </div>
+                        </div>
+                    <% } %>
+                    
+                    <div class="row">
+                        <div class="col-sm-4"><strong>Permissions:</strong></div>
+                        <div class="col-sm-8">
+                            <span class="badge bg-success me-1">Full Access</span>
+                            <span class="badge bg-info me-1">Content Management</span>
+                            <span class="badge bg-secondary">User Management</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Admin Quick Actions -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-tools me-2"></i>Admin Quick Actions
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3 mb-2">
+                            <a href="/admin" class="btn btn-outline-primary w-100">
+                                <i class="fas fa-tachometer-alt me-1"></i>Dashboard
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-2">
+                            <a href="/admin/add-resource" class="btn btn-outline-success w-100">
+                                <i class="fas fa-plus me-1"></i>Add Resource
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-2">
+                            <a href="/admin/notices" class="btn btn-outline-warning w-100">
+                                <i class="fas fa-bullhorn me-1"></i>Manage Notices
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-2">
+                            <a href="/admin/manage-resources" class="btn btn-outline-info w-100">
+                                <i class="fas fa-cog me-1"></i>Manage Content
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- System Information -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-info-circle me-2"></i>System Access
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h6><i class="fas fa-users me-1"></i>User Management</h6>
+                            <p class="text-muted mb-2">Full access to student accounts and permissions.</p>
+                        </div>
+                        <div class="col-md-4">
+                            <h6><i class="fas fa-database me-1"></i>Content Management</h6>
+                            <p class="text-muted mb-2">Add, edit, and delete resources, PYQs, and syllabus.</p>
+                        </div>
+                        <div class="col-md-4">
+                            <h6><i class="fas fa-chart-bar me-1"></i>Analytics</h6>
+                            <p class="text-muted mb-2">View system usage and performance metrics.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.profile-image {
+    transition: transform 0.3s ease;
+}
+
+.profile-image:hover {
+    transform: scale(1.05);
+}
+
+.card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.badge {
+    font-size: 0.8em;
+}
+
+.btn {
+    transition: all 0.2s ease;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+.bg-warning {
+    background-color: #ffc107 !important;
+}
+</style>

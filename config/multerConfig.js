@@ -14,6 +14,8 @@ const storage = multer.diskStorage({
             uploadPath = 'uploads/doubts/';
         } else if (file.fieldname === 'noticeImage') {
             uploadPath = 'uploads/notices/';
+        } else if (file.fieldname === 'profileImage') {
+            uploadPath = 'uploads/profiles/';
         } else {
             uploadPath = 'uploads/'; // Fallback or handle specific types
         }
@@ -30,6 +32,31 @@ const storage = multer.diskStorage({
     }
 });
 
-const upload = multer({ storage: storage });
+// File filter for profile images
+const profileImageFilter = (req, file, cb) => {
+    const allowedTypes = /jpeg|jpg|png|gif/;
+    const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+    const mimetype = allowedTypes.test(file.mimetype);
 
-module.exports = upload; // Export the configured multer instance
+    if (mimetype && extname) {
+        return cb(null, true);
+    } else {
+        cb(new Error('Only image files (JPEG, JPG, PNG, GIF) are allowed!'));
+    }
+};
+
+const upload = multer({ 
+    storage: storage,
+    limits: {
+        fileSize: 5 * 1024 * 1024 // 5MB limit
+    },
+    fileFilter: function(req, file, cb) {
+        if (file.fieldname === 'profileImage') {
+            profileImageFilter(req, file, cb);
+        } else {
+            cb(null, true); // Accept other file types as before
+        }
+    }
+});
+
+module.exports = upload;

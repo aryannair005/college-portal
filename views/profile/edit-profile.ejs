@@ -1,0 +1,325 @@
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <!-- Profile Header -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white text-center">
+                    <h4>
+                        <i class="fas fa-user-edit me-2"></i>Edit Profile
+                    </h4>
+                    <small>Update your personal information</small>
+                </div>
+                <div class="card-body text-center">
+                    <!-- Current Profile Picture -->
+                    <div class="profile-image-container mb-3">
+                        <% if (user.profile.profileImage) { %>
+                            <img src="/uploads/profiles/<%= user.profile.profileImage %>" 
+                                 alt="Profile Picture" 
+                                 class="rounded-circle profile-image"
+                                 style="width: 120px; height: 120px; object-fit: cover; border: 3px solid #007bff;">
+                        <% } else { %>
+                            <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center"
+                                 style="width: 120px; height: 120px; margin: 0 auto; border: 3px solid #007bff;">
+                                <i class="fas fa-user text-white" style="font-size: 3rem;"></i>
+                            </div>
+                        <% } %>
+                    </div>
+                    
+                    <!-- Profile Picture Update Form -->
+                    <form method="POST" action="/profile/update-picture" enctype="multipart/form-data" class="mb-3">
+                        <div class="mb-3">
+                            <label for="profileImage" class="form-label">
+                                <i class="fas fa-camera me-1"></i>Update Profile Picture
+                            </label>
+                            <input type="file" class="form-control" id="profileImage" name="profileImage" 
+                                   accept="image/*" onchange="previewImage(this)">
+                            <div class="form-text">
+                                Accepted formats: JPG, PNG, GIF. Maximum size: 5MB
+                            </div>
+                        </div>
+                        
+                        <!-- Image Preview -->
+                        <div id="imagePreview" class="mb-3" style="display: none;">
+                            <img id="preview" src="" alt="Preview" 
+                                 class="rounded-circle" 
+                                 style="width: 100px; height: 100px; object-fit: cover; border: 2px solid #28a745;">
+                        </div>
+                        
+                        <button type="submit" class="btn btn-success btn-sm">
+                            <i class="fas fa-upload me-1"></i>Update Picture
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Profile Information Form -->
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-user-cog me-2"></i>Personal Information
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="/profile/update" enctype="multipart/form-data" id="profileForm">
+                        <div class="row">
+                            <!-- Left Column -->
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="fullName" class="form-label">
+                                        <i class="fas fa-user me-1"></i>Full Name
+                                    </label>
+                                    <input type="text" class="form-control" id="fullName" name="fullName" 
+                                           value="<%= user.profile.fullName || '' %>" 
+                                           placeholder="Enter your full name">
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">
+                                        <i class="fas fa-envelope me-1"></i>Email Address
+                                    </label>
+                                    <input type="email" class="form-control" id="email" name="email" 
+                                           value="<%= user.email %>" readonly disabled
+                                           style="background-color: #f8f9fa;">
+                                    <div class="form-text">Email cannot be changed. Contact admin if needed.</div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="phone" class="form-label">
+                                        <i class="fas fa-phone me-1"></i>Phone Number
+                                    </label>
+                                    <input type="tel" class="form-control" id="phone" name="phone" 
+                                           value="<%= user.profile.phone || '' %>" 
+                                           placeholder="Enter your phone number">
+                                </div>
+                                
+                                <% if (user.role === 'student') { %>
+                                    <div class="mb-3">
+                                        <label for="rollNo" class="form-label">
+                                            <i class="fas fa-id-card me-1"></i>Roll Number
+                                        </label>
+                                        <input type="text" class="form-control" id="rollNo" name="rollNo" 
+                                               value="<%= user.profile.rollNo || '' %>" 
+                                               placeholder="Enter your roll number">
+                                    </div>
+                                <% } %>
+                            </div>
+                            
+                            <!-- Right Column -->
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="course" class="form-label">
+                                        <i class="fas fa-graduation-cap me-1"></i>Course
+                                    </label>
+                                    <input type="text" class="form-control" id="course" name="course" 
+                                           value="<%= user.profile.course || '' %>" 
+                                           placeholder="Enter your course/program">
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="dateOfBirth" class="form-label">
+                                        <i class="fas fa-calendar me-1"></i>Date of Birth
+                                    </label>
+                                    <input type="date" class="form-control" id="dateOfBirth" name="dateOfBirth" 
+                                           value="<%= user.profile.dateOfBirth ? user.profile.dateOfBirth.toISOString().split('T')[0] : '' %>">
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="address" class="form-label">
+                                        <i class="fas fa-map-marker-alt me-1"></i>Address
+                                    </label>
+                                    <textarea class="form-control" id="address" name="address" rows="3" 
+                                              placeholder="Enter your address"><%= user.profile.address || '' %></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Bio Section -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="mb-3">
+                                    <label for="bio" class="form-label">
+                                        <i class="fas fa-quote-left me-1"></i>Bio
+                                    </label>
+                                    <textarea class="form-control" id="bio" name="bio" rows="3" 
+                                              placeholder="Tell us about yourself..." maxlength="500"><%= user.profile.bio || '' %></textarea>
+                                    <div class="form-text">
+                                        <span id="bioCounter">0</span>/500 characters
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Optional Profile Image Upload in Main Form -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="mb-4">
+                                    <label for="profileImageMain" class="form-label">
+                                        <i class="fas fa-image me-1"></i>Profile Picture (Optional)
+                                    </label>
+                                    <input type="file" class="form-control" id="profileImageMain" name="profileImage" 
+                                           accept="image/*">
+                                    <div class="form-text">
+                                        Leave empty to keep current picture. This will override the separate picture upload above.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Form Actions -->
+                        <div class="d-flex gap-2 justify-content-between">
+                            <a href="/profile" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-1"></i>Cancel
+                            </a>
+                            <div>
+                                <button type="reset" class="btn btn-outline-warning me-2">
+                                    <i class="fas fa-undo me-1"></i>Reset
+                                </button>
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-save me-1"></i>Save Changes
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Account Settings -->
+            <div class="card mt-4">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">
+                        <i class="fas fa-cog me-2"></i>Account Settings
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-user-circle me-1"></i>Account Information</h6>
+                            <p class="text-muted mb-1">Username: <strong><%= user.username %></strong></p>
+                            <p class="text-muted mb-1">Role: 
+                                <span class="badge <%= user.role === 'admin' ? 'bg-warning text-dark' : 'bg-primary' %>">
+                                    <%= user.role.charAt(0).toUpperCase() + user.role.slice(1) %>
+                                </span>
+                            </p>
+                            <p class="text-muted">Member since: <strong><%= new Date(user.createdAt).toLocaleDateString() %></strong></p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-shield-alt me-1"></i>Security</h6>
+                            <p class="text-muted mb-3">Keep your account secure by using a strong password.</p>
+                            <button type="button" class="btn btn-outline-primary btn-sm" onclick="alert('Password change feature coming soon!')">
+                                <i class="fas fa-key me-1"></i>Change Password
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Bio character counter
+    const bioTextarea = document.getElementById('bio');
+    const bioCounter = document.getElementById('bioCounter');
+    
+    function updateBioCounter() {
+        const currentLength = bioTextarea.value.length;
+        bioCounter.textContent = currentLength;
+        
+        if (currentLength > 450) {
+            bioCounter.className = 'text-warning';
+        } else if (currentLength > 480) {
+            bioCounter.className = 'text-danger';
+        } else {
+            bioCounter.className = 'text-muted';
+        }
+    }
+    
+    bioTextarea.addEventListener('input', updateBioCounter);
+    updateBioCounter(); // Initial count
+    
+    // Form validation
+    const form = document.getElementById('profileForm');
+    form.addEventListener('submit', function(e) {
+        let isValid = true;
+        const inputs = form.querySelectorAll('input[type="tel"]');
+        
+        inputs.forEach(input => {
+            if (input.name === 'phone' && input.value) {
+                const phonePattern = /^[+]?[\d\s\-\(\)]{7,15}$/;
+                if (!phonePattern.test(input.value)) {
+                    isValid = false;
+                    input.classList.add('is-invalid');
+                    if (!input.nextElementSibling || !input.nextElementSibling.classList.contains('invalid-feedback')) {
+                        const feedback = document.createElement('div');
+                        feedback.className = 'invalid-feedback';
+                        feedback.textContent = 'Please enter a valid phone number';
+                        input.parentNode.appendChild(feedback);
+                    }
+                } else {
+                    input.classList.remove('is-invalid');
+                }
+            }
+        });
+        
+        if (!isValid) {
+            e.preventDefault();
+        }
+    });
+});
+
+// Image preview function
+function previewImage(input) {
+    const preview = document.getElementById('preview');
+    const previewContainer = document.getElementById('imagePreview');
+    
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            preview.src = e.target.result;
+            previewContainer.style.display = 'block';
+        };
+        
+        reader.readAsDataURL(input.files[0]);
+    } else {
+        previewContainer.style.display = 'none';
+    }
+}
+</script>
+
+<style>
+.profile-image {
+    transition: transform 0.3s ease;
+}
+
+.profile-image:hover {
+    transform: scale(1.05);
+}
+
+.card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.btn {
+    transition: all 0.2s ease;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+#imagePreview {
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+</style>

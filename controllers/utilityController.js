@@ -49,6 +49,41 @@ exports.downloadSyllabus = (req, res) => {
     }
 };
 
+exports.downloadNoticeImage = (req, res) => {
+    const filename = req.params.filename;
+    const filepath = path.join(getBaseDir(), 'uploads/notices', filename);
+
+    if (fs.existsSync(filepath)) {
+        res.sendFile(filepath);
+    } else {
+        res.status(404).send('Image not found');
+    }
+};
+
+// NEW: Profile Image Functions
+exports.downloadProfileImage = (req, res) => {
+    const filename = req.params.filename;
+    const filepath = path.join(getBaseDir(), 'uploads/profiles', filename);
+
+    if (fs.existsSync(filepath)) {
+        res.sendFile(filepath);
+    } else {
+        res.status(404).send('Image not found');
+    }
+};
+
+exports.serveProfileImage = (req, res) => {
+    const filename = req.params.filename;
+    const filepath = path.join(getBaseDir(), 'uploads/profiles', filename);
+
+    if (fs.existsSync(filepath)) {
+        res.setHeader('Content-Type', 'image/*');
+        res.setHeader('Content-Disposition', 'inline');
+        res.sendFile(filepath);
+    } else {
+        res.status(404).send('Image not found');
+    }
+};
 
 // --- PDF Viewer Functions ---
 exports.viewResourcePdf = (req, res) => {
@@ -136,18 +171,6 @@ exports.serveSyllabusPdf = (req, res) => {
         res.sendFile(filepath);
     } else {
         res.status(404).send('PDF not found');
-    }
-};
-
-
-exports.downloadNoticeImage = (req, res) => {
-    const filename = req.params.filename;
-    const filepath = path.join(getBaseDir(), 'uploads/notices', filename);
-
-    if (fs.existsSync(filepath)) {
-        res.sendFile(filepath);
-    } else {
-        res.status(404).send('Image not found');
     }
 };
 
