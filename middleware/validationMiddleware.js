@@ -229,7 +229,6 @@ const schemas = {
         semester: Joi.number().integer().min(1).max(10).allow(''),
         subject: Joi.string().trim().allow('')
     }),
-    // Add this to your existing validationMiddleware.js schemas object
 
     // Notice Schemas
     addNoticeSchema: Joi.object({
@@ -279,8 +278,55 @@ const schemas = {
             'string.max': 'Address should have a maximum length of {#limit}'
         })
     }),
-
 };
+
+// Route mapping for better redirect handling
+const routeRedirectMap = {
+    // Auth routes
+    'loginSchema': '/login',
+    'registerSchema': '/register',
+    'createAdminSchema': '/create-admin',
+    
+    // Admin routes
+    'addResourceSchema': '/admin/add-resource',
+    'addPyqSchema': '/admin/add-pyq',
+    'addSyllabusSchema': '/admin/add-syllabus',
+    'addYoutubeLinkSchema': 'back', // Will use referrer for YouTube links
+    'bulkAddYoutubeLinksSchema': 'back',
+    'addNoticeSchema': '/admin/add-notice',
+    
+    // Student/User routes
+    'addDoubtSchema': '/doubts/add',
+    'replyToDoubtSchema': 'back', // Will use referrer for replies
+    'studentQuerySchema': 'back', // For query params, stay on same page
+    'profileUpdateSchema': '/profile/edit'
+};
+
+// Helper function to get safe redirect URL
+function getSafeRedirectUrl(req, schemaName) {
+    const mappedRoute = routeRedirectMap[schemaName];
+    
+    // If it's mapped to 'back', try to use referrer
+    if (mappedRoute === 'back') {
+        const referrer = req.get('Referrer') || req.get('Referer');
+        if (referrer) {
+            try {
+                const referrerUrl = new URL(referrer);
+                // Make sure referrer is from same origin for security
+                if (referrerUrl.origin === `${req.protocol}://${req.get('host')}`) {
+                    return referrerUrl.pathname + (referrerUrl.search || '');
+                }
+            } catch (e) {
+                console.error('Invalid referrer URL:', referrer);
+            }
+        }
+        // Fallback to dashboard if no valid referrer
+        return '/dashboard';
+    }
+    
+    // Return mapped route or fallback
+    return mappedRoute || '/dashboard';
+}
 
 // Validation middleware function
 const validate = (schemaName, source = 'body') => {
@@ -289,7 +335,7 @@ const validate = (schemaName, source = 'body') => {
         if (!schema) {
             console.error(`Joi schema "${schemaName}" not found.`);
             req.session.messages = ['Internal server error: Validation schema missing.'];
-            return res.redirect('back');
+            return res.redirect(getSafeRedirectUrl(req, schemaName));
         }
 
         let dataToValidate;
@@ -300,7 +346,7 @@ const validate = (schemaName, source = 'body') => {
         } else {
             console.error(`Invalid source for validation: ${source}. Must be 'body' or 'query'.`);
             req.session.messages = ['Internal server error: Invalid validation source.'];
-            return res.redirect('back');
+            return res.redirect(getSafeRedirectUrl(req, schemaName));
         }
 
         const { error } = schema.validate(dataToValidate, { abortEarly: false });
@@ -310,13 +356,9 @@ const validate = (schemaName, source = 'body') => {
             console.log('Validation Errors:', errors);
             req.session.messages = errors;
 
-            // Always redirect back for POST requests, never to a 404
-            if (req.method === 'POST') {
-                return res.redirect('back');
-            } else {
-                // For GET requests with query params, just continue with empty/default values
-                return next();
-            }
+            // Always use safe redirect URL
+            const redirectUrl = getSafeRedirectUrl(req, schemaName);
+            return res.redirect(redirectUrl);
         }
         next();
     };
