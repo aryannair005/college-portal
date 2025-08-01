@@ -97,6 +97,32 @@
                 padding: 10px 0;
             }
         }
+
+        /* Chatbot floating button */
+        .chatbot-float {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1050;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            box-shadow: 0 4px 20px rgba(0, 123, 255, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 4px 20px rgba(0, 123, 255, 0.3);
+            }
+            50% {
+                box-shadow: 0 4px 25px rgba(0, 123, 255, 0.5);
+                transform: scale(1.05);
+            }
+            100% {
+                box-shadow: 0 4px 20px rgba(0, 123, 255, 0.3);
+            }
+        }
     </style>
 </head>
 <body>
@@ -144,6 +170,11 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/doubts">
                             <i class="fas fa-comments me-1"></i>Doubts
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/assistant">
+                            <i class="fas fa-robot me-1"></i>Assistant
                         </a>
                     </li>
                     <% if (user.role === 'admin') { %>
@@ -219,6 +250,14 @@
     <main class="main-content">
         <%- body %>
     </main>
+
+    <!-- Floating Chatbot Button (only for logged in users and not on assistant page) -->
+    <% if (user && !title.includes('Assistant')) { %>
+        <a href="/assistant" class="btn btn-primary chatbot-float d-flex align-items-center justify-content-center" 
+           title="Need help? Ask the assistant!">
+            <i class="fas fa-robot" style="font-size: 1.5rem;"></i>
+        </a>
+    <% } %>
 
     <!-- Footer -->
     <footer class="footer">

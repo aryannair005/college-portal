@@ -1,0 +1,350 @@
+<div class="container-fluid mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10">
+            <!-- Chat Header -->
+            <div class="card">
+                <div class="card-header bg-primary text-white text-center">
+                    <h4 class="mb-0">
+                        <i class="fas fa-robot me-2"></i>Website Assistant
+                    </h4>
+                    <small>Ask me about website features and navigation</small>
+                </div>
+
+                <!-- Chat Messages Area -->
+                <div class="card-body p-0">
+                    <div id="chatMessages" class="chat-messages p-3" style="height: 500px; overflow-y: auto; background-color: #f8f9fa;">
+                        <!-- Initial Bot Message -->
+                        <div class="message-container bot-message mb-3">
+                            <div class="d-flex align-items-start">
+                                <div class="avatar me-2">
+                                    <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                        <i class="fas fa-robot text-white"></i>
+                                    </div>
+                                </div>
+                                <div class="message-content">
+                                    <div class="message-bubble bg-white p-3 rounded shadow-sm">
+                                        <%= initialMessage %>
+                                    </div>
+                                    <small class="text-muted message-time">Just now</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Input Area -->
+                <div class="card-footer bg-white border-top">
+                    <form id="chatForm" class="d-flex gap-2">
+                        <input type="text" id="messageInput" class="form-control" 
+                               placeholder="Ask me about website features..." 
+                               maxlength="500" autocomplete="off" required>
+                        <button type="submit" id="sendButton" class="btn btn-primary">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                    <div class="mt-2">
+                        <small class="text-muted">
+                            <i class="fas fa-info-circle me-1"></i>
+                            I can help with website navigation, features, and functionality. For academic help, use the Doubts section.
+                        </small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Questions -->
+            <div class="card mt-3">
+                <div class="card-header bg-light">
+                    <h6 class="mb-0">
+                        <i class="fas fa-question-circle me-2"></i>Quick Questions
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-2">
+                            <button class="btn btn-outline-primary btn-sm w-100 quick-question" 
+                                    data-question="How do I login to the portal?">
+                                <i class="fas fa-sign-in-alt me-1"></i>How to Login
+                            </button>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <button class="btn btn-outline-primary btn-sm w-100 quick-question" 
+                                    data-question="How do I post a doubt?">
+                                <i class="fas fa-comments me-1"></i>Post Doubts
+                            </button>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <button class="btn btn-outline-primary btn-sm w-100 quick-question" 
+                                    data-question="How do I update my profile?">
+                                <i class="fas fa-user-edit me-1"></i>Update Profile
+                            </button>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <button class="btn btn-outline-primary btn-sm w-100 quick-question" 
+                                    data-question="How do I download resources?">
+                                <i class="fas fa-download me-1"></i>Download Files
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.chat-messages {
+    background-image: 
+        radial-gradient(circle at 20% 80%, rgba(0, 123, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(40, 167, 69, 0.1) 0%, transparent 50%);
+}
+
+.message-container {
+    animation: fadeInUp 0.3s ease;
+}
+
+.bot-message .message-bubble {
+    background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+    border-left: 4px solid #007bff;
+    max-width: 85%;
+}
+
+.user-message {
+    margin-left: auto;
+    margin-right: 0;
+}
+
+.user-message .message-bubble {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    color: white;
+    max-width: 85%;
+    margin-left: auto;
+}
+
+.user-message .d-flex {
+    flex-direction: row-reverse;
+}
+
+.user-message .avatar {
+    margin-left: 8px;
+    margin-right: 0;
+}
+
+.message-time {
+    font-size: 0.75rem;
+}
+
+.typing-indicator {
+    display: none;
+}
+
+.typing-indicator .dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #007bff;
+    animation: typing 1.4s infinite;
+}
+
+.typing-indicator .dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-indicator .dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typing {
+    0%, 60%, 100% { transform: translateY(0); }
+    30% { transform: translateY(-10px); }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.quick-question:hover {
+    transform: translateY(-1px);
+    transition: all 0.2s ease;
+}
+
+#messageInput:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.avatar {
+    flex-shrink: 0;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const chatForm = document.getElementById('chatForm');
+    const messageInput = document.getElementById('messageInput');
+    const sendButton = document.getElementById('sendButton');
+    const chatMessages = document.getElementById('chatMessages');
+    const quickQuestions = document.querySelectorAll('.quick-question');
+
+    // Handle form submission
+    chatForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const message = messageInput.value.trim();
+        if (message) {
+            sendMessage(message);
+        }
+    });
+
+    // Handle quick questions
+    quickQuestions.forEach(button => {
+        button.addEventListener('click', function() {
+            const question = this.getAttribute('data-question');
+            sendMessage(question);
+        });
+    });
+
+    // Send message function
+    async function sendMessage(message) {
+        if (!message.trim()) return;
+
+        // Add user message to chat
+        addMessage(message, 'user');
+        messageInput.value = '';
+        
+        // Disable send button and show typing
+        sendButton.disabled = true;
+        showTypingIndicator();
+
+        try {
+            const response = await fetch('/assistant/message', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ message })
+            });
+
+            const data = await response.json();
+            
+            // Hide typing indicator
+            hideTypingIndicator();
+
+            if (data.success) {
+                addMessage(data.response, 'bot');
+            } else {
+                addMessage(data.error || 'Sorry, something went wrong. Please try again.', 'bot');
+            }
+        } catch (error) {
+            hideTypingIndicator();
+            addMessage('Sorry, I\'m having trouble connecting. Please try again later.', 'bot');
+        } finally {
+            sendButton.disabled = false;
+            messageInput.focus();
+        }
+    }
+
+    // Add message to chat
+    function addMessage(text, sender) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message-container ${sender}-message mb-3`;
+        
+        const currentTime = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        
+        if (sender === 'user') {
+            messageDiv.innerHTML = `
+                <div class="d-flex align-items-start">
+                    <div class="avatar me-2">
+                        <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                            <i class="fas fa-user text-white"></i>
+                        </div>
+                    </div>
+                    <div class="message-content">
+                        <div class="message-bubble p-3 rounded shadow-sm">
+                            ${escapeHtml(text)}
+                        </div>
+                        <small class="text-muted message-time">${currentTime}</small>
+                    </div>
+                </div>
+            `;
+        } else {
+            messageDiv.innerHTML = `
+                <div class="d-flex align-items-start">
+                    <div class="avatar me-2">
+                        <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                            <i class="fas fa-robot text-white"></i>
+                        </div>
+                    </div>
+                    <div class="message-content">
+                        <div class="message-bubble bg-white p-3 rounded shadow-sm">
+                            ${escapeHtml(text)}
+                        </div>
+                        <small class="text-muted message-time">${currentTime}</small>
+                    </div>
+                </div>
+            `;
+        }
+        
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    // Show typing indicator
+    function showTypingIndicator() {
+        const typingDiv = document.createElement('div');
+        typingDiv.className = 'typing-indicator message-container bot-message mb-3';
+        typingDiv.innerHTML = `
+            <div class="d-flex align-items-start">
+                <div class="avatar me-2">
+                    <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                        <i class="fas fa-robot text-white"></i>
+                    </div>
+                </div>
+                <div class="message-content">
+                    <div class="message-bubble bg-white p-3 rounded shadow-sm">
+                        <div class="d-flex align-items-center">
+                            <span class="me-2">Typing</span>
+                            <div class="dot me-1"></div>
+                            <div class="dot me-1"></div>
+                            <div class="dot"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        typingDiv.style.display = 'block';
+        chatMessages.appendChild(typingDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    // Hide typing indicator
+    function hideTypingIndicator() {
+        const typingIndicator = document.querySelector('.typing-indicator');
+        if (typingIndicator) {
+            typingIndicator.remove();
+        }
+    }
+
+    // Escape HTML to prevent XSS
+    function escapeHtml(unsafe) {
+        return unsafe
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+    // Auto-focus message input
+    messageInput.focus();
+
+    // Handle Enter key in input
+    messageInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            chatForm.dispatchEvent(new Event('submit'));
+        }
+    });
+});
+</script>

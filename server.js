@@ -23,7 +23,8 @@ const doubtRouter = require('./routes/doubtRoutes');
 const adminRouter = require('./routes/adminRoutes');
 const utilityRouter = require('./routes/utilityRoutes');
 const noticeRouter = require('./routes/noticeRoutes');
-const profileRouter = require('./routes/profileRoutes'); // NEW: Profile routes
+const profileRouter = require('./routes/profileRoutes');
+const chatbotRouter = require('./routes/chatbotRoutes'); // NEW: Chatbot routes
 
 const app = express();
 
@@ -110,7 +111,8 @@ app.use('/doubts', doubtRouter); // All doubt related routes
 app.use('/admin', adminRouter); // Admin routes
 app.use('/', utilityRouter); // Download and Viewer routes
 app.use('/notices', noticeRouter); // Notice routes
-app.use('/', profileRouter); // NEW: Profile routes
+app.use('/', profileRouter); // Profile routes
+app.use('/', chatbotRouter); // NEW: Chatbot routes
 
 // Handle 404 (Not Found)
 app.use((req, res, next) => {
@@ -135,10 +137,11 @@ app.listen(PORT, () => {
     console.log('3. Create your admin account');
     console.log('Note: Change the secret code in authController.js for production!');
     console.log('');
-    console.log('🎯 NEW FEATURES:');
+    console.log('🎯 FEATURES:');
     console.log('- Notice Board: Admin can add notices at /admin/notices');
     console.log('- Student notices: /notices');
     console.log('- User Profiles: /profile (view), /profile/edit (edit)');
     console.log('- Profile pictures supported with circular display');
     console.log('- Notices auto-delete after 2 weeks');
+    console.log('- 🤖 AI Chatbot: /assistant (website help only)');
 });
