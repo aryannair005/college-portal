@@ -36,4 +36,13 @@ router.post('/add-notice', ensureAdmin, upload.single('noticeImage'), validate('
 router.post('/delete-notice/:id', ensureAdmin, require('../controllers/noticeController').deleteNotice);
 router.post('/toggle-notice/:id', ensureAdmin, require('../controllers/noticeController').toggleNoticeStatus);
 
+// Calendar Management
+router.get('/calendar', ensureAdmin, require('../controllers/calendarController').getAdminCalendarPage);
+router.get('/calendar/add', ensureAdmin, require('../controllers/calendarController').getAddCalendarEventPage);
+router.post('/calendar/add', ensureAdmin, validate('addCalendarEventSchema'), require('../controllers/calendarController').postAddCalendarEvent);
+router.get('/calendar/edit/:id', ensureAdmin, require('../controllers/calendarController').getEditCalendarEventPage);
+router.post('/calendar/edit/:id', ensureAdmin, validate('editCalendarEventSchema'), require('../controllers/calendarController').postEditCalendarEvent);
+router.post('/calendar/delete/:id', ensureAdmin, require('../controllers/calendarController').deleteCalendarEvent);
+router.post('/calendar/toggle/:id', ensureAdmin, require('../controllers/calendarController').toggleCalendarEventStatus);
+
 module.exports = router;

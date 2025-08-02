@@ -1,0 +1,225 @@
+/* Calendar Styles */
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1px;
+    background-color: #dee2e6;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.calendar-day {
+    background-color: white;
+    padding: 10px;
+    min-height: 80px;
+    position: relative;
+    transition: all 0.2s ease;
+}
+
+.calendar-day:hover {
+    background-color: #f8f9fa;
+}
+
+.calendar-day.other-month {
+    background-color: #f8f9fa;
+    color: #6c757d;
+}
+
+.calendar-day.today {
+    background-color: #e3f2fd;
+    font-weight: bold;
+    border: 2px solid #2196f3;
+}
+
+.calendar-day.has-event {
+    background-color: #fff3cd;
+    border-left: 4px solid #ffc107;
+}
+
+.calendar-day-number {
+    font-weight: bold;
+    margin-bottom: 5px;
+    font-size: 1.1rem;
+}
+
+.event-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 2px;
+    margin-bottom: 2px;
+}
+
+.event-item {
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    border-left: 4px solid;
+}
+
+.event-item:hover {
+    background-color: #e9ecef;
+    transform: translateX(2px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.event-item.border-success {
+    border-left-color: #28a745;
+}
+
+.event-item.border-danger {
+    border-left-color: #dc3545;
+}
+
+.event-item.border-warning {
+    border-left-color: #ffc107;
+}
+
+.event-item.border-info {
+    border-left-color: #17a2b8;
+}
+
+.event-item.border-primary {
+    border-left-color: #007bff;
+}
+
+.event-item.border-secondary {
+    border-left-color: #6c757d;
+}
+
+.event-item.border-dark {
+    border-left-color: #343a40;
+}
+
+/* Calendar Navigation */
+.calendar-nav {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+/* Event Type Badges */
+.event-type-badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .calendar-grid {
+        grid-template-columns: repeat(7, 1fr);
+        font-size: 0.8rem;
+    }
+    
+    .calendar-day {
+        min-height: 60px;
+        padding: 5px;
+    }
+    
+    .calendar-day-number {
+        font-size: 0.9rem;
+    }
+    
+    .event-dot {
+        width: 6px;
+        height: 6px;
+    }
+}
+
+@media (max-width: 576px) {
+    .calendar-day {
+        min-height: 50px;
+        padding: 3px;
+    }
+    
+    .calendar-day-number {
+        font-size: 0.8rem;
+    }
+}
+
+/* Calendar Management Styles */
+.calendar-management-table {
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.calendar-management-table th {
+    background-color: #343a40;
+    color: white;
+    border: none;
+    padding: 12px;
+}
+
+.calendar-management-table td {
+    padding: 12px;
+    vertical-align: middle;
+}
+
+.calendar-management-table tr:hover {
+    background-color: #f8f9fa;
+}
+
+/* Form Styles */
+.calendar-form {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.calendar-form .card-header {
+    border-bottom: 2px solid #dee2e6;
+}
+
+/* Event Type Guide */
+.event-type-guide {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.event-type-guide .badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+}
+
+/* Custom Button Styles */
+.btn-calendar {
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.btn-calendar:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Loading States */
+.calendar-loading {
+    text-align: center;
+    padding: 40px;
+    color: #6c757d;
+}
+
+.calendar-loading i {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+/* Empty State */
+.calendar-empty {
+    text-align: center;
+    padding: 40px;
+    color: #6c757d;
+}
+
+.calendar-empty i {
+    font-size: 3rem;
+    margin-bottom: 15px;
+    opacity: 0.5;
+} 

@@ -18,6 +18,10 @@
     <% if (title && (title.includes('Profile') || title.includes('profile'))) { %>
         <link href="/css/profile.css" rel="stylesheet">
     <% } %>
+    
+    <% if (title && (title.includes('Calendar') || title.includes('calendar'))) { %>
+        <link href="/css/calendar.css" rel="stylesheet">
+    <% } %>
 </head>
 <body>
     <!-- Navigation -->
@@ -69,6 +73,11 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/assistant">
                             <i class="fas fa-robot me-1"></i>Assistant
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/calendar">
+                            <i class="fas fa-calendar-alt me-1"></i>Calendar
                         </a>
                     </li>
                     <% if (user.role === 'admin') { %>

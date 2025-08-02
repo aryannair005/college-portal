@@ -27,4 +27,7 @@ router.get('/download-syllabus/:filename', ensureStudent, require('../controller
 router.get('/notices', ensureStudent, require('../controllers/noticeController').getNoticesPage);
 router.get('/notices/:id', ensureStudent, require('../controllers/noticeController').getSingleNotice);
 
+// Calendar
+router.get('/calendar', ensureStudent, require('../controllers/calendarController').getCalendarPage);
+
 module.exports = router;

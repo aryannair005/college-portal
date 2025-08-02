@@ -278,6 +278,49 @@ const schemas = {
             'string.max': 'Address should have a maximum length of {#limit}'
         })
     }),
+
+    // Calendar Event Schemas
+    addCalendarEventSchema: Joi.object({
+        title: Joi.string().trim().min(3).max(200).required().messages({
+            'string.empty': 'Event title cannot be empty',
+            'string.min': 'Event title should have a minimum length of {#limit}',
+            'string.max': 'Event title should have a maximum length of {#limit}',
+            'any.required': 'Event title is required'
+        }),
+        description: Joi.string().trim().min(10).required().messages({
+            'string.empty': 'Event description cannot be empty',
+            'string.min': 'Event description should have a minimum length of {#limit}',
+            'any.required': 'Event description is required'
+        }),
+        eventDate: Joi.date().required().messages({
+            'date.base': 'Event date must be a valid date',
+            'any.required': 'Event date is required'
+        }),
+        eventType: Joi.string().valid('holiday', 'exam', 'assignment', 'meeting', 'seminar', 'workshop', 'other').default('other').messages({
+            'any.only': 'Event type must be one of: holiday, exam, assignment, meeting, seminar, workshop, other'
+        })
+    }),
+
+    editCalendarEventSchema: Joi.object({
+        title: Joi.string().trim().min(3).max(200).required().messages({
+            'string.empty': 'Event title cannot be empty',
+            'string.min': 'Event title should have a minimum length of {#limit}',
+            'string.max': 'Event title should have a maximum length of {#limit}',
+            'any.required': 'Event title is required'
+        }),
+        description: Joi.string().trim().min(10).required().messages({
+            'string.empty': 'Event description cannot be empty',
+            'string.min': 'Event description should have a minimum length of {#limit}',
+            'any.required': 'Event description is required'
+        }),
+        eventDate: Joi.date().required().messages({
+            'date.base': 'Event date must be a valid date',
+            'any.required': 'Event date is required'
+        }),
+        eventType: Joi.string().valid('holiday', 'exam', 'assignment', 'meeting', 'seminar', 'workshop', 'other').default('other').messages({
+            'any.only': 'Event type must be one of: holiday, exam, assignment, meeting, seminar, workshop, other'
+        })
+    }),
 };
 
 // Route mapping for better redirect handling
@@ -298,6 +341,10 @@ const routeRedirectMap = {
     // Student/User routes
     'addDoubtSchema': '/doubts/add',
     'replyToDoubtSchema': 'back', // Will use referrer for replies
+    
+    // Calendar routes
+    'addCalendarEventSchema': '/admin/calendar/add',
+    'editCalendarEventSchema': 'back', // Will use referrer for edits
     'studentQuerySchema': 'back', // For query params, stay on same page
     'profileUpdateSchema': '/profile/edit'
 };

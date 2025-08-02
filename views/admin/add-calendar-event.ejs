@@ -1,0 +1,166 @@
+<div class="container my-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-warning text-dark">
+                    <h4 class="mb-0">
+                        <i class="fas fa-plus me-2"></i>Add New Calendar Event
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="/calendar/admin/add">
+                        <div class="mb-3">
+                            <label for="title" class="form-label">
+                                <i class="fas fa-heading me-1"></i>Event Title *
+                            </label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="title" 
+                                   name="title" 
+                                   required 
+                                   minlength="3" 
+                                   maxlength="200"
+                                   placeholder="Enter event title">
+                            <div class="form-text">Enter a clear and descriptive title for the event (3-200 characters)</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="description" class="form-label">
+                                <i class="fas fa-align-left me-1"></i>Event Description *
+                            </label>
+                            <textarea class="form-control" 
+                                      id="description" 
+                                      name="description" 
+                                      rows="4" 
+                                      required 
+                                      minlength="10"
+                                      placeholder="Provide detailed information about the event"></textarea>
+                            <div class="form-text">Describe the event details, requirements, and any important information (minimum 10 characters)</div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="eventDate" class="form-label">
+                                        <i class="fas fa-calendar-day me-1"></i>Event Date *
+                                    </label>
+                                    <input type="date" 
+                                           class="form-control" 
+                                           id="eventDate" 
+                                           name="eventDate" 
+                                           required>
+                                    <div class="form-text">Select the date when this event will occur</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="eventType" class="form-label">
+                                        <i class="fas fa-tag me-1"></i>Event Type
+                                    </label>
+                                    <select class="form-select" id="eventType" name="eventType">
+                                        <option value="other">Other</option>
+                                        <option value="holiday">Holiday</option>
+                                        <option value="exam">Exam</option>
+                                        <option value="assignment">Assignment</option>
+                                        <option value="meeting">Meeting</option>
+                                        <option value="seminar">Seminar</option>
+                                        <option value="workshop">Workshop</option>
+                                    </select>
+                                    <div class="form-text">Choose the type of event to help students categorize it</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="/calendar/admin/manage" class="btn btn-secondary me-md-2">
+                                <i class="fas fa-arrow-left me-1"></i>Cancel
+                            </a>
+                            <button type="submit" class="btn btn-warning btn-custom">
+                                <i class="fas fa-save me-1"></i>Add Event
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Event Type Guide -->
+            <div class="card mt-4">
+                <div class="card-header bg-light">
+                    <h6 class="mb-0">
+                        <i class="fas fa-info-circle me-2"></i>Event Type Guide
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <ul class="list-unstyled">
+                                <li class="mb-2">
+                                    <span class="badge bg-success me-2">Holiday</span>
+                                    <small>College holidays, breaks, and non-working days</small>
+                                </li>
+                                <li class="mb-2">
+                                    <span class="badge bg-danger me-2">Exam</span>
+                                    <small>Examinations, tests, and assessments</small>
+                                </li>
+                                <li class="mb-2">
+                                    <span class="badge bg-warning me-2">Assignment</span>
+                                    <small>Assignment due dates and submissions</small>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="list-unstyled">
+                                <li class="mb-2">
+                                    <span class="badge bg-info me-2">Meeting</span>
+                                    <small>Faculty meetings, student meetings, and conferences</small>
+                                </li>
+                                <li class="mb-2">
+                                    <span class="badge bg-primary me-2">Seminar</span>
+                                    <small>Academic seminars, guest lectures, and presentations</small>
+                                </li>
+                                <li class="mb-2">
+                                    <span class="badge bg-secondary me-2">Workshop</span>
+                                    <small>Training sessions, workshops, and skill development programs</small>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Set minimum date to today
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('eventDate').min = today;
+    
+    // Form validation
+    const form = document.querySelector('form');
+    form.addEventListener('submit', function(e) {
+        const title = document.getElementById('title').value.trim();
+        const description = document.getElementById('description').value.trim();
+        const eventDate = document.getElementById('eventDate').value;
+        
+        if (!title || !description || !eventDate) {
+            e.preventDefault();
+            alert('Please fill in all required fields.');
+            return;
+        }
+        
+        if (title.length < 3) {
+            e.preventDefault();
+            alert('Event title must be at least 3 characters long.');
+            return;
+        }
+        
+        if (description.length < 10) {
+            e.preventDefault();
+            alert('Event description must be at least 10 characters long.');
+            return;
+        }
+    });
+});
+</script> 

@@ -1,0 +1,308 @@
+<div class="container my-4">
+    <h2 class="mb-4">
+        <i class="fas fa-calendar-alt me-2"></i>Academic Calendar
+    </h2>
+    
+    <% if (events.length === 0) { %>
+        <div class="alert alert-info alert-custom text-center">
+            <i class="fas fa-info-circle me-2"></i>
+            No upcoming events in the academic calendar. Check back later for updates!
+        </div>
+    <% } else { %>
+        <!-- Calendar Navigation -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-outline-primary" id="prevMonth">
+                        <i class="fas fa-chevron-left"></i> Previous
+                    </button>
+                    <button type="button" class="btn btn-outline-primary" id="nextMonth">
+                        Next <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="col-md-6 text-end">
+                <h4 id="currentMonthDisplay" class="mb-0">
+                    <%= new Date(currentYear, currentMonth).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) %>
+                </h4>
+            </div>
+        </div>
+
+        <!-- Calendar Grid -->
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-calendar me-2"></i>Monthly View
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="calendarGrid" class="calendar-grid">
+                            <!-- Calendar will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-list me-2"></i>Upcoming Events
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="upcomingEvents">
+                            <% Object.keys(eventsByMonth).forEach(monthKey => { %>
+                                <% const monthEvents = eventsByMonth[monthKey]; %>
+                                <% if (monthEvents.length > 0) { %>
+                                    <div class="mb-3">
+                                        <h6 class="text-muted">
+                                            <%= new Date(monthEvents[0].eventDate).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) %>
+                                        </h6>
+                                        <% monthEvents.forEach(event => { %>
+                                            <div class="event-item mb-2 p-2 border-start border-<%= 
+                                                event.eventType === 'holiday' ? 'success' : 
+                                                event.eventType === 'exam' ? 'danger' : 
+                                                event.eventType === 'assignment' ? 'warning' : 
+                                                event.eventType === 'meeting' ? 'info' : 
+                                                event.eventType === 'seminar' ? 'primary' : 
+                                                event.eventType === 'workshop' ? 'secondary' : 'dark' 
+                                            %> border-3">
+                                                <div class="d-flex justify-content-between align-items-start">
+                                                    <div>
+                                                        <strong class="text-<%= 
+                                                            event.eventType === 'holiday' ? 'success' : 
+                                                            event.eventType === 'exam' ? 'danger' : 
+                                                            event.eventType === 'assignment' ? 'warning' : 
+                                                            event.eventType === 'meeting' ? 'info' : 
+                                                            event.eventType === 'seminar' ? 'primary' : 
+                                                            event.eventType === 'workshop' ? 'secondary' : 'dark' 
+                                                        %>">
+                                                            <%= event.title %>
+                                                        </strong>
+                                                        <br>
+                                                        <small class="text-muted">
+                                                            <i class="fas fa-calendar-day me-1"></i>
+                                                            <%= new Date(event.eventDate).toLocaleDateString() %>
+                                                        </small>
+                                                    </div>
+                                                    <span class="badge bg-<%= 
+                                                        event.eventType === 'holiday' ? 'success' : 
+                                                        event.eventType === 'exam' ? 'danger' : 
+                                                        event.eventType === 'assignment' ? 'warning' : 
+                                                        event.eventType === 'meeting' ? 'info' : 
+                                                        event.eventType === 'seminar' ? 'primary' : 
+                                                        event.eventType === 'workshop' ? 'secondary' : 'dark' 
+                                                    %>">
+                                                        <%= event.eventType.charAt(0).toUpperCase() + event.eventType.slice(1) %>
+                                                    </span>
+                                                </div>
+                                                <p class="mb-0 mt-1 small">
+                                                    <%= event.description.length > 80 ? event.description.substring(0, 80) + '...' : event.description %>
+                                                </p>
+                                            </div>
+                                        <% }) %>
+                                    </div>
+                                <% } %>
+                            <% }) %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <% } %>
+    
+    <!-- Info section -->
+    <div class="mt-5">
+        <div class="card border-light bg-light">
+            <div class="card-body text-center">
+                <h6><i class="fas fa-lightbulb me-2"></i>About Academic Calendar</h6>
+                <p class="mb-0 small text-muted">
+                    Stay organized with important academic dates including exams, assignments, holidays, meetings, seminars, and workshops.
+                    The calendar is regularly updated by the administration to keep you informed of all upcoming events.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1px;
+    background-color: #dee2e6;
+    border: 1px solid #dee2e6;
+}
+
+.calendar-day {
+    background-color: white;
+    padding: 10px;
+    min-height: 80px;
+    position: relative;
+}
+
+.calendar-day.other-month {
+    background-color: #f8f9fa;
+    color: #6c757d;
+}
+
+.calendar-day.today {
+    background-color: #e3f2fd;
+    font-weight: bold;
+}
+
+.calendar-day.has-event {
+    background-color: #fff3cd;
+}
+
+.calendar-day-number {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.event-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 2px;
+}
+
+.event-item {
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.event-item:hover {
+    background-color: #e9ecef;
+    transform: translateX(2px);
+}
+
+@media (max-width: 768px) {
+    .calendar-grid {
+        grid-template-columns: repeat(7, 1fr);
+        font-size: 0.8rem;
+    }
+    
+    .calendar-day {
+        min-height: 60px;
+        padding: 5px;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    let currentYear = <%= currentYear %>;
+    let currentMonth = <%= currentMonth %>;
+    
+    function renderCalendar(year, month) {
+        const firstDay = new Date(year, month, 1);
+        const lastDay = new Date(year, month + 1, 0);
+        const startDate = new Date(firstDay);
+        startDate.setDate(startDate.getDate() - firstDay.getDay());
+        
+        const calendarGrid = document.getElementById('calendarGrid');
+        const currentMonthDisplay = document.getElementById('currentMonthDisplay');
+        
+        // Update month display
+        currentMonthDisplay.textContent = new Date(year, month).toLocaleDateString('en-US', { 
+            month: 'long', 
+            year: 'numeric' 
+        });
+        
+        // Clear calendar
+        calendarGrid.innerHTML = '';
+        
+        // Add day headers
+        const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        dayNames.forEach(day => {
+            const dayHeader = document.createElement('div');
+            dayHeader.className = 'calendar-day text-center fw-bold bg-light';
+            dayHeader.textContent = day;
+            calendarGrid.appendChild(dayHeader);
+        });
+        
+        // Add calendar days
+        const today = new Date();
+        for (let i = 0; i < 42; i++) {
+            const currentDate = new Date(startDate);
+            currentDate.setDate(startDate.getDate() + i);
+            
+            const dayDiv = document.createElement('div');
+            dayDiv.className = 'calendar-day';
+            
+            if (currentDate.getMonth() !== month) {
+                dayDiv.classList.add('other-month');
+            }
+            
+            if (currentDate.toDateString() === today.toDateString()) {
+                dayDiv.classList.add('today');
+            }
+            
+            const dayNumber = document.createElement('div');
+            dayNumber.className = 'calendar-day-number';
+            dayNumber.textContent = currentDate.getDate();
+            dayDiv.appendChild(dayNumber);
+            
+            // Check if this day has events
+            const events = <%- JSON.stringify(events) %>;
+            const dayEvents = events.filter(event => {
+                const eventDate = new Date(event.eventDate);
+                return eventDate.toDateString() === currentDate.toDateString();
+            });
+            
+            if (dayEvents.length > 0) {
+                dayDiv.classList.add('has-event');
+                dayEvents.forEach(event => {
+                    const eventDot = document.createElement('span');
+                    eventDot.className = 'event-dot';
+                    eventDot.style.backgroundColor = getEventColor(event.eventType);
+                    dayDiv.appendChild(eventDot);
+                });
+            }
+            
+            calendarGrid.appendChild(dayDiv);
+        }
+    }
+    
+    function getEventColor(eventType) {
+        const colors = {
+            'holiday': '#28a745',
+            'exam': '#dc3545',
+            'assignment': '#ffc107',
+            'meeting': '#17a2b8',
+            'seminar': '#007bff',
+            'workshop': '#6c757d',
+            'other': '#343a40'
+        };
+        return colors[eventType] || colors.other;
+    }
+    
+    // Initialize calendar
+    renderCalendar(currentYear, currentMonth);
+    
+    // Navigation buttons
+    document.getElementById('prevMonth').addEventListener('click', function() {
+        currentMonth--;
+        if (currentMonth < 0) {
+            currentMonth = 11;
+            currentYear--;
+        }
+        renderCalendar(currentYear, currentMonth);
+    });
+    
+    document.getElementById('nextMonth').addEventListener('click', function() {
+        currentMonth++;
+        if (currentMonth > 11) {
+            currentMonth = 0;
+            currentYear++;
+        }
+        renderCalendar(currentYear, currentMonth);
+    });
+});
+</script> 

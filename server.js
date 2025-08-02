@@ -22,6 +22,7 @@ const utilityRouter = require('./routes/utilityRoutes');
 const noticeRouter = require('./routes/noticeRoutes');
 const profileRouter = require('./routes/profileRoutes');
 const chatbotRouter = require('./routes/chatbotRoutes');
+const calendarRouter = require('./routes/calendarRoutes');
 
 const app = express();
 
@@ -109,6 +110,7 @@ app.use('/', utilityRouter); // Download and Viewer routes
 app.use('/notices', noticeRouter); // Notice routes
 app.use('/', profileRouter); // Profile routes
 app.use('/', chatbotRouter); // NEW: Chatbot routes
+app.use('/calendar', calendarRouter); // Calendar routes
 
 // 404 (Not Found)
 app.use((req, res, next) => {
