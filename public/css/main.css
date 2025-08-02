@@ -1,0 +1,152 @@
+/* ==================== MAIN STYLES ==================== */
+
+/* Sticky Footer Styles */
+html, body {
+    height: 100%;
+}
+
+body { 
+    background-color: #f8f9fa;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.main-content {
+    flex: 1 0 auto;
+}
+
+.footer {
+    flex-shrink: 0;
+    background-color: #f8f9fa;
+    color: black;
+    padding: 15px 0;
+    margin-top: auto;
+}
+
+/* Navbar Styles */
+.navbar {
+    height: 70px;
+}
+
+.navbar-brand { 
+    font-weight: bold;
+    padding-top: 19px;
+}
+
+.navbar-nav {
+    padding-top: 19px;
+}
+
+/* Card Styles */
+.card { 
+    transition: transform 0.2s; 
+    border: none; 
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+}
+
+.card:hover { 
+    transform: translateY(-2px); 
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15); 
+}
+
+/* Filter and Layout Styles */
+.filter-section { 
+    background: white; 
+    border-radius: 10px; 
+    padding: 20px; 
+    margin-bottom: 20px; 
+}
+
+.resource-card { 
+    margin-bottom: 20px; 
+}
+
+.alert-custom { 
+    border-radius: 10px; 
+}
+
+.btn-custom { 
+    border-radius: 25px; 
+}
+
+/* Profile Image Styles */
+.profile-nav-image {
+    width: 32px;
+    height: 32px;
+    object-fit: cover;
+    border: 2px solid #fff;
+}
+
+.profile-image {
+    transition: transform 0.3s ease;
+}
+
+.profile-image:hover {
+    transform: scale(1.05);
+}
+
+/* Hero Section */
+.hero-section {
+    padding: 60px 0;
+}
+
+/* Spacing */
+.container, .container-fluid {
+    padding-bottom: 20px;
+}
+
+/* Chatbot Floating Button */
+.chatbot-float {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1050;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    box-shadow: 0 4px 20px rgba(0, 123, 255, 0.3);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 4px 20px rgba(0, 123, 255, 0.3);
+    }
+    50% {
+        box-shadow: 0 4px 25px rgba(0, 123, 255, 0.5);
+        transform: scale(1.05);
+    }
+    100% {
+        box-shadow: 0 4px 20px rgba(0, 123, 255, 0.3);
+    }
+}
+
+/* Button Styles */
+.btn {
+    transition: all 0.2s ease;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+/* Badge Styles */
+.badge {
+    font-size: 0.8em;
+}
+
+.bg-warning {
+    background-color: #ffc107 !important;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .hero-section {
+        padding: 40px 0;
+    }
+    
+    .footer {
+        padding: 10px 0;
+    }
+}

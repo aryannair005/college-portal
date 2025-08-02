@@ -6,124 +6,18 @@
     <title><%= title %> - College Portal</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        /* Sticky Footer Styles */
-        html, body {
-            height: 100%;
-        }
-        
-        body { 
-            background-color: #f8f9fa;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-        
-        .main-content {
-            flex: 1 0 auto;
-        }
-        
-        .footer {
-            flex-shrink: 0;
-            background-color: #f8f9fa;
-            color: black;
-            padding: 15px 0;
-            margin-top: auto;
-        }
-        
-        .navbar{
-            height: 70px;
-        }
-
-        /* Existing styles */
-        .navbar-brand { font-weight: bold; }
-        .card { 
-            transition: transform 0.2s; 
-            border: none; 
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
-        }
-        .card:hover { 
-            transform: translateY(-2px); 
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15); 
-        }
-        .filter-section { 
-            background: white; 
-            border-radius: 10px; 
-            padding: 20px; 
-            margin-bottom: 20px; 
-        }
-        .resource-card { 
-            margin-bottom: 20px; 
-        }
-        .alert-custom { 
-            border-radius: 10px; 
-        }
-        .btn-custom { 
-            border-radius: 25px; 
-        }
-        .navbar-nav{
-            padding-top: 19px;
-        }
-
-        .navbar-brand{
-            padding-top: 19px;
-        }
-        
-        /* Profile image styles */
-        .profile-nav-image {
-            width: 32px;
-            height: 32px;
-            object-fit: cover;
-            border: 2px solid #fff;
-        }
-        
-        /* Hero section adjustments */
-        .hero-section {
-            padding: 60px 0;
-        }
-        
-        /* Ensure proper spacing */
-        .container, .container-fluid {
-            padding-bottom: 20px;
-        }
-        
-        /* Mobile responsive adjustments */
-        @media (max-width: 768px) {
-            .hero-section {
-                padding: 40px 0;
-            }
-            
-            .footer {
-                padding: 10px 0;
-            }
-        }
-
-        /* Chatbot floating button */
-        .chatbot-float {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 1050;
-            border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            box-shadow: 0 4px 20px rgba(0, 123, 255, 0.3);
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% {
-                box-shadow: 0 4px 20px rgba(0, 123, 255, 0.3);
-            }
-            50% {
-                box-shadow: 0 4px 25px rgba(0, 123, 255, 0.5);
-                transform: scale(1.05);
-            }
-            100% {
-                box-shadow: 0 4px 20px rgba(0, 123, 255, 0.3);
-            }
-        }
-    </style>
+    
+    <!-- Main CSS -->
+    <link href="/css/main.css" rel="stylesheet">
+    
+    <!-- Conditional CSS based on page/user role -->
+    <% if (user && user.role === 'admin') { %>
+        <link href="/css/admin.css" rel="stylesheet">
+    <% } %>
+    
+    <% if (title && (title.includes('Profile') || title.includes('profile'))) { %>
+        <link href="/css/profile.css" rel="stylesheet">
+    <% } %>
 </head>
 <body>
     <!-- Navigation -->
@@ -266,6 +160,16 @@
         </div>
     </footer>
 
+    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Conditional JavaScript based on page/user role -->
+    <% if (user && user.role === 'admin') { %>
+        <script src="/js/admin.js"></script>
+    <% } %>
+    
+    <% if (title && title.includes('Create Admin')) { %>
+        <script src="/js/auth.js"></script>
+    <% } %>
 </body>
 </html>

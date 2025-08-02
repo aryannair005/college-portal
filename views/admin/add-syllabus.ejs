@@ -87,28 +87,3 @@
         </div>
     </div>
 </div>
-
-<script>
-function toggleSyllabusType() {
-    const type = document.getElementById('type').value;
-    const pdfSection = document.getElementById('pdfSection');
-    const linkSection = document.getElementById('linkSection');
-    
-    if (type === 'pdf') {
-        pdfSection.style.display = 'block';
-        linkSection.style.display = 'none';
-        document.getElementById('pdf').required = true;
-        document.getElementById('url').required = false;
-    } else if (type === 'link') {
-        pdfSection.style.display = 'none';
-        linkSection.style.display = 'block';
-        document.getElementById('pdf').required = false;
-        document.getElementById('url').required = true;
-    } else {
-        pdfSection.style.display = 'none';
-        linkSection.style.display = 'none';
-        document.getElementById('pdf').required = false;
-        document.getElementById('url').required = false;
-    }
-}
-</script>
