@@ -1,0 +1,42 @@
+body {
+    margin: 0;
+    overflow: hidden;
+}
+
+.pdf-container iframe {
+    background: white;
+}
+
+/* Loading animation */
+.pdf-container::before {
+    content: "Loading PDF...";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 18px;
+    color: #666;
+    z-index: 1;
+}
+
+/* Hide navbar for full-screen experience */
+.navbar {
+    display: none;
+}
+
+/* Hide footer for full-screen experience */
+.footer {
+    display: none;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .pdf-container {
+        height: calc(100vh - 100px) !important;
+    }
+    
+    .btn-group .btn {
+        font-size: 12px;
+        padding: 5px 10px;
+    }
+}

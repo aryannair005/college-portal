@@ -1,0 +1,82 @@
+.profile-image {
+    transition: transform 0.3s ease;
+}
+
+.profile-image:hover {
+    transform: scale(1.05);
+}
+
+.card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.profile-image {
+    transition: transform 0.3s ease;
+}
+
+.profile-image:hover {
+    transform: scale(1.05);
+}
+
+.card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.btn {
+    transition: all 0.2s ease;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+#imagePreview {
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.profile-image {
+    transition: transform 0.3s ease;
+}
+
+.profile-image:hover {
+    transform: scale(1.05);
+}
+
+.card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.badge {
+    font-size: 0.8em;
+}
+
+.btn {
+    transition: all 0.2s ease;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+.bg-warning {
+    background-color: #ffc107 !important;
+}

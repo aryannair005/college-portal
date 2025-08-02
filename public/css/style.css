@@ -1,0 +1,8 @@
+.reply-item {
+    border-left: 4px solid #007bff;
+    transition: all 0.2s ease;
+}
+.reply-item:hover {
+    background-color: #f8f9fa !important;
+    transform: translateX(5px);
+}

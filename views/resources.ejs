@@ -1,292 +1,175 @@
-<div class="container my-4">
-    <h2 class="mb-4">
-        <i class="fas fa-book me-2"></i>Study Resources
-    </h2>
-    
-    <!-- Filter Section -->
-    <div class="filter-section">
-        <h5><i class="fas fa-filter me-2"></i>Filter Resources</h5>
-        <form method="GET" action="/resources">
-            <div class="row">
-                <div class="col-md-3 mb-3">
-                    <label for="course" class="form-label">Course</label>
-                    <input type="text" class="form-control" id="course" name="course" 
-                           value="<%= filters.course || '' %>" placeholder="e.g., BCA, MCA">
-                </div>
-                <div class="col-md-3 mb-3">
-                    <label for="semester" class="form-label">Semester</label>
-                    <select class="form-select" id="semester" name="semester">
-                        <option value="">All Semesters</option>
-                        <% for(let i = 1; i <= 8; i++) { %>
-                            <option value="<%= i %>" <%= filters.semester == i ? 'selected' : '' %>><%= i %></option>
-                        <% } %>
-                    </select>
-                </div>
-                <div class="col-md-3 mb-3">
-                    <label for="subject" class="form-label">Subject</label>
-                    <input type="text" class="form-control" id="subject" name="subject" 
-                           value="<%= filters.subject || '' %>" placeholder="e.g., Math, Physics">
-                </div>
-                <div class="col-md-3 mb-3">
-                    <label class="form-label">&nbsp;</label><br>
-                    <button type="submit" class="btn btn-primary btn-custom me-2">
-                        <i class="fas fa-search me-1"></i>Search
-                    </button>
-                    <a href="/resources" class="btn btn-outline-secondary btn-custom">
-                        <i class="fas fa-times me-1"></i>Clear
-                    </a>
-                </div>
-            </div>
-        </form>
-    </div>
-    
-    <!-- Results Section -->
-    <% if (resources.length === 0) { %>
-        <div class="alert alert-info alert-custom text-center">
-            <i class="fas fa-info-circle me-2"></i>
-            No resources found matching your criteria. Try adjusting your filters.
-        </div>
-    <% } else { %>
-        <div class="row">
-            <% resources.forEach(resource => { %>
-                <div class="col-md-6 col-lg-4 resource-card">
-                    <div class="card h-100">
-                        <div class="card-header bg-light">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <span class="badge bg-primary me-1"><%= resource.course %></span>
-                                    <span class="badge bg-secondary me-1">Sem <%= resource.semester %></span>
-                                    <span class="badge bg-info"><%= resource.subject %></span>
-                                </div>
-                                <% if (resource.youtubeLinks && resource.youtubeLinks.length > 0) { %>
-                                    <span class="badge bg-danger" title="YouTube videos available">
-                                        <i class="fab fa-youtube me-1"></i><%= resource.youtubeLinks.length %>
-                                    </span>
-                                <% } %>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title">
-                                <% if (resource.type === 'pdf') { %>
-                                    <i class="fas fa-file-pdf text-danger me-2"></i>
-                                <% } else { %>
-                                    <i class="fas fa-external-link-alt text-primary me-2"></i>
-                                <% } %>
-                                <%= resource.title %>
-                            </h5>
-                            
-                            <!-- YouTube Links Preview -->
-                            <% if (resource.youtubeLinks && resource.youtubeLinks.length > 0) { %>
-                                <div class="mb-2">
-                                    <small class="text-danger">
-                                        <i class="fab fa-youtube me-1"></i>
-                                        Includes <%= resource.youtubeLinks.length %> video<%= resource.youtubeLinks.length > 1 ? 's' : '' %>
-                                    </small>
-                                </div>
-                            <% } %>
-                            
-                            <p class="text-muted mb-3">
-                                <small>
-                                    <i class="fas fa-clock me-1"></i>
-                                    Uploaded: <%= new Date(resource.uploadedAt).toLocaleDateString() %>
-                                </small>
-                            </p>
-                            
-                            <div class="d-grid gap-2">
-                                <!-- View Details Button (Primary Action) -->
-                                <a href="/resources/<%= resource._id %>" 
-                                   class="btn btn-success btn-custom">
-                                    <i class="fas fa-eye me-2"></i>View Details
-                                    <% if (resource.youtubeLinks && resource.youtubeLinks.length > 0) { %>
-                                        & Videos
-                                    <% } %>
-                                </a>
-                                
-                                <!-- Quick Actions -->
-                                <div class="btn-group w-100" role="group">
-                                    <% if (resource.type === 'pdf') { %>
-                                        <a href="/viewer/resource/<%= resource.filename %>" 
-                                           class="btn btn-outline-primary btn-sm">
-                                            <i class="fas fa-file-pdf me-1"></i>PDF
-                                        </a>
-                                        <a href="/download/resource/<%= resource.filename %>" 
-                                           class="btn btn-outline-secondary btn-sm">
-                                            <i class="fas fa-download me-1"></i>Download
-                                        </a>
-                                    <% } else { %>
-                                        <a href="<%= resource.url %>" target="_blank" 
-                                           class="btn btn-outline-primary btn-sm">
-                                            <i class="fas fa-external-link-alt me-1"></i>Open Link
-                                        </a>
-                                    <% } %>
-                                    
-                                    <% if (resource.youtubeLinks && resource.youtubeLinks.length > 0) { %>
-                                        <button type="button" class="btn btn-outline-danger btn-sm"
-                                                onclick="showYouTubeLinks('<%= resource._id %>')">
-                                            <i class="fab fa-youtube me-1"></i>Videos
-                                        </button>
-                                    <% } %>
-                                </div>
-                            </div>
-                        </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/resources.css">
+</head>
+<body>
+    <script>
+        const allResources = <%- JSON.stringify(resources) %>;
+    </script>
+    <div class="container my-4">
+        <h2 class="mb-4">
+            <i class="fas fa-book me-2"></i>Study Resources
+        </h2>
+        
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <h5><i class="fas fa-filter me-2"></i>Filter Resources</h5>
+            <form method="GET" action="/resources">
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <label for="course" class="form-label">Course</label>
+                        <input type="text" class="form-control" id="course" name="course" 
+                            value="<%= filters.course || '' %>" placeholder="e.g., BCA, MCA">
                     </div>
-                </div>
-            <% }) %>
-        </div>
-    <% } %>
-</div>
-
-<!-- YouTube Links Quick View Modal -->
-<div class="modal fade" id="youtubeModal" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header bg-danger text-white">
-                <h5 class="modal-title">
-                    <i class="fab fa-youtube me-2"></i>YouTube Video Resources
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body" id="youtubeModalBody">
-                <!-- Content will be loaded dynamically -->
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-danger" id="viewFullDetailsBtn">
-                    <i class="fas fa-eye me-2"></i>View Full Details
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-function showYouTubeLinks(resourceId) {
-    // Find the resource data
-    const resources = [
-        <% resources.forEach((resource, index) => { %>
-        {
-            id: '<%= resource._id %>',
-            title: '<%= resource.title %>',
-            youtubeLinks: [
-                <% if (resource.youtubeLinks) { %>
-                    <% resource.youtubeLinks.forEach((link, linkIndex) => { %>
-                        {
-                            topicName: '<%= link.topicName.replace(/'/g, "\\'") %>',
-                            url: '<%= link.url %>',
-                            addedAt: '<%= new Date(link.addedAt).toLocaleDateString() %>'
-                        }<%= linkIndex < resource.youtubeLinks.length - 1 ? ',' : '' %>
-                    <% }) %>
-                <% } %>
-            ]
-        }<%= index < resources.length - 1 ? ',' : '' %>
-        <% }) %>
-    ];
-    
-    const resource = resources.find(r => r.id === resourceId);
-    if (!resource || !resource.youtubeLinks.length) return;
-    
-    let modalContent = `<h6>Videos for: ${resource.title}</h6><div class="row">`;
-    
-    resource.youtubeLinks.forEach(link => {
-        modalContent += `
-            <div class="col-md-6 mb-3">
-                <div class="card border-danger">
-                    <div class="card-body">
-                        <h6 class="card-title">${link.topicName}</h6>
-                        <p class="card-text">
-                            <small class="text-muted">Added: ${link.addedAt}</small>
-                        </p>
-                        <a href="${link.url}" target="_blank" class="btn btn-danger btn-sm">
-                            <i class="fas fa-play me-1"></i>Watch Video
+                    <div class="col-md-3 mb-3">
+                        <label for="semester" class="form-label">Semester</label>
+                        <select class="form-select" id="semester" name="semester">
+                            <option value="">All Semesters</option>
+                            <% for(let i = 1; i <= 8; i++) { %>
+                                <option value="<%= i %>" <%= filters.semester == i ? 'selected' : '' %>><%= i %></option>
+                            <% } %>
+                        </select>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="subject" class="form-label">Subject</label>
+                        <input type="text" class="form-control" id="subject" name="subject" 
+                            value="<%= filters.subject || '' %>" placeholder="e.g., Math, Physics">
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label">&nbsp;</label><br>
+                        <button type="submit" class="btn btn-primary btn-custom me-2">
+                            <i class="fas fa-search me-1"></i>Search
+                        </button>
+                        <a href="/resources" class="btn btn-outline-secondary btn-custom">
+                            <i class="fas fa-times me-1"></i>Clear
                         </a>
                     </div>
                 </div>
+            </form>
+        </div>
+        
+        <!-- Results Section -->
+        <% if (resources.length === 0) { %>
+            <div class="alert alert-info alert-custom text-center">
+                <i class="fas fa-info-circle me-2"></i>
+                No resources found matching your criteria. Try adjusting your filters.
             </div>
-        `;
-    });
-    
-    modalContent += '</div>';
-    document.getElementById('youtubeModalBody').innerHTML = modalContent;
-    document.getElementById('viewFullDetailsBtn').onclick = () => {
-        window.location.href = `/resource/${resourceId}`;
-    };
-    
-    const modal = new bootstrap.Modal(document.getElementById('youtubeModal'));
-    modal.show();
-}
-</script>
+        <% } else { %>
+            <div class="row">
+                <% resources.forEach(resource => { %>
+                    <div class="col-md-6 col-lg-4 resource-card">
+                        <div class="card h-100">
+                            <div class="card-header bg-light">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <span class="badge bg-primary me-1"><%= resource.course %></span>
+                                        <span class="badge bg-secondary me-1">Sem <%= resource.semester %></span>
+                                        <span class="badge bg-info"><%= resource.subject %></span>
+                                    </div>
+                                    <% if (resource.youtubeLinks && resource.youtubeLinks.length > 0) { %>
+                                        <span class="badge bg-danger" title="YouTube videos available">
+                                            <i class="fab fa-youtube me-1"></i><%= resource.youtubeLinks.length %>
+                                        </span>
+                                    <% } %>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <% if (resource.type === 'pdf') { %>
+                                        <i class="fas fa-file-pdf text-danger me-2"></i>
+                                    <% } else { %>
+                                        <i class="fas fa-external-link-alt text-primary me-2"></i>
+                                    <% } %>
+                                    <%= resource.title %>
+                                </h5>
+                                
+                                <!-- YouTube Links Preview -->
+                                <% if (resource.youtubeLinks && resource.youtubeLinks.length > 0) { %>
+                                    <div class="mb-2">
+                                        <small class="text-danger">
+                                            <i class="fab fa-youtube me-1"></i>
+                                            Includes <%= resource.youtubeLinks.length %> video<%= resource.youtubeLinks.length > 1 ? 's' : '' %>
+                                        </small>
+                                    </div>
+                                <% } %>
+                                
+                                <p class="text-muted mb-3">
+                                    <small>
+                                        <i class="fas fa-clock me-1"></i>
+                                        Uploaded: <%= new Date(resource.uploadedAt).toLocaleDateString() %>
+                                    </small>
+                                </p>
+                                
+                                <div class="d-grid gap-2">
+                                    <!-- View Details Button (Primary Action) -->
+                                    <a href="/resources/<%= resource._id %>" 
+                                    class="btn btn-success btn-custom">
+                                        <i class="fas fa-eye me-2"></i>View Details
+                                        <% if (resource.youtubeLinks && resource.youtubeLinks.length > 0) { %>
+                                            & Videos
+                                        <% } %>
+                                    </a>
+                                    
+                                    <!-- Quick Actions -->
+                                    <div class="btn-group w-100" role="group">
+                                        <% if (resource.type === 'pdf') { %>
+                                            <a href="/viewer/resource/<%= resource.filename %>" 
+                                            class="btn btn-outline-primary btn-sm">
+                                                <i class="fas fa-file-pdf me-1"></i>PDF
+                                            </a>
+                                            <a href="/download/resource/<%= resource.filename %>" 
+                                            class="btn btn-outline-secondary btn-sm">
+                                                <i class="fas fa-download me-1"></i>Download
+                                            </a>
+                                        <% } else { %>
+                                            <a href="<%= resource.url %>" target="_blank" 
+                                            class="btn btn-outline-primary btn-sm">
+                                                <i class="fas fa-external-link-alt me-1"></i>Open Link
+                                            </a>
+                                        <% } %>
+                                        
+                                        <% if (resource.youtubeLinks && resource.youtubeLinks.length > 0) { %>
+                                            <button type="button" class="btn btn-outline-danger btn-sm"
+                                                    onclick="showYouTubeLinks('<%= resource._id %>')">
+                                                <i class="fab fa-youtube me-1"></i>Videos
+                                            </button>
+                                        <% } %>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% }) %>
+            </div>
+        <% } %>
+    </div>
 
-<style>
-/* Enhanced card styling */
-.resource-card .card {
-    transition: all 0.3s ease;
-    border: none;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-.resource-card .card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-}
-
-/* YouTube badge styling */
-.badge.bg-danger {
-    animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-    0% { opacity: 1; }
-    50% { opacity: 0.7; }
-    100% { opacity: 1; }
-}
-
-/* Filter section styling */
-.filter-section {
-    background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
-    border: 1px solid #e9ecef;
-    border-radius: 15px;
-    padding: 25px;
-    margin-bottom: 30px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-}
-
-/* Button group styling */
-.btn-group .btn {
-    flex: 1;
-}
-
-/* Modal styling */
-.modal-content {
-    border-radius: 15px;
-    overflow: hidden;
-}
-
-.modal-header.bg-danger {
-    border-bottom: none;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .card-header .d-flex {
-        flex-direction: column;
-        align-items: flex-start !important;
-    }
-    
-    .card-header .badge.bg-danger {
-        margin-top: 10px;
-    }
-    
-    .btn-group {
-        flex-direction: column;
-    }
-    
-    .btn-group .btn {
-        border-radius: 0.375rem !important;
-        margin-bottom: 5px;
-    }
-    
-    .btn-group .btn:last-child {
-        margin-bottom: 0;
-    }
-}
-</style>
+    <!-- YouTube Links Quick View Modal -->
+    <div class="modal fade" id="youtubeModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">
+                        <i class="fab fa-youtube me-2"></i>YouTube Video Resources
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="youtubeModalBody">
+                    <!-- Content will be loaded dynamically -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger" id="viewFullDetailsBtn">
+                        <i class="fas fa-eye me-2"></i>View Full Details
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/js/showYouTubeLinks.js"></script>
+</body>
+</html>

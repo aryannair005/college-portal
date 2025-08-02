@@ -1,0 +1,86 @@
+.chat-messages {
+    background-image: 
+        radial-gradient(circle at 20% 80%, rgba(0, 123, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(40, 167, 69, 0.1) 0%, transparent 50%);
+}
+
+.message-container {
+    animation: fadeInUp 0.3s ease;
+}
+
+.bot-message .message-bubble {
+    background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+    border-left: 4px solid #007bff;
+    max-width: 85%;
+}
+
+.user-message {
+    margin-left: auto;
+    margin-right: 0;
+}
+
+.user-message .message-bubble {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    color: white;
+    max-width: 85%;
+    margin-left: auto;
+}
+
+.user-message .d-flex {
+    flex-direction: row-reverse;
+}
+
+.user-message .avatar {
+    margin-left: 8px;
+    margin-right: 0;
+}
+
+.message-time {
+    font-size: 0.75rem;
+}
+
+.typing-indicator {
+    display: none;
+}
+
+.typing-indicator .dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #007bff;
+    animation: typing 1.4s infinite;
+}
+
+.typing-indicator .dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-indicator .dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typing {
+    0%, 60%, 100% { transform: translateY(0); }
+    30% { transform: translateY(-10px); }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.quick-question:hover {
+    transform: translateY(-1px);
+    transition: all 0.2s ease;
+}
+
+#messageInput:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.avatar {
+    flex-shrink: 0;
+}
