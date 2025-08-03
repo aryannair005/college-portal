@@ -38,6 +38,54 @@ body {
     padding-top: 19px;
 }
 
+/* --- FINAL MOBILE NAVBAR FIX --- */
+@media (max-width: 991.98px) {
+    .navbar-collapse {
+        background-color: #0d6efd !important; /* Bootstrap's bg-primary blue */
+        width: 100vw;
+        position: absolute;
+        top: 70px; /* same height as your navbar */
+        left: 0;
+        z-index: 1000;
+        padding: 1rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .navbar-collapse .navbar-nav .nav-link {
+        color: #ffffff !important;
+        font-weight: 500;
+    }
+
+    .navbar-collapse .navbar-nav .nav-link:hover {
+        color: #d1e3ff !important;
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 5px;
+    }
+
+    .navbar-collapse .dropdown-menu {
+        background-color: #0d6efd !important;
+        border: none;
+        box-shadow: none;
+    }
+
+    .navbar-collapse .dropdown-menu .dropdown-item {
+        color: #ffffff !important;
+    }
+
+    .navbar-collapse .dropdown-menu .dropdown-item:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: #d1e3ff !important;
+    }
+
+    .navbar-toggler {
+        border-color: #ffffff;
+    }
+
+    .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    }
+}
+
 /* Card Styles */
 .card { 
     transition: transform 0.2s; 
