@@ -75,6 +75,25 @@
             </div>
         </div>
         
+        <!-- Timetable Management -->
+        <div class="col-md-3 mb-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <i class="fas fa-clock text-purple fa-3x mb-3"></i>
+                    <h5 class="card-title">Timetables</h5>
+                    <p class="card-text">Manage class timetables and schedules for all courses.</p>
+                    <div class="d-grid gap-2">
+                        <a href="/timetable/admin/manage" class="btn btn-purple btn-custom">
+                            <i class="fas fa-cog me-2"></i>Manage Timetables
+                        </a>
+                        <a href="/timetable/admin/add" class="btn btn-outline-purple btn-custom">
+                            <i class="fas fa-plus me-2"></i>Add Timetable
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
         <!-- Calendar Management -->
         <div class="col-md-3 mb-4">
             <div class="card">
@@ -104,27 +123,32 @@
                 </div>
                 <div class="card-body">
                     <div class="row text-center">
-                        <div class="col-md-3 mb-3">
+                        <div class="col-md-2 mb-3">
                             <a href="/admin/add-notice" class="btn btn-outline-warning btn-custom w-100">
                                 <i class="fas fa-bullhorn me-2"></i>Post Notice
                             </a>
                         </div>
-                        <div class="col-md-3 mb-3">
+                        <div class="col-md-2 mb-3">
                             <a href="/admin/add-resource" class="btn btn-outline-primary btn-custom w-100">
                                 <i class="fas fa-upload me-2"></i>Upload Resource
                             </a>
                         </div>
-                        <div class="col-md-3 mb-3">
+                        <div class="col-md-2 mb-3">
                             <a href="/admin/add-pyq" class="btn btn-outline-success btn-custom w-100">
                                 <i class="fas fa-file-upload me-2"></i>Upload PYQ
                             </a>
                         </div>
-                        <div class="col-md-3 mb-3">
+                        <div class="col-md-2 mb-3">
                             <a href="/admin/add-syllabus" class="btn btn-outline-info btn-custom w-100">
                                 <i class="fas fa-plus-circle me-2"></i>Add Syllabus
                             </a>
                         </div>
-                        <div class="col-md-3 mb-3">
+                        <div class="col-md-2 mb-3">
+                            <a href="/timetable/admin/add" class="btn btn-outline-purple btn-custom w-100">
+                                <i class="fas fa-clock me-2"></i>Add Timetable
+                            </a>
+                        </div>
+                        <div class="col-md-2 mb-3">
                             <a href="/admin/calendar/add" class="btn btn-outline-danger btn-custom w-100">
                                 <i class="fas fa-calendar-plus me-2"></i>Add Event
                             </a>
@@ -161,6 +185,9 @@
                             <a href="/syllabus" class="btn btn-outline-info btn-sm w-100">Syllabus</a>
                         </div>
                         <div class="col-md-2 mb-2">
+                            <a href="/timetable" class="btn btn-outline-purple btn-sm w-100">Timetable</a>
+                        </div>
+                        <div class="col-md-2 mb-2">
                             <a href="/doubts" class="btn btn-outline-secondary btn-sm w-100">Doubts</a>
                         </div>
                         <div class="col-md-2 mb-2">
@@ -172,3 +199,33 @@
         </div>
     </div>
 </div>
+
+<style>
+/* Custom purple color for timetable */
+.text-purple {
+    color: #8e44ad !important;
+}
+
+.btn-purple {
+    background-color: #8e44ad;
+    border-color: #8e44ad;
+    color: white;
+}
+
+.btn-purple:hover {
+    background-color: #7e3f98;
+    border-color: #7e3f98;
+    color: white;
+}
+
+.btn-outline-purple {
+    color: #8e44ad;
+    border-color: #8e44ad;
+}
+
+.btn-outline-purple:hover {
+    background-color: #8e44ad;
+    border-color: #8e44ad;
+    color: white;
+}
+</style>

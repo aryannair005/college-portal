@@ -1,0 +1,261 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h2 class="mb-4">📅 Class Timetable</h2>
+            
+            <!-- Filter Section -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Filter Timetables</h5>
+                    <form method="GET" action="/timetable" class="row g-3">
+                        <div class="col-md-3">
+                            <label for="course" class="form-label">Course</label>
+                            <select class="form-select" id="course" name="course">
+                                <option value="">All Courses</option>
+                                <% courses.forEach(course => { %>
+                                    <option value="<%= course %>" <%= filters.course === course ? 'selected' : '' %>><%= course %></option>
+                                <% }); %>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="semester" class="form-label">Semester</label>
+                            <select class="form-select" id="semester" name="semester">
+                                <option value="">All Semesters</option>
+                                <% semesters.forEach(semester => { %>
+                                    <option value="<%= semester %>" <%= filters.semester === semester ? 'selected' : '' %>><%= semester %></option>
+                                <% }); %>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="section" class="form-label">Section</label>
+                            <select class="form-select" id="section" name="section">
+                                <option value="">All Sections</option>
+                                <% sections.forEach(section => { %>
+                                    <option value="<%= section %>" <%= filters.section === section ? 'selected' : '' %>><%= section %></option>
+                                <% }); %>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">&nbsp;</label>
+                            <div>
+                                <button type="submit" class="btn btn-primary">Filter</button>
+                                <a href="/timetable" class="btn btn-secondary">Clear</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Current Timetable Display -->
+            <% if (currentTimetable) { %>
+                <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="mb-0">
+                                <%= currentTimetable.course %> - Semester <%= currentTimetable.semester %> 
+                                (Section <%= currentTimetable.section %>)
+                            </h5>
+                            <small class="text-muted">
+                                Academic Year: <%= currentTimetable.academicYear %> | 
+                                Effective From: <%= currentTimetable.effectiveFrom.toDateString() %>
+                            </small>
+                        </div>
+                        <a href="/timetable/<%= currentTimetable._id %>" class="btn btn-outline-primary btn-sm">View Details</a>
+                    </div>
+                    <div class="card-body">
+                        <!-- Weekly Timetable Grid -->
+                        <div class="table-responsive">
+                            <table class="table table-bordered timetable-grid">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th style="width: 100px;">Time</th>
+                                        <th>Monday</th>
+                                        <th>Tuesday</th>
+                                        <th>Wednesday</th>
+                                        <th>Thursday</th>
+                                        <th>Friday</th>
+                                        <th>Saturday</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <%
+                                        // Get all unique time slots
+                                        const timeSlots = new Set();
+                                        const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+                                        days.forEach(day => {
+                                            if (currentTimetable.schedule[day]) {
+                                                currentTimetable.schedule[day].forEach(slot => {
+                                                    timeSlots.add(slot.timeSlot);
+                                                });
+                                            }
+                                        });
+                                        const sortedTimeSlots = Array.from(timeSlots).sort();
+                                    %>
+                                    
+                                    <% sortedTimeSlots.forEach(timeSlot => { %>
+                                        <tr>
+                                            <td class="time-slot"><strong><%= timeSlot %></strong></td>
+                                            <% days.forEach(day => { %>
+                                                <td class="schedule-cell">
+                                                    <%
+                                                        const daySchedule = currentTimetable.schedule[day] || [];
+                                                        const slotData = daySchedule.find(slot => slot.timeSlot === timeSlot);
+                                                    %>
+                                                    <% if (slotData) { %>
+                                                        <div class="subject-card <%= slotData.type %>">
+                                                            <div class="subject-name"><%= slotData.subject %></div>
+                                                            <div class="faculty-name text-muted"><%= slotData.faculty %></div>
+                                                            <% if (slotData.room) { %>
+                                                                <div class="room-info text-muted">📍 <%= slotData.room %></div>
+                                                            <% } %>
+                                                            <span class="badge bg-secondary type-badge"><%= slotData.type %></span>
+                                                        </div>
+                                                    <% } %>
+                                                </td>
+                                            <% }); %>
+                                        </tr>
+                                    <% }); %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            <% } else { %>
+                <div class="alert alert-info">
+                    <h5>No Timetable Found</h5>
+                    <p>No active timetable matches your current filters. Try adjusting the filters or contact administration.</p>
+                </div>
+            <% } %>
+
+            <!-- All Available Timetables -->
+            <% if (timetables.length > 1) { %>
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">All Available Timetables</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <% timetables.forEach(timetable => { %>
+                                <div class="col-md-6 col-lg-4 mb-3">
+                                    <div class="card h-100 <%= timetable === currentTimetable ? 'border-primary' : '' %>">
+                                        <div class="card-body">
+                                            <h6 class="card-title">
+                                                <%= timetable.course %> - Sem <%= timetable.semester %>
+                                                <% if (timetable === currentTimetable) { %>
+                                                    <span class="badge bg-primary">Current</span>
+                                                <% } %>
+                                            </h6>
+                                            <p class="card-text">
+                                                <small class="text-muted">
+                                                    Section: <%= timetable.section %><br>
+                                                    Academic Year: <%= timetable.academicYear %><br>
+                                                    Effective: <%= timetable.effectiveFrom.toDateString() %>
+                                                </small>
+                                            </p>
+                                            <% if (timetable.description) { %>
+                                                <p class="card-text"><%= timetable.description %></p>
+                                            <% } %>
+                                        </div>
+                                        <div class="card-footer">
+                                            <a href="/timetable/<%= timetable._id %>" class="btn btn-sm btn-outline-primary">View Details</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% }); %>
+                        </div>
+                    </div>
+                </div>
+            <% } %>
+        </div>
+    </div>
+</div>
+
+<style>
+.timetable-grid {
+    font-size: 0.9rem;
+}
+
+.time-slot {
+    background-color: #f8f9fa;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.schedule-cell {
+    padding: 8px !important;
+    vertical-align: top;
+    min-height: 80px;
+}
+
+.subject-card {
+    background: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    padding: 8px;
+    position: relative;
+    height: 100%;
+    min-height: 70px;
+}
+
+.subject-card.lecture {
+    border-left: 4px solid #007bff;
+    background-color: #f8f9ff;
+}
+
+.subject-card.lab {
+    border-left: 4px solid #28a745;
+    background-color: #f8fff9;
+}
+
+.subject-card.tutorial {
+    border-left: 4px solid #ffc107;
+    background-color: #fffcf8;
+}
+
+.subject-card.break {
+    border-left: 4px solid #6c757d;
+    background-color: #f8f9fa;
+}
+
+.subject-name {
+    font-weight: 600;
+    font-size: 0.85rem;
+    margin-bottom: 2px;
+}
+
+.faculty-name {
+    font-size: 0.75rem;
+    margin-bottom: 2px;
+}
+
+.room-info {
+    font-size: 0.7rem;
+    margin-bottom: 4px;
+}
+
+.type-badge {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    font-size: 0.6rem;
+}
+
+@media (max-width: 768px) {
+    .timetable-grid {
+        font-size: 0.8rem;
+    }
+    
+    .subject-card {
+        min-height: 60px;
+        padding: 4px;
+    }
+    
+    .subject-name {
+        font-size: 0.75rem;
+    }
+    
+    .faculty-name, .room-info {
+        font-size: 0.65rem;
+    }
+}
+</style>

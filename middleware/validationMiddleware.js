@@ -321,6 +321,158 @@ const schemas = {
             'any.only': 'Event type must be one of: holiday, exam, assignment, meeting, seminar, workshop, other'
         })
     }),
+    // Timetable Schemas
+    addTimetableSchema: Joi.object({
+        course: Joi.string().trim().required().messages({
+            'string.empty': 'Course cannot be empty',
+            'any.required': 'Course is required'
+        }),
+        semester: Joi.number().integer().min(1).max(10).required().messages({
+            'number.base': 'Semester should be a number',
+            'number.integer': 'Semester should be an integer',
+            'number.min': 'Semester must be at least {#limit}',
+            'number.max': 'Semester must be at most {#limit}',
+            'any.required': 'Semester is required'
+        }),
+        section: Joi.string().trim().max(5).default('A').messages({
+            'string.max': 'Section should not exceed {#limit} characters'
+        }),
+        academicYear: Joi.string().trim().pattern(/^\d{4}-\d{2}$/).required().messages({
+            'string.pattern.base': 'Academic year must be in format YYYY-YY (e.g., 2024-25)',
+            'any.required': 'Academic year is required'
+        }),
+        effectiveFrom: Joi.date().required().messages({
+            'date.base': 'Effective from date must be a valid date',
+            'any.required': 'Effective from date is required'
+        }),
+        effectiveTo: Joi.date().greater(Joi.ref('effectiveFrom')).allow('').optional().messages({
+            'date.greater': 'Effective to date must be after effective from date'
+        }),
+        description: Joi.string().trim().max(500).allow('').messages({
+            'string.max': 'Description should not exceed {#limit} characters'
+        }),
+        schedule: Joi.object({
+            monday: Joi.array().items(Joi.object({
+                subject: Joi.string().trim().required(),
+                faculty: Joi.string().trim().required(),
+                timeSlot: Joi.string().trim().pattern(/^\d{2}:\d{2}-\d{2}:\d{2}$/).required().messages({
+                    'string.pattern.base': 'Time slot must be in format HH:MM-HH:MM (e.g., 09:00-10:00)'
+                }),
+                room: Joi.string().trim().allow(''),
+                type: Joi.string().valid('lecture', 'lab', 'tutorial', 'break').default('lecture')
+            })).default([]),
+            tuesday: Joi.array().items(Joi.object({
+                subject: Joi.string().trim().required(),
+                faculty: Joi.string().trim().required(),
+                timeSlot: Joi.string().trim().pattern(/^\d{2}:\d{2}-\d{2}:\d{2}$/).required(),
+                room: Joi.string().trim().allow(''),
+                type: Joi.string().valid('lecture', 'lab', 'tutorial', 'break').default('lecture')
+            })).default([]),
+            wednesday: Joi.array().items(Joi.object({
+                subject: Joi.string().trim().required(),
+                faculty: Joi.string().trim().required(),
+                timeSlot: Joi.string().trim().pattern(/^\d{2}:\d{2}-\d{2}:\d{2}$/).required(),
+                room: Joi.string().trim().allow(''),
+                type: Joi.string().valid('lecture', 'lab', 'tutorial', 'break').default('lecture')
+            })).default([]),
+            thursday: Joi.array().items(Joi.object({
+                subject: Joi.string().trim().required(),
+                faculty: Joi.string().trim().required(),
+                timeSlot: Joi.string().trim().pattern(/^\d{2}:\d{2}-\d{2}:\d{2}$/).required(),
+                room: Joi.string().trim().allow(''),
+                type: Joi.string().valid('lecture', 'lab', 'tutorial', 'break').default('lecture')
+            })).default([]),
+            friday: Joi.array().items(Joi.object({
+                subject: Joi.string().trim().required(),
+                faculty: Joi.string().trim().required(),
+                timeSlot: Joi.string().trim().pattern(/^\d{2}:\d{2}-\d{2}:\d{2}$/).required(),
+                room: Joi.string().trim().allow(''),
+                type: Joi.string().valid('lecture', 'lab', 'tutorial', 'break').default('lecture')
+            })).default([]),
+            saturday: Joi.array().items(Joi.object({
+                subject: Joi.string().trim().required(),
+                faculty: Joi.string().trim().required(),
+                timeSlot: Joi.string().trim().pattern(/^\d{2}:\d{2}-\d{2}:\d{2}$/).required(),
+                room: Joi.string().trim().allow(''),
+                type: Joi.string().valid('lecture', 'lab', 'tutorial', 'break').default('lecture')
+            })).default([])
+        }).required()
+    }),
+
+    editTimetableSchema: Joi.object({
+        course: Joi.string().trim().required().messages({
+            'string.empty': 'Course cannot be empty',
+            'any.required': 'Course is required'
+        }),
+        semester: Joi.number().integer().min(1).max(10).required().messages({
+            'number.base': 'Semester should be a number',
+            'number.integer': 'Semester should be an integer',
+            'number.min': 'Semester must be at least {#limit}',
+            'number.max': 'Semester must be at most {#limit}',
+            'any.required': 'Semester is required'
+        }),
+        section: Joi.string().trim().max(5).default('A').messages({
+            'string.max': 'Section should not exceed {#limit} characters'
+        }),
+        academicYear: Joi.string().trim().pattern(/^\d{4}-\d{2}$/).required().messages({
+            'string.pattern.base': 'Academic year must be in format YYYY-YY (e.g., 2024-25)',
+            'any.required': 'Academic year is required'
+        }),
+        effectiveFrom: Joi.date().required().messages({
+            'date.base': 'Effective from date must be a valid date',
+            'any.required': 'Effective from date is required'
+        }),
+        effectiveTo: Joi.date().greater(Joi.ref('effectiveFrom')).allow('').optional().messages({
+            'date.greater': 'Effective to date must be after effective from date'
+        }),
+        description: Joi.string().trim().max(500).allow('').messages({
+            'string.max': 'Description should not exceed {#limit} characters'
+        }),
+        schedule: Joi.object({
+            monday: Joi.array().items(Joi.object({
+                subject: Joi.string().trim().required(),
+                faculty: Joi.string().trim().required(),
+                timeSlot: Joi.string().trim().pattern(/^\d{2}:\d{2}-\d{2}:\d{2}$/).required(),
+                room: Joi.string().trim().allow(''),
+                type: Joi.string().valid('lecture', 'lab', 'tutorial', 'break').default('lecture')
+            })).default([]),
+            tuesday: Joi.array().items(Joi.object({
+                subject: Joi.string().trim().required(),
+                faculty: Joi.string().trim().required(),
+                timeSlot: Joi.string().trim().pattern(/^\d{2}:\d{2}-\d{2}:\d{2}$/).required(),
+                room: Joi.string().trim().allow(''),
+                type: Joi.string().valid('lecture', 'lab', 'tutorial', 'break').default('lecture')
+            })).default([]),
+            wednesday: Joi.array().items(Joi.object({
+                subject: Joi.string().trim().required(),
+                faculty: Joi.string().trim().required(),
+                timeSlot: Joi.string().trim().pattern(/^\d{2}:\d{2}-\d{2}:\d{2}$/).required(),
+                room: Joi.string().trim().allow(''),
+                type: Joi.string().valid('lecture', 'lab', 'tutorial', 'break').default('lecture')
+            })).default([]),
+            thursday: Joi.array().items(Joi.object({
+                subject: Joi.string().trim().required(),
+                faculty: Joi.string().trim().required(),
+                timeSlot: Joi.string().trim().pattern(/^\d{2}:\d{2}-\d{2}:\d{2}$/).required(),
+                room: Joi.string().trim().allow(''),
+                type: Joi.string().valid('lecture', 'lab', 'tutorial', 'break').default('lecture')
+            })).default([]),
+            friday: Joi.array().items(Joi.object({
+                subject: Joi.string().trim().required(),
+                faculty: Joi.string().trim().required(),
+                timeSlot: Joi.string().trim().pattern(/^\d{2}:\d{2}-\d{2}:\d{2}$/).required(),
+                room: Joi.string().trim().allow(''),
+                type: Joi.string().valid('lecture', 'lab', 'tutorial', 'break').default('lecture')
+            })).default([]),
+            saturday: Joi.array().items(Joi.object({
+                subject: Joi.string().trim().required(),
+                faculty: Joi.string().trim().required(),
+                timeSlot: Joi.string().trim().pattern(/^\d{2}:\d{2}-\d{2}:\d{2}$/).required(),
+                room: Joi.string().trim().allow(''),
+                type: Joi.string().valid('lecture', 'lab', 'tutorial', 'break').default('lecture')
+            })).default([])
+        }).required()
+    }),
 };
 
 // Route mapping for better redirect handling
@@ -346,7 +498,12 @@ const routeRedirectMap = {
     'addCalendarEventSchema': '/admin/calendar/add',
     'editCalendarEventSchema': 'back', // Will use referrer for edits
     'studentQuerySchema': 'back', // For query params, stay on same page
-    'profileUpdateSchema': '/profile/edit'
+    'profileUpdateSchema': '/profile/edit',
+
+    //TimeTable routes
+    'addTimetableSchema': '/admin/timetable/add',
+    'editTimetableSchema': 'back'
+
 };
 
 // Helper function to get safe redirect URL

@@ -15,15 +15,17 @@ WEBSITE FEATURES:
 - Doubts & Discussion: Post academic doubts with images, reply to others' doubts
 - Notice Board: View important announcements from administrators
 - Profile Management: Update personal information, profile pictures, and bio
+- Timetable: View class schedules and timings filtered by course, semester, and section
+- Academic Calendar: View important academic events, holidays, and exam dates
 
 USER ROLES:
-- Students: Can access all features, post doubts, view resources
-- Admins: Can add resources, PYQs, syllabus, manage notices, and access admin dashboard
+- Students: Can access all features, post doubts, view resources, check timetables and calendar
+- Admins: Can add resources, PYQs, syllabus, manage notices, create/manage timetables, and manage calendar events
 
 NAVIGATION:
 - Login/Register: Authentication system for students and admins
 - Dashboard: Main hub after login
-- All main features accessible from navigation bar
+- All main features accessible from navigation bar including Timetable and Calendar
 
 ADMIN FEATURES:
 - Add/manage study resources (PDF uploads or external links)
@@ -31,6 +33,21 @@ ADMIN FEATURES:
 - Add/manage syllabus
 - Create and manage notices
 - Add YouTube links to resources
+- Create and manage class timetables for different courses/semesters
+- Add and manage academic calendar events
+
+TIMETABLE FEATURES:
+- Students can view timetables filtered by course, semester, and section
+- Shows daily class schedules with subject, faculty, time slots, and room details
+- Displays current active timetables
+- Admins can create, edit, copy, and manage multiple timetables
+- Timetables include effective dates and academic year information
+
+CALENDAR FEATURES:
+- View academic events in calendar format
+- Shows important dates like exams, holidays, and academic deadlines
+- Admins can add events with titles, descriptions, dates, and categories
+- Students can view all upcoming events and important dates
 
 KEY RULES:
 1. Only answer questions about website features, navigation, and functionality
@@ -48,6 +65,9 @@ COMMON TOPICS YOU CAN HELP WITH:
 - Website features explanation
 - Login/registration issues
 - File upload procedures
+- How to view timetables
+- How to check calendar events
+- Timetable and calendar management (for admins)
 `;
 
 const PREDEFINED_RESPONSES = {
@@ -59,12 +79,23 @@ const PREDEFINED_RESPONSES = {
     'admin access': 'To create an admin account, go to /create-admin and use the secret code. Contact the system administrator for the secret code.',
     'download files': 'You can download resources and PYQs by clicking the download button on the respective cards. PDFs can also be viewed inline.',
     'notice board': 'Check the "Notices" section in the navigation menu to view important announcements from administrators.',
+    'view timetable': 'Click "Timetable" in the navigation menu to view class schedules. You can filter by course, semester, and section to find your specific timetable.',
+    'check timetable': 'Go to the "Timetable" section from the navigation bar. Use the filters to select your course, semester, and section to view your class schedule with timings, subjects, and faculty details.',
+    'timetable': 'The Timetable section shows your class schedules with daily timings, subjects, faculty names, and room details. Filter by course, semester, and section to find your specific schedule.',
+    'class schedule': 'Your class schedule is available in the "Timetable" section. Filter by your course, semester, and section to see daily class timings, subjects, and faculty information.',
+    'calendar': 'Click "Calendar" in the navigation menu to view academic events, important dates, holidays, and exam schedules in a calendar format.',
+    'academic calendar': 'The Academic Calendar shows important dates like exams, holidays, and academic deadlines. Access it through the "Calendar" link in the navigation menu.',
+    'events': 'Check the "Calendar" section to view all academic events, including exam dates, holidays, and important academic deadlines.',
+    'manage timetable': 'Admins can manage timetables by going to Admin Dashboard → Manage Timetables. You can create, edit, copy, activate/deactivate, and delete timetables for different courses.',
+    'add timetable': 'Admins can add new timetables by going to Admin Dashboard → Add Timetable. Fill in course details, semester, section, academic year, and create the weekly schedule.',
+    'manage calendar': 'Admins can manage calendar events by going to Admin Dashboard → Manage Calendar. You can add, edit, and delete academic events and important dates.',
+    'add event': 'Admins can add calendar events by going to Admin Dashboard → Add Event. Include event title, description, date, and category information.'
 };
 
 exports.getChatbotPage = (req, res) => {
     res.render('chatbot', { 
         title: 'Website Assistant',
-        initialMessage: 'Hi! I\'m here to help you navigate the College Portal. Ask me about website features, how to use different sections, or any navigation questions!'
+        initialMessage: 'Hi! I\'m here to help you navigate the College Portal. Ask me about website features, how to use different sections, view timetables, check calendar events, or any navigation questions!'
     });
 };
 

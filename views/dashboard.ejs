@@ -60,6 +60,20 @@
                 </div>
             </div>
         </div>
+        
+        <!-- Timetable Card -->
+        <div class="col-md-3 mb-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <i class="fas fa-clock text-purple fa-3x mb-3"></i>
+                    <h5 class="card-title">Class Timetable</h5>
+                    <p class="card-text">View your class schedules and timings for all subjects.</p>
+                    <a href="/timetable" class="btn btn-purple btn-custom">
+                        <i class="fas fa-arrow-right me-2"></i>Browse Timetable
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
     
     <div class="row">
@@ -153,6 +167,11 @@
                             </a>
                         </div>
                         <div class="col-md-2 mb-3">
+                            <a href="/timetable" class="btn btn-outline-purple btn-custom w-100">
+                                <i class="fas fa-clock me-2"></i>View Timetable
+                            </a>
+                        </div>
+                        <div class="col-md-2 mb-3">
                             <a href="/doubts" class="btn btn-outline-dark btn-custom w-100">
                                 <i class="fas fa-comments me-2"></i>Browse Doubts
                             </a>
@@ -181,3 +200,33 @@
     </div>
     <% } %>
 </div>
+
+<style>
+/* Custom purple color for timetable */
+.text-purple {
+    color: #8e44ad !important;
+}
+
+.btn-purple {
+    background-color: #8e44ad;
+    border-color: #8e44ad;
+    color: white;
+}
+
+.btn-purple:hover {
+    background-color: #7e3f98;
+    border-color: #7e3f98;
+    color: white;
+}
+
+.btn-outline-purple {
+    color: #8e44ad;
+    border-color: #8e44ad;
+}
+
+.btn-outline-purple:hover {
+    background-color: #8e44ad;
+    border-color: #8e44ad;
+    color: white;
+}
+</style>

@@ -1,0 +1,307 @@
+<!-- views/admin/add-timetable.ejs -->
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>📅 Add New Timetable</h2>
+                <a href="/admin/timetable" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Manage
+                </a>
+            </div>
+
+            <form method="POST" action="/admin/timetable/add" id="timetableForm">
+                <!-- Basic Information -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Basic Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="course" class="form-label">Course *</label>
+                                <input type="text" class="form-control" id="course" name="course" required 
+                                       placeholder="e.g., B.Tech Computer Science">
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                <label for="semester" class="form-label">Semester *</label>
+                                <select class="form-select" id="semester" name="semester" required>
+                                    <option value="">Select</option>
+                                    <option value="1">1st Semester</option>
+                                    <option value="2">2nd Semester</option>
+                                    <option value="3">3rd Semester</option>
+                                    <option value="4">4th Semester</option>
+                                    <option value="5">5th Semester</option>
+                                    <option value="6">6th Semester</option>
+                                    <option value="7">7th Semester</option>
+                                    <option value="8">8th Semester</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                <label for="section" class="form-label">Section</label>
+                                <input type="text" class="form-control" id="section" name="section" value="A" 
+                                       placeholder="A, B, C...">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="academicYear" class="form-label">Academic Year *</label>
+                                <input type="text" class="form-control" id="academicYear" name="academicYear" required 
+                                       placeholder="2024-25" pattern="^\d{4}-\d{2}$">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="effectiveFrom" class="form-label">Effective From *</label>
+                                <input type="date" class="form-control" id="effectiveFrom" name="effectiveFrom" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="effectiveTo" class="form-label">Effective To</label>
+                                <input type="date" class="form-control" id="effectiveTo" name="effectiveTo">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="description" class="form-label">Description</label>
+                                <input type="text" class="form-control" id="description" name="description" 
+                                       placeholder="Optional description">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Weekly Schedule -->
+                <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Weekly Schedule</h5>
+                        <div>
+                            <button type="button" class="btn btn-sm btn-outline-primary" onclick="addTimeSlot()">
+                                <i class="fas fa-plus"></i> Add Time Slot
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="clearSchedule()">
+                                <i class="fas fa-trash"></i> Clear All
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <!-- Days of the week tabs -->
+                        <ul class="nav nav-tabs" id="scheduleTabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="monday-tab" data-bs-toggle="tab" data-bs-target="#monday" type="button" role="tab">Monday</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="tuesday-tab" data-bs-toggle="tab" data-bs-target="#tuesday" type="button" role="tab">Tuesday</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="wednesday-tab" data-bs-toggle="tab" data-bs-target="#wednesday" type="button" role="tab">Wednesday</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="thursday-tab" data-bs-toggle="tab" data-bs-target="#thursday" type="button" role="tab">Thursday</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="friday-tab" data-bs-toggle="tab" data-bs-target="#friday" type="button" role="tab">Friday</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="saturday-tab" data-bs-toggle="tab" data-bs-target="#saturday" type="button" role="tab">Saturday</button>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content mt-3" id="scheduleTabContent">
+                            <!-- Monday -->
+                            <div class="tab-pane fade show active" id="monday" role="tabpanel">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h6>Monday Schedule</h6>
+                                    <button type="button" class="btn btn-sm btn-outline-primary" onclick="addSlotToDay('monday')">
+                                        <i class="fas fa-plus"></i> Add Slot
+                                    </button>
+                                </div>
+                                <div id="monday-slots"></div>
+                            </div>
+
+                            <!-- Tuesday -->
+                            <div class="tab-pane fade" id="tuesday" role="tabpanel">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h6>Tuesday Schedule</h6>
+                                    <button type="button" class="btn btn-sm btn-outline-primary" onclick="addSlotToDay('tuesday')">
+                                        <i class="fas fa-plus"></i> Add Slot
+                                    </button>
+                                </div>
+                                <div id="tuesday-slots"></div>
+                            </div>
+
+                            <!-- Wednesday -->
+                            <div class="tab-pane fade" id="wednesday" role="tabpanel">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h6>Wednesday Schedule</h6>
+                                    <button type="button" class="btn btn-sm btn-outline-primary" onclick="addSlotToDay('wednesday')">
+                                        <i class="fas fa-plus"></i> Add Slot
+                                    </button>
+                                </div>
+                                <div id="wednesday-slots"></div>
+                            </div>
+
+                            <!-- Thursday -->
+                            <div class="tab-pane fade" id="thursday" role="tabpanel">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h6>Thursday Schedule</h6>
+                                    <button type="button" class="btn btn-sm btn-outline-primary" onclick="addSlotToDay('thursday')">
+                                        <i class="fas fa-plus"></i> Add Slot
+                                    </button>
+                                </div>
+                                <div id="thursday-slots"></div>
+                            </div>
+
+                            <!-- Friday -->
+                            <div class="tab-pane fade" id="friday" role="tabpanel">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h6>Friday Schedule</h6>
+                                    <button type="button" class="btn btn-sm btn-outline-primary" onclick="addSlotToDay('friday')">
+                                        <i class="fas fa-plus"></i> Add Slot
+                                    </button>
+                                </div>
+                                <div id="friday-slots"></div>
+                            </div>
+
+                            <!-- Saturday -->
+                            <div class="tab-pane fade" id="saturday" role="tabpanel">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h6>Saturday Schedule</h6>
+                                    <button type="button" class="btn btn-sm btn-outline-primary" onclick="addSlotToDay('saturday')">
+                                        <i class="fas fa-plus"></i> Add Slot
+                                    </button>
+                                </div>
+                                <div id="saturday-slots"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="d-flex justify-content-end gap-2">
+                    <a href="/admin/timetable" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Create Timetable
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+let slotCounter = 0;
+
+function addSlotToDay(day) {
+    const slotsContainer = document.getElementById(`${day}-slots`);
+    const slotHtml = `
+        <div class="card mb-2 slot-card" id="slot-${slotCounter}">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-md-3">
+                        <label class="form-label">Subject</label>
+                        <input type="text" class="form-control" name="schedule[${day}][${slotCounter}][subject]" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Faculty</label>
+                        <input type="text" class="form-control" name="schedule[${day}][${slotCounter}][faculty]" required>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Time Slot</label>
+                        <input type="text" class="form-control" name="schedule[${day}][${slotCounter}][timeSlot]" 
+                               placeholder="09:00-10:00" pattern="^\\d{2}:\\d{2}-\\d{2}:\\d{2}$" required>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Room</label>
+                        <input type="text" class="form-control" name="schedule[${day}][${slotCounter}][room]">
+                    </div>
+                    <div class="col-md-1">
+                        <label class="form-label">Type</label>
+                        <select class="form-select" name="schedule[${day}][${slotCounter}][type]">
+                            <option value="lecture">Lecture</option>
+                            <option value="lab">Lab</option>
+                            <option value="tutorial">Tutorial</option>
+                            <option value="break">Break</option>
+                        </select>
+                    </div>
+                    <div class="col-md-1">
+                        <label class="form-label">&nbsp;</label>
+                        <button type="button" class="btn btn-outline-danger btn-sm w-100" onclick="removeSlot('slot-${slotCounter}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    slotsContainer.insertAdjacentHTML('beforeend', slotHtml);
+    slotCounter++;
+}
+
+function removeSlot(slotId) {
+    const slot = document.getElementById(slotId);
+    if (slot) {
+        slot.remove();
+    }
+}
+
+function addTimeSlot() {
+    // Add a slot to the currently active tab
+    const activeTab = document.querySelector('.tab-pane.active');
+    if (activeTab) {
+        const day = activeTab.id;
+        addSlotToDay(day);
+    }
+}
+
+function clearSchedule() {
+    if (confirm('Are you sure you want to clear all schedule slots?')) {
+        const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+        days.forEach(day => {
+            document.getElementById(`${day}-slots`).innerHTML = '';
+        });
+    }
+}
+
+// Set default effective from date to today
+document.addEventListener('DOMContentLoaded', function() {
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('effectiveFrom').value = today;
+    
+    // Add some default slots to Monday to get started
+    addSlotToDay('monday');
+});
+
+// Form validation
+document.getElementById('timetableForm').addEventListener('submit', function(e) {
+    const hasSchedule = document.querySelectorAll('.slot-card').length > 0;
+    if (!hasSchedule) {
+        e.preventDefault();
+        alert('Please add at least one time slot to the schedule.');
+        return false;
+    }
+});
+</script>
+
+<style>
+.slot-card {
+    border-left: 4px solid #007bff;
+}
+
+.nav-tabs .nav-link {
+    color: #495057;
+}
+
+.nav-tabs .nav-link.active {
+    color: #007bff;
+    border-color: #dee2e6 #dee2e6 #fff;
+}
+
+.card {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.form-label {
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+}
+
+.btn-group-sm .btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+}
+</style>

@@ -23,6 +23,7 @@ const noticeRouter = require('./routes/noticeRoutes');
 const profileRouter = require('./routes/profileRoutes');
 const chatbotRouter = require('./routes/chatbotRoutes');
 const calendarRouter = require('./routes/calendarRoutes');
+const timetableRouter = require('./routes/timetableRoutes'); // ADD THIS LINE
 
 const app = express();
 
@@ -111,6 +112,7 @@ app.use('/notices', noticeRouter); // Notice routes
 app.use('/', profileRouter); // Profile routes
 app.use('/', chatbotRouter); // NEW: Chatbot routes
 app.use('/calendar', calendarRouter); // Calendar routes
+app.use('/timetable', timetableRouter); // Timetable routes
 
 // 404 (Not Found)
 app.use((req, res, next) => {

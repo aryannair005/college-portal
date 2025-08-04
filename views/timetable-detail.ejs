@@ -1,0 +1,446 @@
+<!-- views/timetable-detail.ejs -->
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>📅 Timetable Details</h2>
+                <div>
+                    <a href="/timetable" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back to Timetables
+                    </a>
+                    <% if (user && user.role === 'admin') { %>
+                        <a href="/admin/timetable/edit/<%= timetable._id %>" class="btn btn-primary">
+                            <i class="fas fa-edit"></i> Edit
+                        </a>
+                    <% } %>
+                </div>
+            </div>
+
+            <!-- Timetable Information -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <%= timetable.course %> - Semester <%= timetable.semester %> (Section <%= timetable.section %>)
+                        <% if (timetable.isActive) { %>
+                            <span class="badge bg-success ms-2">Active</span>
+                        <% } else { %>
+                            <span class="badge bg-danger ms-2">Inactive</span>
+                        <% } %>
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <strong>Academic Year:</strong><br>
+                            <%= timetable.academicYear %>
+                        </div>
+                        <div class="col-md-3">
+                            <strong>Effective From:</strong><br>
+                            <%= timetable.effectiveFrom.toDateString() %>
+                        </div>
+                        <div class="col-md-3">
+                            <strong>Effective To:</strong><br>
+                            <% if (timetable.effectiveTo) { %>
+                                <%= timetable.effectiveTo.toDateString() %>
+                            <% } else { %>
+                                <em>Ongoing</em>
+                            <% } %>
+                        </div>
+                        <div class="col-md-3">
+                            <strong>Created By:</strong><br>
+                            <%= timetable.createdByName || 'Unknown' %><br>
+                            <small class="text-muted"><%= timetable.createdAt.toDateString() %></small>
+                        </div>
+                    </div>
+                    <% if (timetable.description) { %>
+                        <div class="row mt-3">
+                            <div class="col-12">
+                                <strong>Description:</strong><br>
+                                <%= timetable.description %>
+                            </div>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+
+            <!-- Weekly Schedule -->
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Weekly Schedule</h5>
+                    <div class="btn-group btn-group-sm" role="group">
+                        <button type="button" class="btn btn-outline-primary" onclick="printTimetable()">
+                            <i class="fas fa-print"></i> Print
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="toggleView()">
+                            <i class="fas fa-table"></i> <span id="viewToggle">Grid View</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <!-- Grid View -->
+                    <div id="gridView">
+                        <div class="table-responsive">
+                            <table class="table table-bordered timetable-grid">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th style="width: 120px;">Time</th>
+                                        <th>Monday</th>
+                                        <th>Tuesday</th>
+                                        <th>Wednesday</th>
+                                        <th>Thursday</th>
+                                        <th>Friday</th>
+                                        <th>Saturday</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <%
+                                        // Get all unique time slots and sort them
+                                        const timeSlots = new Set();
+                                        const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+                                        days.forEach(day => {
+                                            if (timetable.schedule[day]) {
+                                                timetable.schedule[day].forEach(slot => {
+                                                    timeSlots.add(slot.timeSlot);
+                                                });
+                                            }
+                                        });
+                                        const sortedTimeSlots = Array.from(timeSlots).sort();
+                                    %>
+                                    
+                                    <% sortedTimeSlots.forEach(timeSlot => { %>
+                                        <tr>
+                                            <td class="time-slot">
+                                                <strong><%= timeSlot %></strong>
+                                            </td>
+                                            <% days.forEach(day => { %>
+                                                <td class="schedule-cell">
+                                                    <%
+                                                        const daySchedule = timetable.schedule[day] || [];
+                                                        const slotData = daySchedule.find(slot => slot.timeSlot === timeSlot);
+                                                    %>
+                                                    <% if (slotData) { %>
+                                                        <div class="subject-card <%= slotData.type %>">
+                                                            <div class="subject-name"><%= slotData.subject %></div>
+                                                            <div class="faculty-name text-muted">👨‍🏫 <%= slotData.faculty %></div>
+                                                            <% if (slotData.room) { %>
+                                                                <div class="room-info text-muted">📍 <%= slotData.room %></div>
+                                                            <% } %>
+                                                            <span class="badge type-badge bg-<%= getTypeBadgeColor(slotData.type) %>">
+                                                                <%= slotData.type.charAt(0).toUpperCase() + slotData.type.slice(1) %>
+                                                            </span>
+                                                        </div>
+                                                    <% } %>
+                                                </td>
+                                            <% }); %>
+                                        </tr>
+                                    <% }); %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- List View -->
+                    <div id="listView" style="display: none;">
+                        <% days.forEach(day => { %>
+                            <div class="day-schedule mb-4">
+                                <h6 class="day-header"><%= day.charAt(0).toUpperCase() + day.slice(1) %></h6>
+                                <% if (timetable.schedule[day] && timetable.schedule[day].length > 0) { %>
+                                    <div class="row">
+                                        <% timetable.schedule[day].sort((a, b) => a.timeSlot.localeCompare(b.timeSlot)).forEach(slot => { %>
+                                            <div class="col-md-4 mb-3">
+                                                <div class="card slot-card-list <%= slot.type %>">
+                                                    <div class="card-body">
+                                                        <div class="d-flex justify-content-between align-items-start">
+                                                            <div>
+                                                                <h6 class="card-title"><%= slot.subject %></h6>
+                                                                <p class="card-text mb-1">
+                                                                    <small class="text-muted">👨‍🏫 <%= slot.faculty %></small>
+                                                                </p>
+                                                                <% if (slot.room) { %>
+                                                                    <p class="card-text mb-1">
+                                                                        <small class="text-muted">📍 <%= slot.room %></small>
+                                                                    </p>
+                                                                <% } %>
+                                                                <p class="card-text">
+                                                                    <small class="text-muted">🕐 <%= slot.timeSlot %></small>
+                                                                </p>
+                                                            </div>
+                                                            <span class="badge bg-<%= getTypeBadgeColor(slot.type) %>">
+                                                                <%= slot.type.charAt(0).toUpperCase() + slot.type.slice(1) %>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <% }); %>
+                                    </div>
+                                <% } else { %>
+                                    <p class="text-muted">No classes scheduled for this day.</p>
+                                <% } %>
+                            </div>
+                        <% }); %>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Schedule Statistics -->
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h6 class="mb-0">Schedule Statistics</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row text-center">
+                                <%
+                                    let totalSlots = 0;
+                                    let lectureCount = 0;
+                                    let labCount = 0;
+                                    let tutorialCount = 0;
+                                    let breakCount = 0;
+                                    let uniqueSubjects = new Set();
+                                    let uniqueFaculty = new Set();
+
+                                    days.forEach(day => {
+                                        if (timetable.schedule[day]) {
+                                            timetable.schedule[day].forEach(slot => {
+                                                totalSlots++;
+                                                uniqueSubjects.add(slot.subject);
+                                                uniqueFaculty.add(slot.faculty);
+                                                
+                                                switch(slot.type) {
+                                                    case 'lecture': lectureCount++; break;
+                                                    case 'lab': labCount++; break;
+                                                    case 'tutorial': tutorialCount++; break;
+                                                    case 'break': breakCount++; break;
+                                                }
+                                            });
+                                        }
+                                    });
+                                %>
+                                <div class="col-md-2">
+                                    <div class="stat-item">
+                                        <h5 class="text-primary"><%= totalSlots %></h5>
+                                        <p class="mb-0">Total Slots</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="stat-item">
+                                        <h5 class="text-info"><%= lectureCount %></h5>
+                                        <p class="mb-0">Lectures</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="stat-item">
+                                        <h5 class="text-success"><%= labCount %></h5>
+                                        <p class="mb-0">Labs</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="stat-item">
+                                        <h5 class="text-warning"><%= tutorialCount %></h5>
+                                        <p class="mb-0">Tutorials</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="stat-item">
+                                        <h5 class="text-secondary"><%= uniqueSubjects.size %></h5>
+                                        <p class="mb-0">Subjects</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="stat-item">
+                                        <h5 class="text-dark"><%= uniqueFaculty.size %></h5>
+                                        <p class="mb-0">Faculty</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%
+function getTypeBadgeColor(type) {
+    switch(type) {
+        case 'lecture': return 'primary';
+        case 'lab': return 'success';
+        case 'tutorial': return 'warning';
+        case 'break': return 'secondary';
+        default: return 'primary';
+    }
+}
+%>
+
+<script>
+function toggleView() {
+    const gridView = document.getElementById('gridView');
+    const listView = document.getElementById('listView');
+    const toggleButton = document.getElementById('viewToggle');
+    
+    if (gridView.style.display === 'none') {
+        gridView.style.display = 'block';
+        listView.style.display = 'none';
+        toggleButton.textContent = 'List View';
+    } else {
+        gridView.style.display = 'none';
+        listView.style.display = 'block';
+        toggleButton.textContent = 'Grid View';
+    }
+}
+
+function printTimetable() {
+    window.print();
+}
+</script>
+
+<style>
+.timetable-grid {
+    font-size: 0.9rem;
+}
+
+.time-slot {
+    background-color: #f8f9fa;
+    text-align: center;
+    vertical-align: middle;
+    font-weight: 600;
+}
+
+.schedule-cell {
+    padding: 8px !important;
+    vertical-align: top;
+    min-height: 100px;
+}
+
+.subject-card {
+    background: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    padding: 10px;
+    position: relative;
+    height: 100%;
+    min-height: 80px;
+    transition: transform 0.2s;
+}
+
+.subject-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.subject-card.lecture {
+    border-left: 4px solid #007bff;
+    background-color: #f8f9ff;
+}
+
+.subject-card.lab {
+    border-left: 4px solid #28a745;
+    background-color: #f8fff9;
+}
+
+.subject-card.tutorial {
+    border-left: 4px solid #ffc107;
+    background-color: #fffcf8;
+}
+
+.subject-card.break {
+    border-left: 4px solid #6c757d;
+    background-color: #f8f9fa;
+}
+
+.subject-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 4px;
+    color: #212529;
+}
+
+.faculty-name {
+    font-size: 0.8rem;
+    margin-bottom: 2px;
+}
+
+.room-info {
+    font-size: 0.75rem;
+    margin-bottom: 4px;
+}
+
+.type-badge {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    font-size: 0.65rem;
+}
+
+.slot-card-list {
+    border-left: 4px solid #007bff;
+}
+
+.slot-card-list.lecture {
+    border-left-color: #007bff;
+}
+
+.slot-card-list.lab {
+    border-left-color: #28a745;
+}
+
+.slot-card-list.tutorial {
+    border-left-color: #ffc107;
+}
+
+.slot-card-list.break {
+    border-left-color: #6c757d;
+}
+
+.day-header {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: white;
+    padding: 10px 15px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+}
+
+.stat-item {
+    padding: 15px;
+    border-radius: 6px;
+    background-color: #f8f9fa;
+}
+
+@media print {
+    .btn, .card-header .btn-group {
+        display: none !important;
+    }
+    
+    .card {
+        border: 1px solid #000 !important;
+        box-shadow: none !important;
+    }
+    
+    .subject-card {
+        border: 1px solid #000 !important;
+        background-color: #fff !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .timetable-grid {
+        font-size: 0.75rem;
+    }
+    
+    .subject-card {
+        min-height: 60px;
+        padding: 6px;
+    }
+    
+    .subject-name {
+        font-size: 0.8rem;
+    }
+    
+    .faculty-name, .room-info {
+        font-size: 0.7rem;
+    }
+}
+</style>
