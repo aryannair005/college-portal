@@ -97,6 +97,27 @@
     </div>
 </div>
 
+
+<!-- User Statistics Section -->
+<% if (user) { %>
+<div class="stats-section py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center">
+                <div class="stats-card">
+                    <div class="stats-icon">
+                        <i class="fas fa-users text-primary"></i>
+                    </div>
+                    <div class="stats-content">
+                        <h3 class="stats-number"><%= totalUsers || 0 %></h3>
+                        <p class="stats-label">Users Already Joined</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%}%>   
 <!-- Features Section -->
 <div class="container py-5" id="features">
     <div class="text-center mb-5">
@@ -169,3 +190,54 @@
     </div>
 </div>
 <% } %>
+
+<style>
+    /* Stats Section */
+.stats-section {
+    margin: 0;
+    padding: 3rem 0;
+}
+
+.stats-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.stats-icon i {
+    font-size: 3rem;
+}
+
+.stats-number {
+    font-size: 3rem;
+    font-weight: bold;
+    margin: 0;
+    color: #0d6efd;
+}
+
+.stats-label {
+    margin: 0;
+    color: #6c757d;
+    font-size: 1.1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .stats-card {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+    
+    .stats-number {
+        font-size: 2.5rem;
+    }
+}
+</style>
