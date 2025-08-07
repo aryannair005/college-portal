@@ -25,7 +25,7 @@ function showYouTubeLinks(resourceId) {
     modalContent += '</div>';
     document.getElementById('youtubeModalBody').innerHTML = modalContent;
     document.getElementById('viewFullDetailsBtn').onclick = () => {
-        window.location.href = `/resource/${resourceId}`;
+        window.location.href = `/resources/${resourceId}`;
     };
 
     const modal = new bootstrap.Modal(document.getElementById('youtubeModal'));
