@@ -4,14 +4,21 @@ const Joi = require('joi');
 const schemas = {
     // Auth Validation
     registerSchema: Joi.object({
-        username: Joi.string().trim().alphanum().min(3).max(30).required().messages({
+            username: Joi.string()
+        .trim()
+        .pattern(/^[a-zA-Z0-9!@#$%^&*()\-_]+$/)
+        .min(3)
+        .max(30)
+        .required()
+        .messages({
             'string.base': 'Username should be a type of text',
             'string.empty': 'Username cannot be empty',
-            'string.alphanum': 'Username can only contain alpha-numeric characters',
+            'string.pattern.base': 'Username can only contain letters, numbers, and !@#$%^&*()-_',
             'string.min': 'Username should have a minimum length of {#limit}',
             'string.max': 'Username should have a maximum length of {#limit}',
             'any.required': 'Username is required'
         }),
+
         email: Joi.string().trim().email().required().messages({
             'string.base': 'Email should be a type of text',
             'string.empty': 'Email cannot be empty',
