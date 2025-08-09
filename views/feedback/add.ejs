@@ -1,0 +1,197 @@
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card border-primary">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-comments me-2"></i>Submit Feedback
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted mb-4">
+                        Your feedback helps us improve our services. Please share your thoughts, suggestions, or report any issues.
+                    </p>
+
+                    <form action="/feedback/add" method="POST" enctype="multipart/form-data">
+                        <!-- Title -->
+                        <div class="mb-3">
+                            <label for="title" class="form-label">
+                                <i class="fas fa-heading me-2"></i>Title <span class="text-danger">*</span>
+                            </label>
+                            <input type="text" class="form-control" id="title" name="title" 
+                                   placeholder="Brief title for your feedback" required>
+                            <div class="form-text">Provide a clear, descriptive title for your feedback</div>
+                        </div>
+
+                        <!-- Category -->
+                        <div class="mb-3">
+                            <label for="category" class="form-label">
+                                <i class="fas fa-tags me-2"></i>Category <span class="text-danger">*</span>
+                            </label>
+                            <select class="form-select" id="category" name="category" required>
+                                <option value="">Select a category</option>
+                                <option value="general">General Feedback</option>
+                                <option value="technical">Technical Issue</option>
+                                <option value="suggestion">Suggestion/Improvement</option>
+                                <option value="complaint">Complaint</option>
+                                <option value="feature-request">Feature Request</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <!-- Priority -->
+                        <div class="mb-3">
+                            <label for="priority" class="form-label">
+                                <i class="fas fa-exclamation-triangle me-2"></i>Priority
+                            </label>
+                            <select class="form-select" id="priority" name="priority">
+                                <option value="low">Low</option>
+                                <option value="medium" selected>Medium</option>
+                                <option value="high">High</option>
+                            </select>
+                            <div class="form-text">Select the urgency level of your feedback</div>
+                        </div>
+
+                        <!-- Message -->
+                        <div class="mb-3">
+                            <label for="message" class="form-label">
+                                <i class="fas fa-comment me-2"></i>Message <span class="text-danger">*</span>
+                            </label>
+                            <textarea class="form-control" id="message" name="message" rows="6" 
+                                      placeholder="Please provide detailed feedback..." required></textarea>
+                            <div class="form-text">Be as specific as possible to help us understand your feedback</div>
+                        </div>
+
+                        <!-- Rating (Optional) -->
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <i class="fas fa-star me-2"></i>Overall Rating (Optional)
+                            </label>
+                            <div class="rating-container">
+                                <div class="btn-group" role="group" aria-label="Rating">
+                                    <input type="radio" class="btn-check" name="rating" id="rating1" value="1">
+                                    <label class="btn btn-outline-warning" for="rating1">
+                                        <i class="fas fa-star"></i> 1
+                                    </label>
+                                    
+                                    <input type="radio" class="btn-check" name="rating" id="rating2" value="2">
+                                    <label class="btn btn-outline-warning" for="rating2">
+                                        <i class="fas fa-star"></i> 2
+                                    </label>
+                                    
+                                    <input type="radio" class="btn-check" name="rating" id="rating3" value="3">
+                                    <label class="btn btn-outline-warning" for="rating3">
+                                        <i class="fas fa-star"></i> 3
+                                    </label>
+                                    
+                                    <input type="radio" class="btn-check" name="rating" id="rating4" value="4">
+                                    <label class="btn btn-outline-warning" for="rating4">
+                                        <i class="fas fa-star"></i> 4
+                                    </label>
+                                    
+                                    <input type="radio" class="btn-check" name="rating" id="rating5" value="5">
+                                    <label class="btn btn-outline-warning" for="rating5">
+                                        <i class="fas fa-star"></i> 5
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-text">Rate your overall experience (1 = Poor, 5 = Excellent)</div>
+                        </div>
+
+                        <!-- File Attachment -->
+                        <div class="mb-3">
+                            <label for="feedbackImage" class="form-label">
+                                <i class="fas fa-paperclip me-2"></i>Attachment (Optional)
+                            </label>
+                            <input type="file" class="form-control" id="feedbackImage" name="feedbackImage" 
+                                   accept="image/*,.pdf,.doc,.docx">
+                            <div class="form-text">Upload a screenshot or document to support your feedback (Max 5MB)</div>
+                        </div>
+
+                        <!-- Anonymous Option -->
+                        <div class="mb-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="isAnonymous" name="isAnonymous" value="true">
+                                <label class="form-check-label" for="isAnonymous">
+                                    <i class="fas fa-user-secret me-2"></i>Submit feedback anonymously
+                                </label>
+                            </div>
+                            <div class="form-text">Check this if you prefer to keep your identity hidden</div>
+                        </div>
+
+                        <!-- Submit Buttons -->
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="/dashboard" class="btn btn-secondary me-md-2">
+                                <i class="fas fa-times me-2"></i>Cancel
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-paper-plane me-2"></i>Submit Feedback
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Help Section -->
+            <div class="card mt-4 border-info">
+                <div class="card-header bg-info text-white">
+                    <h6 class="mb-0">
+                        <i class="fas fa-question-circle me-2"></i>Feedback Guidelines
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-check-circle text-success me-2"></i>What to Include:</h6>
+                            <ul class="small">
+                                <li>Specific details about the issue or suggestion</li>
+                                <li>Steps to reproduce technical problems</li>
+                                <li>Screenshots or examples when possible</li>
+                                <li>Constructive suggestions for improvements</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-clock text-primary me-2"></i>Response Time:</h6>
+                            <ul class="small">
+                                <li><strong>High Priority:</strong> 1-2 business days</li>
+                                <li><strong>Medium Priority:</strong> 3-5 business days</li>
+                                <li><strong>Low Priority:</strong> 1-2 weeks</li>
+                                <li>Check your feedback status in <a href="/feedback/my-feedback">My Feedback</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.rating-container .btn-check:checked + .btn {
+    background-color: #ffc107;
+    border-color: #ffc107;
+    color: #000;
+}
+
+.card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+.btn {
+    transition: all 0.2s ease;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+</style>

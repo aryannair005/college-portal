@@ -23,7 +23,8 @@ const noticeRouter = require('./routes/noticeRoutes');
 const profileRouter = require('./routes/profileRoutes');
 const chatbotRouter = require('./routes/chatbotRoutes');
 const calendarRouter = require('./routes/calendarRoutes');
-const timetableRouter = require('./routes/timetableRoutes'); // ADD THIS LINE
+const timetableRouter = require('./routes/timetableRoutes');
+const feedbackRouter = require('./routes/feedbackRoutes');
 
 const app = express();
 
@@ -49,7 +50,8 @@ const uploadDirs = [
     path.join(uploadBaseDir, 'resources'),
     path.join(uploadBaseDir, 'doubts'),
     path.join(uploadBaseDir, 'notices'),
-    path.join(uploadBaseDir, 'profiles')
+    path.join(uploadBaseDir, 'profiles'),
+    path.join(uploadBaseDir, 'feedback')
 ];
 uploadDirs.forEach(dir => {
     if (!fs.existsSync(dir)) {
@@ -113,6 +115,7 @@ app.use('/', profileRouter); // Profile routes
 app.use('/', chatbotRouter); // NEW: Chatbot routes
 app.use('/calendar', calendarRouter); // Calendar routes
 app.use('/timetable', timetableRouter); // Timetable routes
+app.use('/feedback', feedbackRouter);//feedback Routes
 
 // 404 (Not Found)
 app.use((req, res, next) => {

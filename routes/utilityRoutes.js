@@ -8,7 +8,7 @@ router.get('/download/resource/:filename', ensureStudent, utilityController.down
 router.get('/download/pyq/:filename', ensureStudent, utilityController.downloadPyq);
 router.get('/download/doubt/:filename', ensureStudent, utilityController.downloadDoubtImage);
 router.get('/download/syllabus/:filename', ensureStudent, utilityController.downloadSyllabus);
-router.get('/download/notice/:filename', ensureStudent, utilityController.downloadNoticeImage);
+router.get('/download/notice/:filename', ensureStudent, utilityController.downloadNoticeImage); 
 router.get('/download/profile/:filename', ensureStudent, utilityController.downloadProfileImage); // NEW
 
 // PDF Viewers

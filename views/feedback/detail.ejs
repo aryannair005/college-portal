@@ -1,0 +1,288 @@
+<div class="container my-5">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="/feedback/my-feedback">My Feedback</a></li>
+                    <li class="breadcrumb-item active">Feedback Details</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h4 class="mb-1">
+                                <i class="fas fa-comments me-2"></i>
+                                <%= feedback.title %>
+                            </h4>
+                            <small>
+                                <i class="fas fa-clock me-1"></i>
+                                Submitted <%= feedback.timeAgo %> • <%= feedback.formattedDate %>
+                            </small>
+                        </div>
+                        <span class="badge bg-<%= feedback.status === 'pending' ? 'warning' : 
+                            feedback.status === 'reviewed' ? 'info' : 
+                            feedback.status === 'resolved' ? 'success' : 'secondary' %> fs-6">
+                            <%= feedback.status.charAt(0).toUpperCase() + feedback.status.slice(1) %>
+                        </span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <!-- Feedback Details -->
+                    <div class="row mb-4">
+                        <div class="col-md-4">
+                            <strong>Category:</strong>
+                            <br>
+                            <span class="badge bg-light text-dark mt-1">
+                                <i class="fas fa-tag me-1"></i>
+                                <%= feedback.category.charAt(0).toUpperCase() + feedback.category.slice(1).replace('-', ' ') %>
+                            </span>
+                        </div>
+                        <div class="col-md-4">
+                            <strong>Priority:</strong>
+                            <br>
+                            <span class="badge bg-<%= feedback.priority === 'high' ? 'danger' : 
+                                feedback.priority === 'medium' ? 'warning' : 'secondary' %> mt-1">
+                                <i class="fas fa-exclamation-triangle me-1"></i>
+                                <%= feedback.priority.charAt(0).toUpperCase() + feedback.priority.slice(1) %>
+                            </span>
+                        </div>
+                        <div class="col-md-4">
+                            <% if (feedback.rating) { %>
+                                <strong>Rating:</strong>
+                                <br>
+                                <div class="mt-1">
+                                    <% for (let i = 1; i <= 5; i++) { %>
+                                        <i class="fas fa-star <%= i <= feedback.rating ? 'text-warning' : 'text-muted' %>"></i>
+                                    <% } %>
+                                    <span class="ms-2 small">(<%= feedback.rating %>/5)</span>
+                                </div>
+                            <% } else { %>
+                                <strong>Rating:</strong>
+                                <br>
+                                <span class="text-muted mt-1">No rating provided</span>
+                            <% } %>
+                        </div>
+                    </div>
+
+                    <!-- Feedback Message -->
+                    <div class="mb-4">
+                        <h6><i class="fas fa-comment me-2"></i>Your Feedback:</h6>
+                        <div class="bg-light rounded p-3">
+                            <%= feedback.message %>
+                        </div>
+                    </div>
+
+                    <!-- Attachments -->
+                    <% if (feedback.attachments && feedback.attachments.length > 0) { %>
+                        <div class="mb-4">
+                            <h6><i class="fas fa-paperclip me-2"></i>Attachments:</h6>
+                            <% feedback.attachments.forEach(attachment => { %>
+                                <div class="d-inline-block me-3">
+                                    <a href="/feedback/download/<%= attachment.filename %>" class="btn btn-outline-primary btn-sm">
+                                        <i class="fas fa-download me-1"></i>
+                                        <%= attachment.originalName %>
+                                    </a>
+                                </div>
+                            <% }) %>
+                        </div>
+                    <% } %>
+
+                    <!-- Admin Response -->
+                    <% if (feedback.adminResponse && feedback.adminResponse.message) { %>
+                        <div class="alert alert-info">
+                            <div class="d-flex align-items-start">
+                                <i class="fas fa-reply fa-2x text-info me-3 mt-1"></i>
+                                <div class="flex-grow-1">
+                                    <h6 class="alert-heading mb-2">
+                                        <i class="fas fa-user-tie me-2"></i>Admin Response
+                                    </h6>
+                                    <p class="mb-2"><%= feedback.adminResponse.message %></p>
+                                    <small class="text-muted">
+                                        <i class="fas fa-clock me-1"></i>
+                                        Responded on <%= new Date(feedback.adminResponse.respondedAt).toLocaleDateString('en-US', { 
+                                            year: 'numeric', month: 'long', day: 'numeric', 
+                                            hour: '2-digit', minute: '2-digit' 
+                                        }) %>
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    <% } else { %>
+                        <div class="alert alert-light">
+                            <i class="fas fa-hourglass-half me-2"></i>
+                            <strong>Awaiting Response</strong>
+                            <p class="mb-0 mt-2">Your feedback has been received and is being reviewed. You'll be notified when there's an update.</p>
+                        </div>
+                    <% } %>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <% if (feedback.isAnonymous) { %>
+                                <span class="badge bg-secondary">
+                                    <i class="fas fa-user-secret me-1"></i>Anonymous Submission
+                                </span>
+                            <% } %>
+                            <% if (feedback.reviewedBy && feedback.reviewedAt) { %>
+                                <span class="badge bg-info ms-2">
+                                    <i class="fas fa-eye me-1"></i>
+                                    Reviewed by <%= feedback.reviewedByName %>
+                                </span>
+                            <% } %>
+                        </div>
+                        <a href="/feedback/my-feedback" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left me-2"></i>Back to My Feedback
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-md-4">
+            <!-- Status Timeline -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h6 class="mb-0">
+                        <i class="fas fa-history me-2"></i>Status Timeline
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-marker bg-primary"></div>
+                            <div class="timeline-content">
+                                <h6>Feedback Submitted</h6>
+                                <small class="text-muted"><%= feedback.formattedDate %></small>
+                            </div>
+                        </div>
+                        <% if (feedback.reviewedAt) { %>
+                            <div class="timeline-item">
+                                <div class="timeline-marker bg-info"></div>
+                                <div class="timeline-content">
+                                    <h6>Under Review</h6>
+                                    <small class="text-muted">
+                                        Reviewed by <%= feedback.reviewedByName %> on 
+                                        <%= new Date(feedback.reviewedAt).toLocaleDateString() %>
+                                    </small>
+                                </div>
+                            </div>
+                        <% } %>
+                        <% if (feedback.status === 'resolved') { %>
+                            <div class="timeline-item">
+                                <div class="timeline-marker bg-success"></div>
+                                <div class="timeline-content">
+                                    <h6>Resolved</h6>
+                                    <small class="text-muted">Issue has been resolved</small>
+                                </div>
+                            </div>
+                        <% } else if (feedback.status === 'closed') { %>
+                            <div class="timeline-item">
+                                <div class="timeline-marker bg-secondary"></div>
+                                <div class="timeline-content">
+                                    <h6>Closed</h6>
+                                    <small class="text-muted">Feedback has been closed</small>
+                                </div>
+                            </div>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="mb-0">
+                        <i class="fas fa-bolt me-2"></i>Quick Actions
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="/feedback/add" class="btn btn-primary btn-sm">
+                            <i class="fas fa-plus me-2"></i>Submit New Feedback
+                        </a>
+                        <a href="/feedback/my-feedback" class="btn btn-outline-secondary btn-sm">
+                            <i class="fas fa-list me-2"></i>View All My Feedback
+                        </a>
+                        <a href="/dashboard" class="btn btn-outline-info btn-sm">
+                            <i class="fas fa-home me-2"></i>Return to Dashboard
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.timeline {
+    position: relative;
+    padding-left: 30px;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 15px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background-color: #e9ecef;
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.timeline-marker {
+    position: absolute;
+    left: -37px;
+    top: 0;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid white;
+}
+
+.timeline-content h6 {
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+}
+
+.card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.btn {
+    transition: all 0.2s ease;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+.alert {
+    border-left: 4px solid;
+}
+
+.alert-info {
+    border-left-color: #17a2b8;
+}
+
+.alert-light {
+    border-left-color: #6c757d;
+}
+</style>

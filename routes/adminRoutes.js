@@ -54,4 +54,12 @@ router.post('/timetable/delete/:id', ensureAdmin, require('../controllers/timeta
 router.post('/timetable/toggle/:id', ensureAdmin, require('../controllers/timetableController').toggleTimetableStatus);
 router.post('/timetable/copy/:id', ensureAdmin, require('../controllers/timetableController').copyTimetable);
 
+
+// NEW: Feedback Management (Admin routes)
+router.get('/feedback', ensureAdmin, require('../controllers/feedbackController').getAdminFeedbackPage);
+router.post('/feedback/update-status/:id', ensureAdmin, validate('updateFeedbackStatusSchema'), require('../controllers/feedbackController').updateFeedbackStatus);
+router.post('/feedback/delete/:id', ensureAdmin, require('../controllers/feedbackController').deleteFeedback);
+router.get('/feedback/export', ensureAdmin, require('../controllers/feedbackController').exportFeedback);
+
+
 module.exports = router;

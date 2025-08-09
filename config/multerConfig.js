@@ -16,7 +16,11 @@ const storage = multer.diskStorage({
             uploadPath = 'uploads/notices/';
         } else if (file.fieldname === 'profileImage') {
             uploadPath = 'uploads/profiles/';
-        } else {
+        }else if (file.fieldname === 'profileImage') {
+            uploadPath = 'uploads/profiles/';
+        } else if (file.fieldname === 'feedbackImage') {
+            uploadPath = 'uploads/feedback/';
+        }else {
             uploadPath = 'uploads/'; // Fallback or handle specific types
         }
 

@@ -285,6 +285,46 @@ const schemas = {
             'string.max': 'Address should have a maximum length of {#limit}'
         })
     }),
+    // Feedback Schemas
+    addFeedbackSchema: Joi.object({
+        title: Joi.string().trim().min(5).max(200).required().messages({
+            'string.empty': 'Title cannot be empty',
+            'string.min': 'Title should have a minimum length of {#limit}',
+            'string.max': 'Title should have a maximum length of {#limit}',
+            'any.required': 'Title is required'
+        }),
+        message: Joi.string().trim().min(10).max(2000).required().messages({
+            'string.empty': 'Message cannot be empty',
+            'string.min': 'Message should have a minimum length of {#limit}',
+            'string.max': 'Message should have a maximum length of {#limit}',
+            'any.required': 'Message is required'
+        }),
+        category: Joi.string().valid('general', 'technical', 'suggestion', 'complaint', 'feature-request', 'other').required().messages({
+            'any.only': 'Category must be one of: general, technical, suggestion, complaint, feature-request, other',
+            'any.required': 'Category is required'
+        }),
+        priority: Joi.string().valid('low', 'medium', 'high').default('medium').messages({
+            'any.only': 'Priority must be one of: low, medium, high'
+        }),
+        rating: Joi.number().integer().min(1).max(5).allow('').optional().messages({
+            'number.base': 'Rating should be a number',
+            'number.integer': 'Rating should be an integer',
+            'number.min': 'Rating must be at least {#limit}',
+            'number.max': 'Rating must be at most {#limit}'
+        }),
+        isAnonymous: Joi.boolean().default(false)
+        // feedbackImage is handled by multer, not directly validated by Joi here
+    }),
+
+    updateFeedbackStatusSchema: Joi.object({
+        status: Joi.string().valid('pending', 'reviewed', 'resolved', 'closed').required().messages({
+            'any.only': 'Status must be one of: pending, reviewed, resolved, closed',
+            'any.required': 'Status is required'
+        }),
+        adminResponse: Joi.string().trim().allow('').max(1000).messages({
+            'string.max': 'Admin response should have a maximum length of {#limit} characters'
+        })
+    }),
 
     // Calendar Event Schemas
     addCalendarEventSchema: Joi.object({

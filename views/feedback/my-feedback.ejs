@@ -1,0 +1,160 @@
+<div class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>
+            <i class="fas fa-comments me-2"></i>My Feedback
+        </h2>
+        <a href="/feedback/add" class="btn btn-primary">
+            <i class="fas fa-plus me-2"></i>Submit New Feedback
+        </a>
+    </div>
+
+    <% if (feedbacks.length === 0) { %>
+        <div class="card border-light">
+            <div class="card-body text-center py-5">
+                <i class="fas fa-comments fa-4x text-muted mb-4"></i>
+                <h4 class="text-muted mb-3">No Feedback Yet</h4>
+                <p class="text-muted mb-4">You haven't submitted any feedback yet. We'd love to hear your thoughts!</p>
+                <a href="/feedback/add" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>Submit Your First Feedback
+                </a>
+            </div>
+        </div>
+    <% } else { %>
+        <div class="row">
+            <% feedbacks.forEach(feedback => { %>
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100 border-start border-4 
+                        <%= feedback.status === 'pending' ? 'border-warning' : 
+                            feedback.status === 'reviewed' ? 'border-info' : 
+                            feedback.status === 'resolved' ? 'border-success' : 'border-secondary' %>">
+                        <div class="card-header d-flex justify-content-between align-items-start">
+                            <div>
+                                <h6 class="card-title mb-1">
+                                    <%= feedback.title %>
+                                </h6>
+                                <small class="text-muted">
+                                    <i class="fas fa-clock me-1"></i>
+                                    <%= feedback.timeAgo %>
+                                </small>
+                            </div>
+                            <div class="text-end">
+                                <span class="badge bg-<%= feedback.status === 'pending' ? 'warning' : 
+                                    feedback.status === 'reviewed' ? 'info' : 
+                                    feedback.status === 'resolved' ? 'success' : 'secondary' %> mb-1">
+                                    <%= feedback.status.charAt(0).toUpperCase() + feedback.status.slice(1) %>
+                                </span>
+                                <% if (feedback.priority === 'high') { %>
+                                    <span class="badge bg-danger">High Priority</span>
+                                <% } else if (feedback.priority === 'medium') { %>
+                                    <span class="badge bg-warning">Medium</span>
+                                <% } else { %>
+                                    <span class="badge bg-secondary">Low</span>
+                                <% } %>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <small class="text-muted">
+                                    <i class="fas fa-tag me-1"></i>
+                                    <%= feedback.category.charAt(0).toUpperCase() + feedback.category.slice(1).replace('-', ' ') %>
+                                </small>
+                                <% if (feedback.rating) { %>
+                                    <span class="ms-3">
+                                        <% for (let i = 1; i <= 5; i++) { %>
+                                            <i class="fas fa-star <%= i <= feedback.rating ? 'text-warning' : 'text-muted' %>"></i>
+                                        <% } %>
+                                    </span>
+                                <% } %>
+                            </div>
+                            
+                            <p class="card-text">
+                                <%= feedback.message.length > 120 ? feedback.message.substring(0, 120) + '...' : feedback.message %>
+                            </p>
+
+                            <% if (feedback.adminResponse && feedback.adminResponse.message) { %>
+                                <div class="alert alert-info alert-sm mb-0">
+                                    <strong><i class="fas fa-reply me-2"></i>Admin Response:</strong>
+                                    <p class="mb-0 mt-2">
+                                        <%= feedback.adminResponse.message %>
+                                    </p>
+                                    <small class="text-muted">
+                                        <i class="fas fa-clock me-1"></i>
+                                        <%= new Date(feedback.adminResponse.respondedAt).toLocaleDateString() %>
+                                    </small>
+                                </div>
+                            <% } %>
+                        </div>
+                        <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
+                            <small class="text-muted">
+                                <%= feedback.formattedDate %>
+                                <% if (feedback.isAnonymous) { %>
+                                    <span class="badge bg-secondary ms-2">Anonymous</span>
+                                <% } %>
+                            </small>
+                            <a href="/feedback/<%= feedback._id %>" class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-eye me-1"></i>View Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
+
+        <!-- Pagination -->
+        <% if (totalPages > 1) { %>
+            <nav aria-label="Feedback pagination" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    <% if (hasPrevPage) { %>
+                        <li class="page-item">
+                            <a class="page-link" href="/feedback/my-feedback?page=<%= prevPage %>">
+                                <i class="fas fa-chevron-left"></i> Previous
+                            </a>
+                        </li>
+                    <% } %>
+                    
+                    <% for (let i = 1; i <= totalPages; i++) { %>
+                        <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                            <a class="page-link" href="/feedback/my-feedback?page=<%= i %>"><%= i %></a>
+                        </li>
+                    <% } %>
+                    
+                    <% if (hasNextPage) { %>
+                        <li class="page-item">
+                            <a class="page-link" href="/feedback/my-feedback?page=<%= nextPage %>">
+                                Next <i class="fas fa-chevron-right"></i>
+                            </a>
+                        </li>
+                    <% } %>
+                </ul>
+            </nav>
+        <% } %>
+    <% } %>
+</div>
+
+<style>
+.card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.alert-sm {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+}
+
+.border-4 {
+    border-width: 4px !important;
+}
+
+.btn {
+    transition: all 0.2s ease;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+</style>
