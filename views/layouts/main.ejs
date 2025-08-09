@@ -177,6 +177,10 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
+    <% if (title && (title.includes('Login') || title.includes('Register') || title.includes('Create Admin'))) { %>
+        <script src="/js/eye.js"></script>
+    <% } %>
+
     <!-- Conditional JavaScript based on page/user role -->
     <% if (user && user.role === 'admin') { %>
         <script src="/js/admin.js"></script>
