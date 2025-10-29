@@ -1,11 +1,13 @@
 # Academic Calendar Feature
 
 ## Overview
+
 The Academic Calendar feature has been successfully integrated into the College Portal website. This feature allows administrators to manage academic events, holidays, and important dates, while students can view these events in an interactive calendar interface.
 
 ## Features
 
 ### For Students:
+
 - **Interactive Calendar View**: Monthly calendar grid with navigation
 - **Event Listings**: Sidebar showing upcoming events organized by month
 - **Event Types**: Color-coded events by type (holiday, exam, assignment, etc.)
@@ -13,6 +15,7 @@ The Academic Calendar feature has been successfully integrated into the College 
 - **Event Details**: Hover effects and visual indicators for events
 
 ### For Administrators:
+
 - **Event Management**: Add, edit, delete, and toggle event status
 - **Event Types**: 7 different event categories (holiday, exam, assignment, meeting, seminar, workshop, other)
 - **Bulk Management**: View all events in a table format
@@ -22,26 +25,32 @@ The Academic Calendar feature has been successfully integrated into the College 
 ## File Structure
 
 ### Models:
+
 - `models/Calendar.js` - MongoDB schema for calendar events
 
 ### Controllers:
+
 - `controllers/calendarController.js` - Business logic for calendar operations
 
 ### Routes:
+
 - `routes/calendarRoutes.js` - API endpoints for calendar functionality
 - `routes/studentRoutes.js` - Student calendar access
 - `routes/adminRoutes.js` - Admin calendar management
 
 ### Views:
+
 - `views/calendar.ejs` - Student calendar interface
 - `views/admin/manage-calendar.ejs` - Admin event management
 - `views/admin/add-calendar-event.ejs` - Add new events
 - `views/admin/edit-calendar-event.ejs` - Edit existing events
 
 ### Styles:
+
 - `public/css/calendar.css` - Calendar-specific styling
 
 ### Validation:
+
 - Updated `middleware/validationMiddleware.js` with calendar schemas
 
 ## Event Types
@@ -57,10 +66,12 @@ The Academic Calendar feature has been successfully integrated into the College 
 ## API Endpoints
 
 ### Student Routes:
+
 - `GET /calendar` - View calendar page
 - `GET /calendar/events/:year/:month` - Get events for specific month
 
 ### Admin Routes:
+
 - `GET /admin/calendar` - Manage calendar events
 - `GET /admin/calendar/add` - Add new event form
 - `POST /admin/calendar/add` - Create new event
@@ -88,10 +99,12 @@ The Academic Calendar feature has been successfully integrated into the College 
 ## Navigation Integration
 
 ### Student Navigation:
+
 - Added "Calendar" link to main navigation bar
 - Accessible to all authenticated students
 
 ### Admin Navigation:
+
 - Added "Academic Calendar" section to admin dashboard
 - Quick action buttons for calendar management
 - Student view includes calendar link
@@ -99,6 +112,7 @@ The Academic Calendar feature has been successfully integrated into the College 
 ## Usage Instructions
 
 ### For Administrators:
+
 1. Navigate to Admin Dashboard
 2. Click "Academic Calendar" section
 3. Use "Manage Calendar" to view all events
@@ -106,6 +120,7 @@ The Academic Calendar feature has been successfully integrated into the College 
 5. Edit or delete events as needed
 
 ### For Students:
+
 1. Click "Calendar" in the main navigation
 2. Browse events by month using navigation buttons
 3. View event details in the sidebar
@@ -131,10 +146,11 @@ The Academic Calendar feature has been successfully integrated into the College 
 ## Future Enhancements
 
 Potential improvements for future versions:
+
 - Event recurrence (weekly, monthly, yearly)
 - Event reminders and notifications
 - Calendar export (PDF, iCal)
 - Event search and filtering
 - Integration with external calendar systems
 - Email notifications for upcoming events
-- Calendar sharing between departments 
+- Calendar sharing between departments

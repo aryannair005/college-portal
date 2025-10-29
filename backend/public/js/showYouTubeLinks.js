@@ -1,11 +1,11 @@
 function showYouTubeLinks(resourceId) {
-    const resource = allResources.find(r => r._id === resourceId);
-    if (!resource || !resource.youtubeLinks.length) return;
+  const resource = allResources.find((r) => r._id === resourceId);
+  if (!resource || !resource.youtubeLinks.length) return;
 
-    let modalContent = `<h6>Videos for: ${resource.title}</h6><div class="row">`;
+  let modalContent = `<h6>Videos for: ${resource.title}</h6><div class="row">`;
 
-    resource.youtubeLinks.forEach(link => {
-        modalContent += `
+  resource.youtubeLinks.forEach((link) => {
+    modalContent += `
             <div class="col-md-6 mb-3">
                 <div class="card border-danger">
                     <div class="card-body">
@@ -20,14 +20,14 @@ function showYouTubeLinks(resourceId) {
                 </div>
             </div>
         `;
-    });
+  });
 
-    modalContent += '</div>';
-    document.getElementById('youtubeModalBody').innerHTML = modalContent;
-    document.getElementById('viewFullDetailsBtn').onclick = () => {
-        window.location.href = `/resources/${resourceId}`;
-    };
+  modalContent += "</div>";
+  document.getElementById("youtubeModalBody").innerHTML = modalContent;
+  document.getElementById("viewFullDetailsBtn").onclick = () => {
+    window.location.href = `/resources/${resourceId}`;
+  };
 
-    const modal = new bootstrap.Modal(document.getElementById('youtubeModal'));
-    modal.show();
+  const modal = new bootstrap.Modal(document.getElementById("youtubeModal"));
+  modal.show();
 }
