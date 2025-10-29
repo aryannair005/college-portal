@@ -1,0 +1,20 @@
+{
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "editor.smoothScrolling": true,
+  "javascript.autoClosingTags": true,
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit",
+    "source.organizeImports": "always",
+    "source.organizeImports.biome": "always"
+  },
+  "editor.tabSize": 2,
+  "prettier.tabWidth": 2,
+  "prettier.singleQuote": false,
+  "prettier.bracketSpacing": true,
+  "prettier.arrowParens": "always",
+  "prettier.semi": true
+}
